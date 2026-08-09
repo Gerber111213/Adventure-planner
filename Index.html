@@ -1,1 +1,396 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Smart Adventure Packing Engine</title>
+  <style>
+    :root {
+      --bg: #0d1117;
+      --card-bg: #161b22;
+      --border: #30363d;
+      --accent: #238636;
+      --accent-hover: #2ea043;
+      --warning: #d29922;
+      --text: #c9d1d9;
+      --text-bright: #ffffff;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 16px;
+      line-height: 1.5;
+    }
+
+    .container {
+      max-width: 650px;
+      margin: 0 auto;
+    }
+
+    h1, h2, h3 {
+      color: var(--text-bright);
+      margin-top: 0;
+    }
+
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .form-group {
+      margin-bottom: 16px;
+    }
+
+    label {
+      display: block;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text-bright);
+    }
+
+    select, input[type="text"], input[type="number"], textarea {
+      width: 100%;
+      padding: 10px;
+      background: var(--bg);
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      color: var(--text-bright);
+      box-sizing: border-box;
+      font-size: 15px;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-top: 10px;
+      cursor: pointer;
+    }
+
+    .checkbox-group input {
+      width: 18px;
+      height: 18px;
+    }
+
+    button {
+      background: var(--accent);
+      color: var(--text-bright);
+      border: none;
+      padding: 12px 20px;
+      border-radius: 6px;
+      font-weight: bold;
+      font-size: 16px;
+      width: 100%;
+      cursor: pointer;
+      transition: background 0.2s ease;
+    }
+
+    button:hover {
+      background: var(--accent-hover);
+    }
+
+    .btn-preset {
+      background: #21262d;
+      border: 1px solid var(--border);
+      color: #58a6ff;
+      padding: 8px 12px;
+      font-size: 13px;
+      border-radius: 4px;
+      margin-bottom: 12px;
+      width: auto;
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: bold;
+      margin-left: 6px;
+    }
+
+    .badge-rain { background: rgba(210, 153, 34, 0.2); color: var(--warning); border: 1px solid var(--warning); }
+    .badge-acmg { background: rgba(56, 139, 253, 0.2); color: #58a6ff; border: 1px solid #58a6ff; }
+
+    ul.gear-manifest {
+      list-style-type: none;
+      padding-left: 0;
+      margin: 0;
+    }
+
+    ul.gear-manifest li {
+      padding: 10px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
+    ul.gear-manifest li:last-child {
+      border-bottom: none;
+    }
+
+    ul.gear-manifest input[type="checkbox"] {
+      margin-top: 4px;
+      width: 18px;
+      height: 18px;
+    }
+
+    .item-warning {
+      color: var(--warning);
+      font-weight: 600;
+    }
+
+    .section-header {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #8b949e;
+      margin-top: 16px;
+      margin-bottom: 8px;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 4px;
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+  <h1>Smart Adventure Planner</h1>
+  <p style="color: #8b949e; margin-bottom: 20px;">Conditional packing engine driven by ACMG baseline standards and real-time route/environmental parameters.</p>
+
+  <!-- PARAMETERS FORM -->
+  <div class="card">
+    <button type="button" class="btn-preset" onclick="loadStarstruckPreset()">⚡ Load Preset: Starstruck (Nordegg - Rain)</button>
+    
+    <form id="planner-form">
+      <div class="form-group">
+        <label for="route-name">Route / Destination Name</label>
+        <input type="text" id="route-name" placeholder="e.g., Mount Ernest Ross - Starstruck">
+      </div>
+
+      <div class="form-group">
+        <label for="transport-mode">Mode of Transport / Activity</label>
+        <select id="transport-mode">
+          <option value="climb">Rock Climbing (Multi-Pitch / Trad / Sport)</option>
+          <option value="hike">Backcountry Hiking / Trekking</option>
+          <option value="bike">Bikepacking / Alpine Cycling</option>
+          <option value="ski">Ski Touring / Backcountry Skiing</option>
+          <option value="run">Mountain Trail Running</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="duration">Duration (Days)</label>
+        <input type="number" id="duration" value="1" min="1">
+      </div>
+
+      <div class="form-group">
+        <label>Environmental Conditions</label>
+        <label class="checkbox-group">
+          <input type="checkbox" id="rain-flag"> Active Rain / Wet Rock & Trail
+        </label>
+        <label class="checkbox-group">
+          <input type="checkbox" id="cold-flag"> Cold Weather / Sub-Zero Overnight
+        </label>
+        <label class="checkbox-group">
+          <input type="checkbox" id="technical-terrain"> Technical / Glaciated / High Exposure
+        </label>
+      </div>
+
+      <div class="form-group">
+        <label for="route-notes">Route Specifics & Hazards (e.g. tree anchors, waterfalls, loose scree)</label>
+        <textarea id="route-notes" rows="3" placeholder="P9 leads to waterfall crossing, 70m rope required..."></textarea>
+      </div>
+
+      <button type="button" onclick="generateManifest()">Generate Optimized Manifest</button>
+    </form>
+  </div>
+
+  <!-- MANIFEST DISPLAY -->
+  <div class="card" id="manifest-card" style="display: none;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+      <h2 id="manifest-title" style="margin: 0;">Gear Manifest</h2>
+      <span id="acmg-badge" class="badge badge-acmg">ACMG Protocol</span>
+    </div>
+
+    <div id="manifest-alerts"></div>
+
+    <div class="section-header">Core Safety & Comms</div>
+    <ul class="gear-manifest" id="list-safety"></ul>
+
+    <div class="section-header">Technical Hardware & Activity Gear</div>
+    <ul class="gear-manifest" id="list-hardware"></ul>
+
+    <div class="section-header">Layering & Clothing</div>
+    <ul class="gear-manifest" id="list-clothing"></ul>
+
+    <div class="section-header">Hydration, Fuel & Route Extras</div>
+    <ul class="gear-manifest" id="list-fuel"></ul>
+  </div>
+</div>
+
+<script>
+  function loadStarstruckPreset() {
+    document.getElementById('route-name').value = "Starstruck (Mt. Ernest Ross, Nordegg)";
+    document.getElementById('transport-mode').value = "climb";
+    document.getElementById('duration').value = "1";
+    document.getElementById('rain-flag').checked = true;
+    document.getElementById('technical-terrain').checked = true;
+    document.getElementById('route-notes').value = "10 Pitches, 330m, 5.9. P4/P10 wandering drag. P9 leads to Freyja Falls gully crossing. Tree belay at top.";
+  }
+
+  function generateManifest() {
+    const routeName = document.getElementById('route-name').value || "Unnamed Objective";
+    const mode = document.getElementById('transport-mode').value;
+    const duration = parseInt(document.getElementById('duration').value) || 1;
+    const isRain = document.getElementById('rain-flag').checked;
+    const isCold = document.getElementById('cold-flag').checked;
+    const isTechnical = document.getElementById('technical-terrain').checked;
+    const notes = document.getElementById('route-notes').value.toLowerCase();
+
+    // Clear Previous
+    document.getElementById('list-safety').innerHTML = '';
+    document.getElementById('list-hardware').innerHTML = '';
+    document.getElementById('list-clothing').innerHTML = '';
+    document.getElementById('list-fuel').innerHTML = '';
+    document.getElementById('manifest-alerts').innerHTML = '';
+
+    document.getElementById('manifest-title').textContent = routeName;
+
+    // 1. SAFETY BASELINE (ACMG Standard)
+    const safety = [
+      "Garmin inReach / Satellite Communicator",
+      "ACMG First Aid + Hypothermia Space Blanket",
+      "Headlamp (IPX8 Waterproof) + Extra Batteries",
+      "Multi-tool / Knife + Repair Tape"
+    ];
+
+    // 2. HARDWARE & ACTIVITY SPECIFIC
+    const hardware = [];
+    if (mode === 'climb') {
+      hardware.push("70m Dynamic Single Rope (Dry-treated)");
+      hardware.push("Climbing Helmet (Essential for gully/loose rock)");
+      hardware.push("Harness & Sticky-Rubber Approach Shoes");
+      hardware.push("Climbing Shoes & Chalk Bag");
+      hardware.push("Belay Device (Assisted-braking preferred) + HMS Locker");
+      hardware.push("10x Standard Quickdraws");
+      hardware.push("4x - 6x Alpine Long Draws (Reduces rope drag on wandering pitches)");
+      hardware.push("1x 120cm Cordelette / Sling + 2x Locking Carabiners");
+    } else if (mode === 'bike') {
+      hardware.push("Bikepacking Seat Bag, Frame Bag & Handlebar Roll");
+      hardware.push("Bike Multi-tool with Chain Breaker & Spare Links");
+      hardware.push("High-Volume Frame Pump, Tire Levers & Plug Kit");
+      hardware.push("Spare Inner Tube + Sidewall Boot Patch");
+      hardware.push("Front/Rear High-Visibility Safety Lights");
+    } else if (mode === 'hike') {
+      hardware.push("Topographic Map & Compass (In waterproof case)");
+      hardware.push("Trekking Poles");
+      hardware.push("30L - 45L Pack with Rain Cover");
+    } else if (mode === 'ski') {
+      hardware.push("Avalanche Beacon (Check Battery > 80%)");
+      hardware.push("Avalanche Shovel (Metal blade) & 240cm+ Probe");
+      hardware.push("Backcountry Skis/Splitboard + Climbing Skins");
+      hardware.push("Ski Crampons / Boot Crampons");
+    } else if (mode === 'run') {
+      hardware.push("12L Running Vest / Pack");
+      hardware.push("Trail Running Shoes with Aggressive Lug Tread");
+      hardware.push("Emergency Bivy Sack (Ultralight)");
+    }
+
+    // Route-specific additions parsed from text
+    if (notes.includes("tree") || notes.includes("p10") || notes.includes("anchor")) {
+      hardware.push("1x Extra 120cm/240cm Sling for Tree Belays (Route Specific)");
+    }
+
+    // 3. CLOTHING & LAYERING (Rain/Cold Adjustments)
+    const clothing = [
+      "Synthetic Base-Layer (Top & Bottom)",
+      "Moisture-Wicking Socks (+1 Spare Pair)"
+    ];
+
+    if (isRain) {
+      clothing.push("⚠️ 3-Layer GORE-TEX / Waterproof Hardshell Jacket");
+      clothing.push("⚠️ Lightweight Waterproof Rain Pants");
+      clothing.push("⚠️ Synthetic Mid-Layer Insulation (Atom LT / Nano-Air — NO DOWN)");
+      clothing.push("⚠️ 2x Pairs Belay/Work Gloves (1 sealed dry inside pack)");
+      clothing.push("⚠️ Dry Bags / Waterproof Pack Liner");
+      
+      if (mode === 'climb') {
+        hardware.push("⚠️ BAIL KIT: 2x 5/16\" Steel Quick-Links + 5m 6mm Accessory Cord");
+        hardware.push("⚠️ 2x Prusik Loops (Required for autoblock rappels on wet ropes)");
+      }
+
+      // Add Alert Banner
+      const alertBox = document.createElement('div');
+      alertBox.className = 'card';
+      alertBox.style.borderColor = 'var(--warning)';
+      alertBox.style.background = 'rgba(210, 153, 34, 0.1)';
+      alertBox.innerHTML = `<span class="item-warning">⚠️ RAIN OVERRIDE ACTIVE:</span> Down insulation has been replaced with synthetic mid-layers. Waterproof dry-bag liners, hardshells, and emergency bail hardware have been added.`;
+      document.getElementById('manifest-alerts').appendChild(alertBox);
+    } else {
+      clothing.push("Packable Down or Synthetic Insulated Jacket");
+      clothing.push("Windshell / Light Softshell");
+    }
+
+    if (isCold) {
+      clothing.push("Heavyweight Thermal Base-Layer");
+      clothing.push("Warm Toque / Beanie + Neck Gaiter");
+      clothing.push("Sub-zero Rated Sleeping System / Pad (R-Value >= 5.0)");
+    }
+
+    // 4. HYDRATION & FUEL
+    const fuel = [
+      "2L Water Storage (Hydration Bladder or Wide-Mouth Bottles)",
+      "High-Calorie Trail Snacks (250-300 kcal/hr requirement)"
+    ];
+
+    if (isRain || isCold) {
+      fuel.push("1L Insulated Thermos with Hot Broth / Tea");
+    }
+
+    if (duration > 1) {
+      fuel.push(`Backcountry Stove + Liquid/Gas Fuel (${duration * 50}g allocated)`);
+      fuel.push(`Dehydrated Main Meals (${duration * 2} meals)`);
+      fuel.push("Water Purification Tablets / Micro-Filter");
+    }
+
+    // RENDER LISTS TO DOM
+    renderList('list-safety', safety);
+    renderList('list-hardware', hardware);
+    renderList('list-clothing', clothing);
+    renderList('list-fuel', fuel);
+
+    document.getElementById('manifest-card').style.display = 'block';
+  }
+
+  function renderList(elementId, items) {
+    const listEl = document.getElementById(elementId);
+    items.forEach(item => {
+      const li = document.createElement('li');
+      
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
+      
+      const span = document.createElement('span');
+      if (item.includes('⚠️')) {
+        span.className = 'item-warning';
+      }
+      span.textContent = item;
+
+      li.appendChild(checkbox);
+      li.appendChild(span);
+      listEl.appendChild(li);
+    });
+  }
+</script>
+
+</body>
+</html>
