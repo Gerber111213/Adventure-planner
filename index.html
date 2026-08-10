@@ -132,6 +132,13 @@
       font-size: 15px;
     }
 
+    .cascade-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
     .autocomplete-items {
       position: absolute;
       border: 1px solid var(--border);
@@ -393,16 +400,35 @@
         </div>
       </div>
 
+      <!-- HIERARCHICAL REGIONAL SELECTOR (Province -> Region -> Crag -> Route) -->
+      <div class="form-group">
+        <label>📍 Regional Route Cascade (Browse by Location)</label>
+        <div class="cascade-row">
+          <select id="cascade-province" onchange="onProvinceChange()">
+            <option value="">Select Province</option>
+            <option value="AB">Alberta (AB)</option>
+            <option value="BC">British Columbia (BC)</option>
+            <option value="CO">Colorado (CO)</option>
+          </select>
+          <select id="cascade-region" onchange="onRegionChange()" disabled>
+            <option value="">Select Region</option>
+          </select>
+          <select id="cascade-crag" onchange="onCragChange()" disabled>
+            <option value="">Select Crag</option>
+          </select>
+        </div>
+        <select id="cascade-route" onchange="onRouteSelect()" disabled style="margin-top: 6px;">
+          <option value="">Select Route Beta (Open Source)</option>
+        </select>
+      </div>
+
       <!-- PERMIT / JURISDICTION BANNER CONTAINER -->
       <div id="permit-container"></div>
 
-      <!-- INFO SCRUBBER BANNER CONTAINER -->
-      <div id="scrubbed-info-container"></div>
-
       <form id="planner-form">
         <div class="form-group" autocomplete="off">
-          <label for="route-search">Search Route Name, Area, or Ultramarathon</label>
-          <input type="text" id="route-search" placeholder="e.g., Starstruck, Berg Lake, Leadville Trail 100...">
+          <label for="route-search">Search Route Name or Area (Sport Isolated)</label>
+          <input type="text" id="route-search" placeholder="Type route name...">
           <div id="autocomplete-list" class="autocomplete-items"></div>
         </div>
 
@@ -440,7 +466,7 @@
         </div>
 
         <div class="form-group">
-          <label for="route-notes">Route Specifics & Hazards (Auto-populated from scrubbed data)</label>
+          <label for="route-notes">Route Specifics & Hazards</label>
           <textarea id="route-notes" rows="3" placeholder="Hazards, technical pitches, water sources..."></textarea>
         </div>
 
@@ -565,7 +591,9 @@
     }
   };
 
+  // SPORT-ISOLATED SCRUBBED DATABASE (Including Whirlpool Ridge trial beta)
   const SCRUBBED_DATABASE = [
+    // Rock Climbing
     {
       name: "Starstruck (Mt. Ernest Ross, Nordegg)",
       category: "rock-climb",
@@ -573,8 +601,31 @@
       permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
       permitName: "Alberta Public Lands Camping Pass",
       notes: "10 Pitches, 330m, 5.9. Tree belays, wandering rope drag on P4/P10, Freyja Falls gully crossing.",
-      gearAdditions: ["1x Extra 120cm/240cm Sling for Tree Belays", "4x Alpine Long Draws (Specific for Starstruck wandering pitches)"]
+      gearAdditions: ["1x Extra 120cm/240cm Sling for Tree Belays", "4x Alpine Long Draws"],
+      gearSubstitutions: { "10x Standard Quickdraws": "14x Standard Quickdraws" } // Eliminates/replaces generic base list item if specified
     },
+    {
+      name: "Whirlpool Ridge Classic Route (David Thompson)",
+      category: "rock-climb",
+      jurisdiction: "Alberta Crown Land",
+      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
+      permitName: "Alberta Public Lands Camping Pass",
+      notes: "Multi-pitch limestone trad and alpine ridge climbing in David Thompson Country. Loose scree approach.",
+      gearAdditions: ["1x Set of Cams (#0.3 to #3)", "1x Set of Nuts", "Helmet (Mandatory for loose rock)"],
+      gearSubstitutions: { "10x Standard Quickdraws": "6x Alpine Long Draws + 4x Quickdraws" }
+    },
+    {
+      name: "Yamnuska - Directissima",
+      category: "rock-climb",
+      jurisdiction: "Kananaskis Country",
+      permitUrl: "https://www.alberta.ca/kananaskis-conservation-pass",
+      permitName: "Kananaskis Conservation Pass",
+      notes: "Steep limestone multi-pitch trad. High winds and complex descent scree trails.",
+      gearAdditions: ["Full Trad Rack (Cams to #3)", "Extra Locking Biners"],
+      gearSubstitutions: { "10x Standard Quickdraws": "8x Alpine Draws" }
+    },
+
+    // Hiking & Backpacking
     {
       name: "Berg Lake Trail (Mount Robson)",
       category: "hike",
@@ -585,31 +636,153 @@
       gearAdditions: ["Bear Spray", "Water Micro-Filter"]
     },
     {
+      name: "Skyline Trail (Jasper National Park)",
+      category: "hike",
+      jurisdiction: "Jasper National Park",
+      permitUrl: "https://reservation.pc.gc.ca/",
+      permitName: "Parks Canada Reservation Portal",
+      notes: "44 km point-to-point high alpine ridge hike. Extreme exposure to wind and weather.",
+      gearAdditions: ["Windproof Hard Shell", "Emergency Bivy"]
+    },
+
+    // Ultramarathons
+    {
       name: "Leadville Trail 100 Run",
       category: "ultra",
       jurisdiction: "Colorado USA / USFS",
       permitUrl: "https://www.leadvilletracingseries.com/",
       permitName: "US Forest Service Special Use Permit",
-      notes: "100 miles, extreme altitude peaking at 12,424 ft (Hope Pass). Mandatory emergency blanket, whistle, jacket, and cup.",
-      gearAdditions: ["Emergency Bivy / Foil Blanket", "Whistle & Headlamp", "Collapsible Cup (Zero-cup race policy)"]
+      notes: "100 miles, extreme altitude peaking at 12,424 ft (Hope Pass).",
+      gearAdditions: ["Emergency Bivy / Foil Blanket", "Whistle & Headlamp", "Collapsible Cup"]
     },
     {
       name: "Hardrock 100 Endurance Run",
       category: "ultra",
       jurisdiction: "San Juan Range, Colorado USA",
       permitUrl: "https://hardrock100.com/",
-      permitName: "Hardrock Race Registration & Permitting",
-      notes: "100.5 miles, 33,050 ft of climb. High alpine exposure, potential afternoon thunderstorms, snowfields over passes.",
+      permitName: "Hardrock Race Registration",
+      notes: "100.5 miles, 33,050 ft of climb. High alpine exposure, snowfields over passes.",
       gearAdditions: ["Microspikes", "Waterproof Shell & Pants", "GPS Tracker / InReach"]
     }
   ];
 
+  // HIERARCHICAL CASCADING DATA (Province -> Region -> Crag -> Route)
+  const HIERARCHY_DATA = {
+    "AB": {
+      "David Thompson": {
+        "Whirlpool Ridge": [
+          { name: "Whirlpool Ridge Classic Route (David Thompson)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Whirlpool Ridge")) }
+        ]
+      },
+      "Nordegg / Ghost": {
+        "Mount Ernest Ross": [
+          { name: "Starstruck (Mt. Ernest Ross, Nordegg)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Starstruck")) }
+        ]
+      },
+      "Kananaskis": {
+        "Yamnuska": [
+          { name: "Yamnuska - Directissima", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Yamnuska")) }
+        ]
+      }
+    },
+    "BC": {
+      "Mount Robson": {
+        "Berg Lake": [
+          { name: "Berg Lake Trail (Mount Robson)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Berg Lake")) }
+        ]
+      }
+    },
+    "CO": {
+      "Leadville": {
+        "Hope Pass": [
+          { name: "Leadville Trail 100 Run", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Leadville")) }
+        ]
+      }
+    }
+  };
+
+  function onProvinceChange() {
+    const prov = document.getElementById('cascade-province').value;
+    const regSelect = document.getElementById('cascade-region');
+    const cragSelect = document.getElementById('cascade-crag');
+    const routeSelect = document.getElementById('cascade-route');
+
+    regSelect.innerHTML = '<option value="">Select Region</option>';
+    cragSelect.innerHTML = '<option value="">Select Crag</option>';
+    routeSelect.innerHTML = '<option value="">Select Route Beta (Open Source)</option>';
+    cragSelect.disabled = true;
+    routeSelect.disabled = true;
+
+    if (prov && HIERARCHY_DATA[prov]) {
+      regSelect.disabled = false;
+      Object.keys(HIERARCHY_DATA[prov]).forEach(reg => {
+        regSelect.innerHTML += `<option value="${reg}">${reg}</option>`;
+      });
+    } else {
+      regSelect.disabled = true;
+    }
+  }
+
+  function onRegionChange() {
+    const prov = document.getElementById('cascade-province').value;
+    const reg = document.getElementById('cascade-region').value;
+    const cragSelect = document.getElementById('cascade-crag');
+    const routeSelect = document.getElementById('cascade-route');
+
+    cragSelect.innerHTML = '<option value="">Select Crag</option>';
+    routeSelect.innerHTML = '<option value="">Select Route Beta (Open Source)</option>';
+    routeSelect.disabled = true;
+
+    if (prov && reg && HIERARCHY_DATA[prov][reg]) {
+      cragSelect.disabled = false;
+      Object.keys(HIERARCHY_DATA[prov][reg]).forEach(crag => {
+        cragSelect.innerHTML += `<option value="${crag}">${crag}</option>`;
+      });
+    } else {
+      cragSelect.disabled = true;
+    }
+  }
+
+  function onCragChange() {
+    const prov = document.getElementById('cascade-province').value;
+    const reg = document.getElementById('cascade-region').value;
+    const crag = document.getElementById('cascade-crag').value;
+    const routeSelect = document.getElementById('cascade-route');
+
+    routeSelect.innerHTML = '<option value="">Select Route Beta (Open Source)</option>';
+
+    if (prov && reg && crag && HIERARCHY_DATA[prov][reg][crag]) {
+      routeSelect.disabled = false;
+      HIERARCHY_DATA[prov][reg][crag].forEach(r => {
+        routeSelect.innerHTML += `<option value="${r.name}">${r.name}</option>`;
+      });
+    } else {
+      routeSelect.disabled = true;
+    }
+  }
+
+  function onRouteSelect() {
+    const routeName = document.getElementById('cascade-route').value;
+    if (!routeName) return;
+
+    const matched = SCRUBBED_DATABASE.find(r => r.name === routeName);
+    if (matched) {
+      document.getElementById('route-search').value = matched.name;
+      document.getElementById('route-notes').value = matched.notes;
+      selectedRouteData = matched;
+      updateJurisdictionAndPermits(currentActivity, matched.jurisdiction);
+    }
+  }
+
+  // SPORT-ISOLATED AUTOCOMPLETE SEARCH BAR
   const searchInput = document.getElementById('route-search');
   const autocompleteList = document.getElementById('autocomplete-list');
 
   searchInput.addEventListener('input', function(e) {
     const val = this.value;
     closeAllLists();
+    selectedRouteData = null; // Reset until clicked or explicitly matched
+
     if (!val) return false;
 
     const listDiv = document.createElement('div');
@@ -618,20 +791,35 @@
     this.parentNode.appendChild(listDiv);
 
     SCRUBBED_DATABASE.forEach(item => {
-      if (item.name.toLowerCase().includes(val.toLowerCase()) || item.category.includes(currentActivity)) {
+      // STRICT ISOLATION: Only show entries matching the active sport category
+      if (item.category === currentActivity && item.name.toLowerCase().includes(val.toLowerCase())) {
         const itemDiv = document.createElement('div');
         itemDiv.innerHTML = `<strong>${item.name}</strong> (${item.jurisdiction})`;
         itemDiv.addEventListener('click', function(e) {
           searchInput.value = item.name;
           document.getElementById('route-notes').value = item.notes;
-          selectedRouteData = item;
-          renderScrubbedInfo(item);
+          selectedRouteData = item; // Explicitly confirmed match via dropdown click
           updateJurisdictionAndPermits(currentActivity, item.jurisdiction);
           closeAllLists();
         });
         listDiv.appendChild(itemDiv);
       }
     });
+  });
+
+  // Also check on blur or change if user typed the exact name without clicking dropdown
+  searchInput.addEventListener('blur', function() {
+    setTimeout(() => {
+      const val = searchInput.value.trim();
+      if (val && !selectedRouteData) {
+        const exactMatch = SCRUBBED_DATABASE.find(item => item.category === currentActivity && item.name.toLowerCase() === val.toLowerCase());
+        if (exactMatch) {
+          selectedRouteData = exactMatch;
+          document.getElementById('route-notes').value = exactMatch.notes;
+          updateJurisdictionAndPermits(currentActivity, exactMatch.jurisdiction);
+        }
+      }
+    }, 200);
   });
 
   function closeAllLists(elmnt) {
@@ -656,6 +844,9 @@
   function selectActivity(activityKey) {
     currentActivity = activityKey;
     selectedRouteData = null;
+    document.getElementById('route-search').value = '';
+    document.getElementById('route-notes').value = '';
+
     const titles = {
       'hike': 'Backcountry Hiking & Trekking',
       'rock-climb': 'Rock Climbing (Multi-Pitch / Trad / Sport)',
@@ -710,7 +901,7 @@
           ℹ️ <strong>Kananaskis Jurisdiction:</strong> This area requires a valid conservation pass. Purchase online via the <a href="https://www.alberta.ca/kananaskis-conservation-pass" target="_blank">Kananaskis Conservation Pass Portal</a>.
         </div>
       `;
-    } else if (routeText.includes('crown land') || routeText.includes('nordegg') || routeText.includes('ghost')) {
+    } else if (routeText.includes('crown land') || routeText.includes('nordegg') || routeText.includes('ghost') || routeText.includes('david thompson')) {
       boxHtml = `
         <div class="info-box">
           ℹ️ <strong>Crown Land Jurisdiction:</strong> Alberta public lands camping requires a pass. Secure yours through the <a href="https://www.alberta.ca/public-lands-camping-pass" target="_blank">Alberta Public Lands Camping Pass Portal</a>.
@@ -739,15 +930,6 @@
     permitContainer.innerHTML = boxHtml;
   }
 
-  function renderScrubbedInfo(item) {
-    const container = document.getElementById('scrubbed-info-container');
-    container.innerHTML = `
-      <div class="info-box" style="border-color: var(--accent); background: rgba(35, 134, 54, 0.1);">
-        🌐 <strong>Smart Autocomplete Loaded:</strong> Objective matched for <strong>${item.name}</strong>. Jurisdiction: ${item.jurisdiction}.
-      </div>
-    `;
-  }
-
   function generateManifest() {
     const routeName = document.getElementById('route-search').value || "Custom Expedition";
     document.getElementById('manifest-title').textContent = routeName;
@@ -763,22 +945,30 @@
       secondaryMode = document.getElementById('leg-2').value;
     }
 
-    // Pull from expert database base lists
     let safety = [...(SPORT_GEAR_DB[activeMode]?.safety || SPORT_GEAR_DB['hike'].safety)];
     let hardware = [...(SPORT_GEAR_DB[activeMode]?.hardware || [])];
     let clothing = [...(SPORT_GEAR_DB[activeMode]?.clothing || SPORT_GEAR_DB['hike'].clothing)];
     let fuel = [...(SPORT_GEAR_DB[activeMode]?.fuel || SPORT_GEAR_DB['hike'].fuel)];
 
-    // If secondary mode exists in multi-sport, combine hardware
     if (secondaryMode && SPORT_GEAR_DB[secondaryMode]) {
       hardware.push(...SPORT_GEAR_DB[secondaryMode].hardware);
     }
 
-    // Inject route-specific tailored additions if matched (e.g. Starstruck)
-    if (selectedRouteData && selectedRouteData.gearAdditions) {
-      selectedRouteData.gearAdditions.forEach(gear => {
-        hardware.push("⭐ " + gear + " (Route Specific)");
-      });
+    // ELIMINATE / SUBSTITUTE GENERIC BASE ITEMS PIECE BY PIECE IF ROUTE SCRUB MATCHES
+    if (selectedRouteData) {
+      // Check gear substitutions (e.g. replacing generic 10x quickdraws with specific counts)
+      if (selectedRouteData.gearSubstitutions) {
+        for (const [genericItem, specificReplacement] of Object.entries(selectedRouteData.gearSubstitutions)) {
+          hardware = hardware.map(item => item === genericItem ? specificReplacement : item);
+        }
+      }
+
+      // Add specific route gear additions
+      if (selectedRouteData.gearAdditions) {
+        selectedRouteData.gearAdditions.forEach(gear => {
+          hardware.push("⭐ " + gear + " (Route Specific)");
+        });
+      }
     }
 
     renderList('list-safety', safety);
