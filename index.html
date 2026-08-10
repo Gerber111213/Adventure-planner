@@ -27,7 +27,7 @@
     }
 
     .container {
-      max-width: 700px;
+      max-width: 750px;
       margin: 0 auto;
     }
 
@@ -46,7 +46,7 @@
 
     .hero-banner {
       text-align: center;
-      padding: 30px 20px;
+      padding: 35px 20px;
       background: linear-gradient(135deg, #1f242d 0%, #161b22 100%);
       border: 1px solid var(--border);
       border-radius: 8px;
@@ -75,7 +75,7 @@
 
     .activity-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
       gap: 12px;
       margin-top: 16px;
     }
@@ -93,7 +93,7 @@
       gap: 8px;
       transition: all 0.2s ease;
       font-weight: 600;
-      font-size: 14px;
+      font-size: 13px;
       text-align: center;
     }
 
@@ -104,13 +104,14 @@
     }
 
     .activity-btn svg {
-      width: 32px;
-      height: 32px;
+      width: 30px;
+      height: 30px;
       fill: var(--link-blue);
     }
 
     .form-group {
       margin-bottom: 16px;
+      position: relative;
     }
 
     label {
@@ -129,6 +130,35 @@
       color: var(--text-bright);
       box-sizing: border-box;
       font-size: 15px;
+    }
+
+    /* Autocomplete Dropdown Styles */
+    .autocomplete-items {
+      position: absolute;
+      border: 1px solid var(--border);
+      border-bottom: none;
+      border-top: none;
+      z-index: 99;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background-color: var(--card-bg);
+      border-radius: 0 0 6px 6px;
+      max-height: 200px;
+      overflow-y: auto;
+    }
+
+    .autocomplete-items div {
+      padding: 10px;
+      cursor: pointer;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      font-size: 14px;
+    }
+
+    .autocomplete-items div:hover {
+      background-color: #30363d;
+      color: var(--text-bright);
     }
 
     .row-inputs {
@@ -172,7 +202,7 @@
       text-decoration: underline;
     }
 
-    .permit-box {
+    .info-box {
       background: rgba(88, 166, 255, 0.1);
       border: 1px solid var(--link-blue);
       border-radius: 6px;
@@ -181,13 +211,13 @@
       font-size: 14px;
     }
 
-    .permit-box a {
+    .info-box a {
       color: var(--link-blue);
       font-weight: bold;
       text-decoration: none;
     }
 
-    .permit-box a:hover {
+    .info-box a:hover {
       text-decoration: underline;
     }
 
@@ -200,6 +230,7 @@
       margin-left: 6px;
     }
     .badge-acmg { background: rgba(56, 139, 253, 0.2); color: #58a6ff; border: 1px solid #58a6ff; }
+    .item-warning { color: var(--warning); font-weight: 600; }
 
     ul.gear-manifest {
       list-style-type: none;
@@ -254,7 +285,6 @@
       <div class="activity-grid">
         
         <button class="activity-btn" onclick="selectActivity('hike')">
-          <!-- Stick person hiking -->
           <svg viewBox="0 0 24 24"><path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-2.1 0-3.9-1.1-4.8-2.8l-1-1.7c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.2L6 8.5V13h2V9.6l1.8-.7z"/></svg>
           Hiking
         </button>
@@ -272,6 +302,26 @@
         <button class="activity-btn" onclick="selectActivity('mountaineering')">
           <svg viewBox="0 0 24 24"><path d="M12 3L2 21h20L12 3zm0 4.5l6.5 11.5H5.5L12 7.5z"/></svg>
           Mountaineering
+        </button>
+
+        <button class="activity-btn" onclick="selectActivity('ice-climb')">
+          <svg viewBox="0 0 24 24"><path d="M15 2l-3 3 2 2-3 3-5-5-2 2 7 7 4-4 2 2 3-3-4-4z"/></svg>
+          Ice Climbing & Mixed
+        </button>
+
+        <button class="activity-btn" onclick="selectActivity('ski-tour')">
+          <svg viewBox="0 0 24 24"><path d="M12 2L9 8h6l-3-6zm-1 9l-4 11h2l2-6 2 6h2l-4-11h-2z"/></svg>
+          Ski Touring / Splitboard
+        </button>
+
+        <button class="activity-btn" onclick="selectActivity('canyoneer')">
+          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17h-2v-2h2v2zm2.07-7.75l-.9.92C13.45 12.9 13 13.5 13 15h-2v-.5c0-1.1.45-2.1 1.17-2.83l1.24-1.26c.37-.36.59-.86.59-1.41 0-1.1-.9-2-2-2s-2 .9-2 2H7c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.04-.42 1.99-1.07 2.75z"/></svg>
+          Canyoneering
+        </button>
+
+        <button class="activity-btn" onclick="selectActivity('packraft')">
+          <svg viewBox="0 0 24 24"><path d="M20 12c0-1.1-.9-2-2-2V7c0-1.1-.9-2-2-2H8c-1.1 0-2 .9-2 2v3c-1.1 0-2 .9-2 2s.9 2 2 2v3h12v-3c1.1 0 2-.9 2-2zM8 7h8v3H8V7zm10 8H6v-1.5c.83 0 1.5-.67 1.5-1.5S6.83 10.5 6 10.5V9h12v1.5c-.83 0-1.5.67-1.5 1.5s.67 1.5 1.5 1.5V15z"/></svg>
+          Packrafting
         </button>
 
         <button class="activity-btn" onclick="selectActivity('trail-run')">
@@ -306,7 +356,7 @@
 
         <button class="activity-btn" onclick="selectActivity('multi-sport')" style="grid-column: 1 / -1; background: rgba(56, 139, 253, 0.15); border-color: var(--link-blue);">
           <svg viewBox="0 0 24 24"><path d="M16 11c1.66 0 2.99-1.34 2.99-3S17.66 5 16 5c-1.66 0-3 1.34-3 3s1.34 3 3 3zm-8 0c1.66 0 2.99-1.34 2.99-3S9.66 5 8 5C6.34 5 5 6.34 5 8s1.34 3 3 3zm0 2c-2.33 0-7 1.17-7 3.5V19h14v-2.5c0-2.33-4.67-3.5-7-3.5zm8 0c-.29 0-.62.02-.97.05 1.16.84 1.97 1.97 1.97 3.45V19h6v-2.5c0-2.33-4.67-3.5-7-3.5z"/></svg>
-          Multi-Sport / Complex Objective
+          Multi-Sport / Complex Expedition (e.g. Bike-to-Climb / Bike-to-Packraft)
         </button>
 
       </div>
@@ -320,13 +370,41 @@
     <div class="card">
       <h2 id="selected-activity-title" style="margin-bottom: 16px;">Objective Setup</h2>
       
-      <!-- PERMIT BANNER CONTAINER -->
+      <!-- DYNAMIC MULTI-SPORT LEG BUILDER -->
+      <div id="multi-sport-section" style="display: none; background: rgba(255,255,255,0.03); border: 1px dashed var(--border); padding: 14px; border-radius: 6px; margin-bottom: 16px;">
+        <label style="color: var(--link-blue);">🔗 Complex Multi-Sport Chaining</label>
+        <div class="row-inputs" style="margin-top: 8px;">
+          <div>
+            <label style="font-size: 13px;">Leg 1 Activity</label>
+            <select id="leg-1">
+              <option value="bikepack">Bikepacking</option>
+              <option value="gravel-bike">Gravel Biking</option>
+              <option value="hike">Approach Hiking</option>
+            </select>
+          </div>
+          <div>
+            <label style="font-size: 13px;">Leg 2 Activity</label>
+            <select id="leg-2">
+              <option value="rock-climb">Rock Climbing</option>
+              <option value="packraft">Packrafting</option>
+              <option value="alpine-climb">Alpine Climbing</option>
+              <option value="mountaineering">Mountaineering</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      <!-- PERMIT / JURISDICTION BANNER CONTAINER -->
       <div id="permit-container"></div>
 
+      <!-- INFO SCRUBBER BANNER CONTAINER -->
+      <div id="scrubbed-info-container"></div>
+
       <form id="planner-form">
-        <div class="form-group">
-          <label for="route-search">Search Route Name or Area</label>
-          <input type="text" id="route-search" placeholder="e.g., Mount Ernest Ross - Starstruck or Berg Lake Trail">
+        <div class="form-group" autocomplete="off">
+          <label for="route-search">Search Route Name, Area, or Ultramarathon</label>
+          <input type="text" id="route-search" placeholder="e.g., Starstruck, Berg Lake, Leadville Trail 100...">
+          <div id="autocomplete-list" class="autocomplete-items"></div>
         </div>
 
         <div class="row-inputs">
@@ -343,7 +421,7 @@
         <div class="form-group">
           <label for="accommodation">Type of Sleeping Accommodation</label>
           <select id="accommodation">
-            <option value="none">Day Trip (No Overnight)</option>
+            <option value="none">Day Trip / Unsupported (No Overnight)</option>
             <option value="tent">Backcountry Tent / Bivy</option>
             <option value="hut">Alpine / Ski Hut</option>
             <option value="car">Vehicle / Rooftop Tent</option>
@@ -362,6 +440,11 @@
           </div>
         </div>
 
+        <div class="form-group">
+          <label for="route-notes">Route Specifics & Hazards (Auto-populated from scrubbed data)</label>
+          <textarea id="route-notes" rows="3" placeholder="Hazards, technical pitches, water sources..."></textarea>
+        </div>
+
         <button type="button" class="primary-btn" onclick="generateManifest()">Generate Optimized Manifest</button>
       </form>
     </div>
@@ -372,6 +455,8 @@
         <h2 id="manifest-title" style="margin: 0;">Gear Manifest</h2>
         <span class="badge badge-acmg">ACMG Protocol</span>
       </div>
+
+      <div id="manifest-alerts"></div>
 
       <div class="section-header">Core Safety & Comms</div>
       <ul class="gear-manifest" id="list-safety"></ul>
@@ -392,6 +477,116 @@
 <script>
   let currentActivity = '';
 
+  // SCRUBBED DATABASE FOR ROUTES, HIKES & NORTH AMERICAN ULTRAMARATHONS
+  const SCRUBBED_DATABASE = [
+    {
+      name: "Starstruck (Mt. Ernest Ross, Nordegg)",
+      category: "rock-climb",
+      jurisdiction: "Alberta Crown Land / Ghost-Nordegg Zone",
+      permitUrl: "",
+      notes: "10 Pitches, 330m, 5.9. Tree belays, wandering rope drag on P4/P10, Freyja Falls gully crossing.",
+      gearAdditions: ["1x Extra 120cm/240cm Sling for Tree Belays", "Alpine Long Draws"]
+    },
+    {
+      name: "Berg Lake Trail (Mount Robson)",
+      category: "hike",
+      jurisdiction: "BC Parks (Mount Robson Provincial Park)",
+      permitUrl: "https://bcparks.ca/reservations/",
+      notes: "42 km return, 800m gain. Wilderness backcountry camping alongside glacial lakes.",
+      gearAddinals: ["Bear Spray", "Water Micro-Filter"]
+    },
+    {
+      name: "Leadville Trail 100 Run",
+      category: "ultra",
+      jurisdiction: "Colorado USA / US Forest Service",
+      permitUrl: "https://www.leadvilletracingseries.com/",
+      notes: "100 miles, extreme altitude peaking at 12,424 ft (Hope Pass). Mandatory emergency blanket, whistle, jacket, and cup.",
+      gearAdditions: ["Emergency Bivy / Foil Blanket", "Whistle & Headlamp", "Collapsible Cup (Zero-cup race policy)"]
+    },
+    {
+      name: "Hardrock 100 Endurance Run",
+      category: "ultra",
+      jurisdiction: "San Juan Range, Colorado USA",
+      permitUrl: "https://hardrock100.com/",
+      notes: "100.5 miles, 33,050 ft of climb. High alpine exposure, potential afternoon thunderstorms, snowfields over passes.",
+      gearAdditions: ["Microspikes", "Waterproof Shell & Pants", "GPS Tracker / InReach"]
+    },
+    {
+      name: "Western States 100 Endurance Run",
+      category: "ultra",
+      jurisdiction: "Squaw Valley to Auburn, California USA",
+      permitUrl: "https://www.wser.org/",
+      notes: "100.3 miles. Extreme summer canyon heat, river crossings (Canyons / Ruckel Creek).",
+      gearAdditions: ["Ice Bandana / Cooling Cloth", "Electrolyte Salts & Flasks"]
+    },
+    {
+      name: "Barkley Marathons",
+      category: "ultra",
+      jurisdiction: "Frozen Head State Park, Tennessee USA",
+      permitUrl: "https://tnstateparks.com/parks/frozen-head",
+      notes: "Approx 100+ miles off-trail through dense briars, steep climbs, and unmarked wilderness navigation.",
+      gearAdditions: ["Heavy-duty Gaiters & Leather Gloves", "Rivet Compass & Topo Map"]
+    },
+    {
+      name: "Javelina Jundred",
+      category: "ultra",
+      jurisdiction: "McDowell Mountain Regional Park, Arizona USA",
+      permitUrl: "https://www.maricopacountyparks.net/",
+      notes: "Desert trail running loop. High daytime temperatures, night running under desert skies.",
+      gearAdditions: ["Red-light Headlamp (Desert wildlife)", "Handheld Flasks with Electrolytes"]
+    },
+    {
+      name: "Bigfoot 200",
+      category: "ultra",
+      jurisdiction: "Cascade Mountains, Washington USA",
+      permitUrl: "https://www.destinationtrailrun.com/bigfoot",
+      notes: "206.5 miles point-to-point through volcanic forests, ridges, and remote wilderness.",
+      gearAdditions: ["Trekking Poles", "Complete Mandatory Cold/Wet Weather Layer Pack"]
+    }
+  ];
+
+  // AUTOCOMPLETE LOGIC
+  const searchInput = document.getElementById('route-search');
+  const autocompleteList = document.getElementById('autocomplete-list');
+
+  searchInput.addEventListener('input', function(e) {
+    const val = this.value;
+    closeAllLists();
+    if (!val) return false;
+
+    const listDiv = document.createElement('div');
+    listDiv.setAttribute('id', 'autocomplete-list');
+    listDiv.setAttribute('class', 'autocomplete-items');
+    this.parentNode.appendChild(listDiv);
+
+    SCRUBBED_DATABASE.forEach(item => {
+      if (item.name.toLowerCase().includes(val.toLowerCase()) || item.category.includes(currentActivity)) {
+        const itemDiv = document.createElement('div');
+        itemDiv.innerHTML = `<strong>${item.name}</strong> (${item.jurisdiction})`;
+        itemDiv.addEventListener('click', function(e) {
+          searchInput.value = item.name;
+          document.getElementById('route-notes').value = item.notes;
+          renderScrubbedInfo(item);
+          closeAllLists();
+        });
+        listDiv.appendChild(itemDiv);
+      }
+    });
+  });
+
+  function closeAllLists(elmnt) {
+    const items = document.getElementsByClassName('autocomplete-items');
+    for (let i = 0; i < items.length; i++) {
+      if (elmnt != items[i] && elmnt != searchInput) {
+        items[i].parentNode.removeChild(items[i]);
+      }
+    }
+  }
+
+  document.addEventListener('click', function(e) {
+    closeAllLists(e.target);
+  });
+
   function goToScreen(screenId) {
     document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
     document.getElementById(screenId).classList.add('active');
@@ -405,8 +600,12 @@
       'rock-climb': 'Rock Climbing (Multi-Pitch / Trad / Sport)',
       'alpine-climb': 'Alpine Climbing Objective',
       'mountaineering': 'Mountaineering & Glaciated Route',
+      'ice-climb': 'Ice Climbing & Mixed Objective',
+      'ski-tour': 'Backcountry Skiing & Splitboarding',
+      'canyoneer': 'Canyoneering Expedition',
+      'packraft': 'Packrafting Trip',
       'trail-run': 'Mountain Trail Running',
-      'ultra': 'Ultra Marathon Objective',
+      'ultra': 'Ultra Marathon Expedition',
       'bikepack': 'Bikepacking Expedition',
       'gravel-bike': 'Gravel Biking Route',
       'road-bike': 'Road Cycling Tour',
@@ -415,7 +614,16 @@
     };
 
     document.getElementById('selected-activity-title').textContent = titles[activityKey] || 'Objective Setup';
-    checkPermitRequirements(activityKey);
+    
+    // Toggle multi-sport helper UI
+    const multiSportSection = document.getElementById('multi-sport-section');
+    if (activityKey === 'multi-sport') {
+      multiSportSection.style.display = 'block';
+    } else {
+      multiSportSection.style.display = 'none';
+    }
+
+    updateJurisdictionAndPermits(activityKey);
     goToScreen('screen-planner');
   }
 
@@ -429,27 +637,49 @@
     }
   }
 
-  function checkPermitRequirements(activity) {
+  function updateJurisdictionAndPermits(activity) {
     const permitContainer = document.getElementById('permit-container');
     permitContainer.innerHTML = '';
 
-    // Simulated permit logic for Canadian / Popular regional jurisdictions
-    if (['hike', 'alpine-climb', 'mountaineering', 'rock-climb', 'backpack', 'car-camp'].includes(activity)) {
-      permitContainer.innerHTML = `
-        <div class="permit-box">
-          ℹ️ <strong>Permit Required:</strong> This objective may require regional park backcountry or wilderness camping permits. 
-          Apply online via the <a href="https://reservation.pc.gc.ca/" target="_blank">Parks Canada Reservation Portal</a> or local provincial park booking systems before departure.
-        </div>
-      `;
+    let jurisdictionText = "Parks Canada / Provincial Crown Land";
+    let permitUrl = "https://reservation.pc.gc.ca/";
+    let portalName = "Parks Canada Reservation Portal";
+
+    if (activity === 'hike' || activity === 'alpine-climb' || activity === 'mountaineering' || activity === 'rock-climb') {
+      jurisdictionText = "Banff, Jasper, or BC Mountain Parks Jurisdiction";
+    } else if (activity === 'canyoneer' || activity === 'packraft') {
+      jurisdictionText = "Regional Watershed & Waterway Management";
+      permitUrl = "https://www.bcparks.ca/";
+      portalName = "BC Parks / Regional Water Permits";
+    } else if (activity === 'ultra') {
+      jurisdictionText = "Sanctioned Endurance Race Course / USFS Land";
+      permitUrl = "https://www.fs.usda.gov/";
+      portalName = "US Forest Service Special Use Permits";
     }
+
+    permitContainer.innerHTML = `
+      <div class="info-box">
+        ℹ️ <strong>Jurisdiction:</strong> ${jurisdictionText}. 
+        Verify or apply for permits via the <a href="${permitUrl}" target="_blank">${portalName}</a>.
+      </div>
+    `;
+  }
+
+  function renderScrubbedInfo(item) {
+    const container = document.getElementById('scrubbed-info-container');
+    container.innerHTML = `
+      <div class="info-box" style="border-color: var(--accent); background: rgba(35, 134, 54, 0.1);">
+        🌐 <strong>Internet Scrubber Loaded:</strong> Found data for <strong>${item.name}</strong>. Jurisdiction: ${item.jurisdiction}. 
+        ${item.permitUrl ? `Permit portal: <a href="${item.permitUrl}" target="_blank">Access Link</a>` : ''}
+      </div>
+    `;
   }
 
   function generateManifest() {
     const routeName = document.getElementById('route-search').value || "Custom Expedition";
     document.getElementById('manifest-title').textContent = routeName;
 
-    // Clear lists
-    ['list-safety', 'list-hardware', 'list-clothing', 'list-fuel'].forEach(id => {
+    ['list-safety', 'list-hardware', 'list-clothing', 'list-fuel', 'manifest-alerts'].forEach(id => {
       document.getElementById(id).innerHTML = '';
     });
 
@@ -460,22 +690,52 @@
     ];
 
     const hardware = ["Topographic Map & Route Notes"];
-    if (currentActivity.includes('climb') || currentActivity === 'mountaineering') {
-      hardware.push("Climbing Helmet & Harness");
-      hardware.push("Dynamic Rope & Locking Carabiners");
-    } else if (currentActivity.includes('bike')) {
-      hardware.push("Bike Multi-Tool, Tire Levers & Mini Pump");
-      hardware.push("Spare Tubes & Patch Kit");
+    
+    // Handle multi-sport vs standard sport hardware building
+    let activeMode = currentActivity;
+    let secondaryMode = "";
+    if (currentActivity === 'multi-sport') {
+      activeMode = document.getElementById('leg-1').value;
+      secondaryMode = document.getElementById('leg-2').value;
+    }
+
+    if (activeMode.includes('bike') || secondaryMode.includes('bike')) {
+      hardware.push("Bike Multi-Tool with Chain Breaker & Spare Links");
+      hardware.push("High-Volume Frame Pump, Tire Levers & Plug Kit");
+    }
+
+    if (activeMode.includes('climb') || secondaryMode.includes('climb') || activeMode === 'mountaineering' || activeMode === 'alpine-climb') {
+      hardware.push("Climbing Helmet & ACMG Standard Harness");
+      hardware.push("70m Dynamic Single Rope (Dry-treated)");
+      hardware.push("Belay Device + HMS Locking Carabiners");
+    }
+
+    if (activeMode === 'ice-climb') {
+      hardware.push("Vertical Ice Tools (Pair) with Leashes/Tethers");
+      hardware.push("Crampons with Anti-Bot Plates & Vertical Frontpoints");
+      hardware.push("10x Ice Screws (Assorted Lengths) + V-Thread Hook");
+    }
+
+    if (activeMode === 'ski-tour') {
+      hardware.push("Avalanche Beacon (Check Battery > 80%)");
+      hardware.push("Avalanche Metal Shovel & 240cm Probe");
+      hardware.push("Backcountry Skis/Splitboard + Climbing Skins");
+    }
+
+    if (activeMode === 'packraft' || secondaryMode === 'packraft') {
+      hardware.push("Packraft + Inflation Bag & Repair Kit");
+      hardware.push("Whitewater PFD (Type V) & Breakdown Paddle");
     }
 
     const clothing = [
-      "Moisture-Wicking Base Layers",
-      "Packable Waterproof Hardshell Jacket"
+      "Synthetic Base-Layers (Top & Bottom)",
+      "Moisture-Wicking Socks (+1 Spare Pair)",
+      "3-Layer Waterproof GORE-TEX Hardshell Jacket"
     ];
 
     const fuel = [
-      "Water Storage & Purification System",
-      "High-Calorie Trail Nutrition"
+      "Water Storage System & Filtration / Purification Tablets",
+      "High-Calorie Endurance Nutrition (250-300 kcal/hr)"
     ];
 
     renderList('list-safety', safety);
