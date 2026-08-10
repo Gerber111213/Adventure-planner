@@ -132,7 +132,6 @@
       font-size: 15px;
     }
 
-    /* Autocomplete Dropdown Styles */
     .autocomplete-items {
       position: absolute;
       border: 1px solid var(--border);
@@ -277,7 +276,7 @@
   <div id="screen-welcome" class="screen active">
     <div class="hero-banner">
       <h1>"Out of the office, into the wild."</h1>
-      <p>Select your discipline to initialize intelligent ACMG protocol packing & safety workflows.</p>
+      <p>Select your discipline to initialize intelligent guide-vetted packing & safety workflows.</p>
     </div>
 
     <div class="card">
@@ -476,30 +475,121 @@
 
 <script>
   let currentActivity = '';
+  let selectedRouteData = null;
 
-  // SCRUBBED DATABASE FOR ROUTES, HIKES & NORTH AMERICAN ULTRAMARATHONS
+  // EXPERT-RECOMMENDED GUIDE & RACE DATABASES
+  const SPORT_GEAR_DB = {
+    'hike': {
+      safety: ["Garmin inReach / Satellite Communicator", "Topographic Map & Compass", "Headlamp (IPX8) + Batteries", "First Aid Kit + Space Blanket"],
+      hardware: ["Trekking Poles", "30L - 45L Pack with Rain Cover", "Multi-Tool / Knife + Repair Tape"],
+      clothing: ["Synthetic Moisture-Wicking Base Layers", "3-Layer GORE-TEX Waterproof Hardshell Jacket & Pants", "Packable Down or Synthetic Insulated Jacket", "Extra Pair of Wool Socks"],
+      fuel: ["2L - 3L Water Storage System", "Water Micro-Filter / Purification Tablets", "High-Calorie Trail Nutrition (250-300 kcal/hr)"]
+    },
+    'rock-climb': {
+      safety: ["Garmin inReach / Satellite Communicator", "ACMG First Aid Kit + Trauma Compress", "Headlamp + Extra Batteries"],
+      hardware: ["70m Dynamic Single Rope (Dry-treated)", "Climbing Helmet (UIAA/CE Certified)", "Certified Climbing Harness", "Sticky-Rubber Approach Shoes", "Climbing Shoes & Chalk Bag", "Assisted-Braking Belay Device + HMS Locker", "10x Standard Quickdraws", "4x - 6x Alpine Long Draws", "1x 120cm Cordelette / Sling + 2x Locking Carabiners"],
+      clothing: ["Synthetic Base Layer", "Lightweight Windshell or Softshell", "Synthetic Mid-Layer Insulation (NO DOWN for wet rock)", "2x Pairs Belay/Work Gloves"],
+      fuel: ["2L Hydration Bladder or Bottles", "High-Calorie Snacks", "1L Insulated Thermos"]
+    },
+    'alpine-climb': {
+      safety: ["Satellite Communicator", "Mountain First Aid + Bivy Emergency Bag", "Headlamp with Fresh Lithium Batteries"],
+      hardware: ["Lightweight Mountaineering Helmet", "Glacier Travel Kit (Prusik loops, 30m dynamic rope)", "Mountaineering Boots", "10- or 12-Point Steel Crampons", "Lightweight Ice Axe / Technical Tools", "Harness with Gear Loops"],
+      clothing: ["Heavyweight Thermal Base Layers", "Hard-face Fleece", "3-Layer Gore-Tex Hardshell Jacket & Pants", "Insulated Down Parka", "Alpine Mountaineering Gloves + Over-mitts", "Balaclava & Warm Toque"],
+      fuel: ["Wide-mouth Nalgene bottles", "Insulated Flask with Warm Liquid", "Compact Alpine Stove + Gas Canister", "Dehydrated Expedition Meals"]
+    },
+    'mountaineering': {
+      safety: ["Garmin inReach / Satellite Communicator", "Comprehensive Alpine First Aid Kit", "Altimeter Watch / GPS"],
+      hardware: ["Glacier Rope Team Equipment", "Steel Mountaineering Crampons (anti-balling plates)", "Walking Ice Axe", "Glacier Glasses (Cat 3 or 4 UV)", "Trekking Poles with Snow Baskets", "Harness with adjustable leg loops"],
+      clothing: ["Full Synthetic or Merino Base Layers", "Mid-layer Fleece", "Gore-Tex Storm Shell", "Expedition-Grade Down Jacket", "Glacier Sun Hoodie", "Mountain Mitts + Liner Gloves", "UV Buff / Sun Mask"],
+      fuel: ["Insulated Water Bottles", "Stove System + Fuel", "High-Fat/High-Carb Expedition Food"]
+    },
+    'ice-climb': {
+      safety: ["Satellite Communicator", "Cold-Weather First Aid Kit + Emergency Bivy"],
+      hardware: ["Vertical Ice Tools (Pair) with Tethers", "Technical Crampons with Vertical Frontpoints", "Rigid Mountaineering Boots", "10x Ice Screws + V-Thread Hook", "Ice Clipper Caritools", "Dual-Rope System (Twin/Half dry ropes)", "Assisted Belay Device for skinny ropes"],
+      clothing: ["Heavyweight Thermal Tops & Bottoms", "Wind-resistant Softshell Jacket & Pants", "Belay Parka", "Ice Climbing Gloves (high dexterity)", "Warm Toque"],
+      fuel: ["Wide-mouth Bottles stored upside down", "High-Energy Snacks", "Thermos with Hot Electrolyte Drink"]
+    },
+    'ski-tour': {
+      safety: ["Avalanche Transceiver (>80% battery)", "Metal Snow Shovel", "240cm+ Avalanche Probe", "Satellite Communicator", "Snow Saw"],
+      hardware: ["Backcountry Skis or Splitboard with Touring Bindings", "Climbing Skins", "Telescopic Ski Poles", "Ski Crampons / Boot Crampons", "Ski/Climb Certified Helmet"],
+      clothing: ["Breathable Touring Base Layers", "Softshell Touring Jacket & Pants", "Packable Insulated Puffy", "Lightweight Uphill Gloves + Heavyweight Downhill Gloves", "Neck Gaiter / Balaclava"],
+      fuel: ["Insulated Flask or Thermos", "Quick-access Energy Gels/Bars", "Ski Straps (Voile x2)"]
+    },
+    'canyoneer': {
+      safety: ["Waterproof Map / Topo Route Description", "Satellite Messenger", "Emergency Whistle"],
+      hardware: ["Canyoneering Harness with seat protector", "Canyon Backpack with drainage mesh", "Static Canyoneering Rope (Dry treated)", "Webbing and Quick-links", "Heavy-duty Helmet", "Rescue Knife"],
+      clothing: ["Neoprene Wetsuit (3mm-5mm)", "Canyon Shoes with sticky rubber", "Neoprene Socks", "Drainage-friendly shorts/pants"],
+      fuel: ["Waterproof Dry Bags for food/fuel", "Compact High-Calorie Snacks", "Water Purification Tablets"]
+    },
+    'packraft': {
+      safety: ["Satellite Communicator", "Waterproof Case for Electronics", "River Guidebook"],
+      hardware: ["Packraft + Inflation Bag & Repair Kit", "Whitewater-rated PFD (Type V)", "Breakdown Whitewater Paddle", "Whitewater Helmet", "Throw Bag (50ft+)", "Bow/Stern Cargo Straps"],
+      clothing: ["Dry Suit or Semi-Dry Suit with gaskets", "Thermal Under-layers", "Neoprene Booties", "Paddling Gloves/Pogies"],
+      fuel: ["Multi-day dry bags for overnight gear", "Camp Kitchen Stove", "Water Filtration System"]
+    },
+    'trail-run': {
+      safety: ["GPS Watch / Phone with offline route", "Emergency Whistle", "Mini First Aid Pack"],
+      hardware: ["5L - 12L Running Vest Pack", "Trail Running Shoes with Aggressive Lug Tread", "Ultralight Emergency Bivy / Foil Blanket", "Collapsible Soft Flasks"],
+      clothing: ["Lightweight Running Tee / Tank", "Running Shorts/Tights", "Ultra-packable Wind Shell or Rain Jacket", "Lightweight Running Gloves & Headband"],
+      fuel: ["Electrolyte Drink Mix", "Energy Gels / Chews / Waffles"]
+    },
+    'ultra': {
+      safety: ["Mandatory Race-Kit Items", "Satellite Tracker", "GPS Watch with pre-loaded track"],
+      hardware: ["10L - 15L Endurance Vest", "Trekking Poles", "Anti-Chafing Balm & Blister Prevention Kit", "Spare Ultralight Headlamp"],
+      clothing: ["Breathable Moisture-Wicking Race Apparel", "Anti-blister Merino/Double Layer Socks", "Mandatory Weather Shell", "Sun Visor / Hat"],
+      fuel: ["Soft Flasks with Electrolyte Mix", "Concentrated Calorie Flasks", "Salt Caps"]
+    },
+    'bikepack': {
+      safety: ["GPS Cycling Computer", "Satellite Communicator", "Backup Power Bank (USB) + Cords"],
+      hardware: ["Bikepacking Bag System (Seat, Frame, Handlebar)", "Bike Multi-tool with Chain Breaker & Quick Links", "High-Volume Mini Pump or CO2 Inflator", "Tire Levers & Tubeless Plug Kit", "Spare Inner Tubes & Tire Boot"],
+      clothing: ["Cycling Bib Shorts with Chamois", "Merino Cycling Jersey", "Packable Windbreaker / Rain Shell", "Off-bike Camp Shoes", "Camp Layers"],
+      fuel: ["Frame-mounted Water Bottles + Fork Cages", "Compact Backpacking Stove + Fuel", "Dehydrated Meals"]
+    },
+    'gravel-bike': {
+      safety: ["GPS Cycling Computer", "Offline Maps Phone App", "Mini First Aid Kit"],
+      hardware: ["Frame Bags / Top Tube Bag", "Heavy-duty Gravel Multi-tool", "Tubeless Sealant Injector + Spare Sealant", "Mini Pump & Tire Plugs", "Spare Heavy-Duty Gravel Tubes"],
+      clothing: ["Gravel-specific Cycling Jersey & Bibs", "Packable Wind/Water Vest", "Arm & Leg Warmers", "Padding Cycling Gloves"],
+      fuel: ["2x Large Capacity Water Bottles", "High-density Energy Bars & Gels", "Electrolyte Drink Mix"]
+    },
+    'road-bike': {
+      safety: ["Cycling Computer / Phone Mount", "ID & Emergency Contact Info", "Cash / Credit Card"],
+      hardware: ["Saddle Bag", "Compact Multi-tool", "Mini Pump or CO2", "2x Spare Inner Tubes & Levers", "Front Daytime Running Light & Rear Flasher"],
+      clothing: ["Aerodynamic Cycling Jersey & Bib Shorts", "Wind Vest (Gilet)", "Packable Rain Jacket", "Road Cycling Shoes"],
+      fuel: ["2x Water/Electrolyte Bottles", "Energy Bars, Chews, or Gel Packets"]
+    },
+    'car-camp': {
+      safety: ["Camp Lantern", "Headlamp", "Reservation Confirmation / Passes"],
+      hardware: ["3-Season or 4-Season Tent", "Sleeping Bags / Quilts (rated for lows)", "Self-inflating Sleeping Pads or Air Mattress", "Camp Chairs", "Cooler with Ice", "Multi-burner Camp Stove + Fuel"],
+      clothing: ["Comfortable Casual Camp Clothes", "Fleece Jacket / Hoodie", "Warm Camp Slippers", "Wool Sleeping Socks"],
+      fuel: ["Camp Kitchen Box (Utensils, plates, pots, soap)", "5L - 10L Water Jug", "Camp Meals / Provisions", "Coffee Percolator / Press"]
+    }
+  };
+
   const SCRUBBED_DATABASE = [
     {
       name: "Starstruck (Mt. Ernest Ross, Nordegg)",
       category: "rock-climb",
-      jurisdiction: "Alberta Crown Land / Ghost-Nordegg Zone",
-      permitUrl: "",
+      jurisdiction: "Alberta Crown Land",
+      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
+      permitName: "Alberta Public Lands Camping Pass",
       notes: "10 Pitches, 330m, 5.9. Tree belays, wandering rope drag on P4/P10, Freyja Falls gully crossing.",
-      gearAdditions: ["1x Extra 120cm/240cm Sling for Tree Belays", "Alpine Long Draws"]
+      gearAdditions: ["1x Extra 120cm/240cm Sling for Tree Belays", "4x Alpine Long Draws (Specific for Starstruck wandering pitches)"]
     },
     {
       name: "Berg Lake Trail (Mount Robson)",
       category: "hike",
-      jurisdiction: "BC Parks (Mount Robson Provincial Park)",
+      jurisdiction: "BC Parks",
       permitUrl: "https://bcparks.ca/reservations/",
+      permitName: "BC Parks Wilderness Registration",
       notes: "42 km return, 800m gain. Wilderness backcountry camping alongside glacial lakes.",
-      gearAddinals: ["Bear Spray", "Water Micro-Filter"]
+      gearAdditions: ["Bear Spray", "Water Micro-Filter"]
     },
     {
       name: "Leadville Trail 100 Run",
       category: "ultra",
-      jurisdiction: "Colorado USA / US Forest Service",
+      jurisdiction: "Colorado USA / USFS",
       permitUrl: "https://www.leadvilletracingseries.com/",
+      permitName: "US Forest Service Special Use Permit",
       notes: "100 miles, extreme altitude peaking at 12,424 ft (Hope Pass). Mandatory emergency blanket, whistle, jacket, and cup.",
       gearAdditions: ["Emergency Bivy / Foil Blanket", "Whistle & Headlamp", "Collapsible Cup (Zero-cup race policy)"]
     },
@@ -508,44 +598,12 @@
       category: "ultra",
       jurisdiction: "San Juan Range, Colorado USA",
       permitUrl: "https://hardrock100.com/",
+      permitName: "Hardrock Race Registration & Permitting",
       notes: "100.5 miles, 33,050 ft of climb. High alpine exposure, potential afternoon thunderstorms, snowfields over passes.",
       gearAdditions: ["Microspikes", "Waterproof Shell & Pants", "GPS Tracker / InReach"]
-    },
-    {
-      name: "Western States 100 Endurance Run",
-      category: "ultra",
-      jurisdiction: "Squaw Valley to Auburn, California USA",
-      permitUrl: "https://www.wser.org/",
-      notes: "100.3 miles. Extreme summer canyon heat, river crossings (Canyons / Ruckel Creek).",
-      gearAdditions: ["Ice Bandana / Cooling Cloth", "Electrolyte Salts & Flasks"]
-    },
-    {
-      name: "Barkley Marathons",
-      category: "ultra",
-      jurisdiction: "Frozen Head State Park, Tennessee USA",
-      permitUrl: "https://tnstateparks.com/parks/frozen-head",
-      notes: "Approx 100+ miles off-trail through dense briars, steep climbs, and unmarked wilderness navigation.",
-      gearAdditions: ["Heavy-duty Gaiters & Leather Gloves", "Rivet Compass & Topo Map"]
-    },
-    {
-      name: "Javelina Jundred",
-      category: "ultra",
-      jurisdiction: "McDowell Mountain Regional Park, Arizona USA",
-      permitUrl: "https://www.maricopacountyparks.net/",
-      notes: "Desert trail running loop. High daytime temperatures, night running under desert skies.",
-      gearAdditions: ["Red-light Headlamp (Desert wildlife)", "Handheld Flasks with Electrolytes"]
-    },
-    {
-      name: "Bigfoot 200",
-      category: "ultra",
-      jurisdiction: "Cascade Mountains, Washington USA",
-      permitUrl: "https://www.destinationtrailrun.com/bigfoot",
-      notes: "206.5 miles point-to-point through volcanic forests, ridges, and remote wilderness.",
-      gearAdditions: ["Trekking Poles", "Complete Mandatory Cold/Wet Weather Layer Pack"]
     }
   ];
 
-  // AUTOCOMPLETE LOGIC
   const searchInput = document.getElementById('route-search');
   const autocompleteList = document.getElementById('autocomplete-list');
 
@@ -566,7 +624,9 @@
         itemDiv.addEventListener('click', function(e) {
           searchInput.value = item.name;
           document.getElementById('route-notes').value = item.notes;
+          selectedRouteData = item;
           renderScrubbedInfo(item);
+          updateJurisdictionAndPermits(currentActivity, item.jurisdiction);
           closeAllLists();
         });
         listDiv.appendChild(itemDiv);
@@ -595,6 +655,7 @@
 
   function selectActivity(activityKey) {
     currentActivity = activityKey;
+    selectedRouteData = null;
     const titles = {
       'hike': 'Backcountry Hiking & Trekking',
       'rock-climb': 'Rock Climbing (Multi-Pitch / Trad / Sport)',
@@ -615,7 +676,6 @@
 
     document.getElementById('selected-activity-title').textContent = titles[activityKey] || 'Objective Setup';
     
-    // Toggle multi-sport helper UI
     const multiSportSection = document.getElementById('multi-sport-section');
     if (activityKey === 'multi-sport') {
       multiSportSection.style.display = 'block';
@@ -623,7 +683,7 @@
       multiSportSection.style.display = 'none';
     }
 
-    updateJurisdictionAndPermits(activityKey);
+    updateJurisdictionAndPermits(activityKey, '');
     goToScreen('screen-planner');
   }
 
@@ -637,40 +697,53 @@
     }
   }
 
-  function updateJurisdictionAndPermits(activity) {
+  function updateJurisdictionAndPermits(activity, customJurisdiction) {
     const permitContainer = document.getElementById('permit-container');
     permitContainer.innerHTML = '';
 
-    let jurisdictionText = "Parks Canada / Provincial Crown Land";
-    let permitUrl = "https://reservation.pc.gc.ca/";
-    let portalName = "Parks Canada Reservation Portal";
+    let boxHtml = '';
+    const routeText = (customJurisdiction + " " + searchInput.value).toLowerCase();
 
-    if (activity === 'hike' || activity === 'alpine-climb' || activity === 'mountaineering' || activity === 'rock-climb') {
-      jurisdictionText = "Banff, Jasper, or BC Mountain Parks Jurisdiction";
-    } else if (activity === 'canyoneer' || activity === 'packraft') {
-      jurisdictionText = "Regional Watershed & Waterway Management";
-      permitUrl = "https://www.bcparks.ca/";
-      portalName = "BC Parks / Regional Water Permits";
-    } else if (activity === 'ultra') {
-      jurisdictionText = "Sanctioned Endurance Race Course / USFS Land";
-      permitUrl = "https://www.fs.usda.gov/";
-      portalName = "US Forest Service Special Use Permits";
+    if (routeText.includes('kananaskis')) {
+      boxHtml = `
+        <div class="info-box">
+          ℹ️ <strong>Kananaskis Jurisdiction:</strong> This area requires a valid conservation pass. Purchase online via the <a href="https://www.alberta.ca/kananaskis-conservation-pass" target="_blank">Kananaskis Conservation Pass Portal</a>.
+        </div>
+      `;
+    } else if (routeText.includes('crown land') || routeText.includes('nordegg') || routeText.includes('ghost')) {
+      boxHtml = `
+        <div class="info-box">
+          ℹ️ <strong>Crown Land Jurisdiction:</strong> Alberta public lands camping requires a pass. Secure yours through the <a href="https://www.alberta.ca/public-lands-camping-pass" target="_blank">Alberta Public Lands Camping Pass Portal</a>.
+        </div>
+      `;
+    } else if (routeText.includes('national park') || routeText.includes('banff') || routeText.includes('jasper') || routeText.includes('yoho')) {
+      boxHtml = `
+        <div class="info-box">
+          ℹ️ <strong>National Park Jurisdiction:</strong> A National Park entry pass is mandatory. Purchase online via the <a href="https://reservation.pc.gc.ca/" target="_blank">Parks Canada Reservation Portal</a> or directly at the park gates upon arrival.
+        </div>
+      `;
+    } else if (selectedRouteData && selectedRouteData.permitUrl) {
+      boxHtml = `
+        <div class="info-box">
+          ℹ️ <strong>Permit Required:</strong> Jurisdiction: ${selectedRouteData.jurisdiction}. Apply via the <a href="${selectedRouteData.permitUrl}" target="_blank">${selectedRouteData.permitName}</a>.
+        </div>
+      `;
+    } else {
+      boxHtml = `
+        <div class="info-box">
+          ℹ️ <strong>General Permit Guidance:</strong> Ensure you check regional backcountry rules. For Canadian National Parks, passes can be bought online via <a href="https://reservation.pc.gc.ca/" target="_blank">Parks Canada</a> or at park gates.
+        </div>
+      `;
     }
 
-    permitContainer.innerHTML = `
-      <div class="info-box">
-        ℹ️ <strong>Jurisdiction:</strong> ${jurisdictionText}. 
-        Verify or apply for permits via the <a href="${permitUrl}" target="_blank">${portalName}</a>.
-      </div>
-    `;
+    permitContainer.innerHTML = boxHtml;
   }
 
   function renderScrubbedInfo(item) {
     const container = document.getElementById('scrubbed-info-container');
     container.innerHTML = `
       <div class="info-box" style="border-color: var(--accent); background: rgba(35, 134, 54, 0.1);">
-        🌐 <strong>Internet Scrubber Loaded:</strong> Found data for <strong>${item.name}</strong>. Jurisdiction: ${item.jurisdiction}. 
-        ${item.permitUrl ? `Permit portal: <a href="${item.permitUrl}" target="_blank">Access Link</a>` : ''}
+        🌐 <strong>Smart Autocomplete Loaded:</strong> Objective matched for <strong>${item.name}</strong>. Jurisdiction: ${item.jurisdiction}.
       </div>
     `;
   }
@@ -683,15 +756,6 @@
       document.getElementById(id).innerHTML = '';
     });
 
-    const safety = [
-      "Garmin inReach / Satellite Communicator",
-      "ACMG First Aid + Hypothermia Space Blanket",
-      "Headlamp (IPX8 Waterproof) + Extra Batteries"
-    ];
-
-    const hardware = ["Topographic Map & Route Notes"];
-    
-    // Handle multi-sport vs standard sport hardware building
     let activeMode = currentActivity;
     let secondaryMode = "";
     if (currentActivity === 'multi-sport') {
@@ -699,44 +763,23 @@
       secondaryMode = document.getElementById('leg-2').value;
     }
 
-    if (activeMode.includes('bike') || secondaryMode.includes('bike')) {
-      hardware.push("Bike Multi-Tool with Chain Breaker & Spare Links");
-      hardware.push("High-Volume Frame Pump, Tire Levers & Plug Kit");
+    // Pull from expert database base lists
+    let safety = [...(SPORT_GEAR_DB[activeMode]?.safety || SPORT_GEAR_DB['hike'].safety)];
+    let hardware = [...(SPORT_GEAR_DB[activeMode]?.hardware || [])];
+    let clothing = [...(SPORT_GEAR_DB[activeMode]?.clothing || SPORT_GEAR_DB['hike'].clothing)];
+    let fuel = [...(SPORT_GEAR_DB[activeMode]?.fuel || SPORT_GEAR_DB['hike'].fuel)];
+
+    // If secondary mode exists in multi-sport, combine hardware
+    if (secondaryMode && SPORT_GEAR_DB[secondaryMode]) {
+      hardware.push(...SPORT_GEAR_DB[secondaryMode].hardware);
     }
 
-    if (activeMode.includes('climb') || secondaryMode.includes('climb') || activeMode === 'mountaineering' || activeMode === 'alpine-climb') {
-      hardware.push("Climbing Helmet & ACMG Standard Harness");
-      hardware.push("70m Dynamic Single Rope (Dry-treated)");
-      hardware.push("Belay Device + HMS Locking Carabiners");
+    // Inject route-specific tailored additions if matched (e.g. Starstruck)
+    if (selectedRouteData && selectedRouteData.gearAdditions) {
+      selectedRouteData.gearAdditions.forEach(gear => {
+        hardware.push("⭐ " + gear + " (Route Specific)");
+      });
     }
-
-    if (activeMode === 'ice-climb') {
-      hardware.push("Vertical Ice Tools (Pair) with Leashes/Tethers");
-      hardware.push("Crampons with Anti-Bot Plates & Vertical Frontpoints");
-      hardware.push("10x Ice Screws (Assorted Lengths) + V-Thread Hook");
-    }
-
-    if (activeMode === 'ski-tour') {
-      hardware.push("Avalanche Beacon (Check Battery > 80%)");
-      hardware.push("Avalanche Metal Shovel & 240cm Probe");
-      hardware.push("Backcountry Skis/Splitboard + Climbing Skins");
-    }
-
-    if (activeMode === 'packraft' || secondaryMode === 'packraft') {
-      hardware.push("Packraft + Inflation Bag & Repair Kit");
-      hardware.push("Whitewater PFD (Type V) & Breakdown Paddle");
-    }
-
-    const clothing = [
-      "Synthetic Base-Layers (Top & Bottom)",
-      "Moisture-Wicking Socks (+1 Spare Pair)",
-      "3-Layer Waterproof GORE-TEX Hardshell Jacket"
-    ];
-
-    const fuel = [
-      "Water Storage System & Filtration / Purification Tablets",
-      "High-Calorie Endurance Nutrition (250-300 kcal/hr)"
-    ];
 
     renderList('list-safety', safety);
     renderList('list-hardware', hardware);
@@ -753,6 +796,9 @@
       const checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
       const span = document.createElement('span');
+      if (item.includes('⭐') || item.includes('⚠️')) {
+        span.className = 'item-warning';
+      }
       span.textContent = item;
       li.appendChild(checkbox);
       li.appendChild(span);
