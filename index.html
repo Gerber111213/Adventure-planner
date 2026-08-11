@@ -22,7 +22,7 @@
  .form-group {margin-bottom: 16px; position: relative; }
  label {display: block; font-weight: 600; margin-bottom: 6px; color: var(--text-bright); }
  select, input[type="text"], input[type="number"], input[type="date"], textarea {width: 100%; padding: 10px; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; color: var(--text-bright); box-sizing: border-box; font-size: 15px; }
- .cascade-row {display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+ .cascade-row {display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 12px; }
  .autocomplete-items {position: absolute; border: 1px solid var(--border); border-bottom: none; border-top: none; z-index: 99; top: 100%; left: 0; right: 0; background-color: var(--card-bg); border-radius: 0 0 6px 6px; max-height: 200px; overflow-y: auto; }
  .autocomplete-items div {padding: 10px; cursor: pointer; border-bottom: 1px solid var(--border); color: var(--text); font-size: 14px; }
  .autocomplete-items div:hover {background-color: #30363d; color: var(--text-bright); }
@@ -68,19 +68,16 @@
  <div class="card">
  <h2 id="sport-title" style="margin-bottom: 16px;">Objective Setup</h2>
 
- <!-- DYNAMIC REGIONAL & CRAG HIERARCHY SELECTOR -->
+ <!-- DYNAMIC REGION & OBJECTIVE SELECTOR -->
  <div id="regional-cascade-group" class="form-group">
- <label>📍 Detailed Regional & Crag Hierarchy</label>
+ <label>📍 Select Region & Objective</label>
  <div class="cascade-row">
  <select id="cascade-region" onchange="onRegionChange()">
- <option value="">Select Region</option>
- </select>
- <select id="cascade-crag" onchange="onCragChange()" disabled>
- <option value="">Select Crag / Area</option>
+ <option value="">Select Region / Area</option>
  </select>
  </div>
- <select id="cascade-route" onchange="onRouteSelect()" disabled style="margin-top: 6px;">
- <option value="">Select Specific Route / Objective</option>
+ <select id="cascade-route" onchange="onRouteSelect()" disabled style="margin-top: 6px; max-height: 200px; overflow-y: auto;">
+ <option value="">Select Specific Objective / Canyon</option>
  </select>
  </div>
 
@@ -179,7 +176,7 @@
  <ul class="gear-manifest" id="list-hardware"></ul>
  <div class="section-header">Layering & Clothing</div>
  <ul class="gear-manifest" id="list-clothing"></ul>
- <div class="section-headerpx">Hydration, Fuel & Camp Systems</div>
+ <div class="section-header">Hydration, Fuel & Camp Systems</div>
  <ul class="gear-manifest" id="list-fuel"></ul>
  </div>
  </div>
@@ -244,7 +241,12 @@
 
  function populateRegions() {
      const regSelect = document.getElementById('cascade-region');
-     regSelect.innerHTML = '<option value="">Select Region</option>';
+     const routeSelect = document.getElementById('cascade-route');
+
+     regSelect.innerHTML = '<option value="">Select Region / Area</option>';
+     routeSelect.innerHTML = '<option value="">Select Specific Objective / Canyon</option>';
+     routeSelect.disabled = true;
+
      const regions = [...new Set(MASTER_DATABASE.map(item => item.region))].filter(Boolean);
      regions.forEach(reg => {
          regSelect.innerHTML += `<option value="${reg}">${reg}</option>`;
@@ -253,41 +255,23 @@
 
  function onRegionChange() {
      const reg = document.getElementById('cascade-region').value;
-     const cragSelect = document.getElementById('cascade-crag');
      const routeSelect = document.getElementById('cascade-route');
 
-     cragSelect.innerHTML = '<option value="">Select Crag / Area</option>';
-     routeSelect.innerHTML = '<option value="">Select Specific Route / Objective</option>';
-     routeSelect.disabled = true;
+     routeSelect.innerHTML = '<option value="">Select Specific Objective / Canyon</option>';
 
      if (reg) {
-         cragSelect.disabled = false;
-         const filteredCrags = [...new Set(MASTER_DATABASE.filter(r => r.region === reg).map(r => r.crag))].filter(Boolean);
-         filteredCrags.forEach(crag => {
-             cragSelect.innerHTML += `<option value="${crag}">${crag}</option>`;
-         });
-     } else {
-         cragSelect.disabled = true;
-     }
- }
-
- function onCragChange() {
-     const reg = document.getElementById('cascade-region').value;
-     const crag = document.getElementById('cascade-crag').value;
-     const routeSelect = document.getElementById('cascade-route');
-
-     routeSelect.innerHTML = '<option value="">Select Specific Route / Objective</option>';
-
-     if (reg && crag) {
          routeSelect.disabled = false;
-         const filteredRoutes = MASTER_DATABASE.filter(r => r.region === reg && r.crag === crag);
+         const filteredRoutes = MASTER_DATABASE.filter(r => r.region === reg);
          filteredRoutes.forEach(r => {
-             routeSelect.innerHTML += `<option value="${r.name}">${r.name} (${r.grade})</option>`;
+             routeSelect.innerHTML += `<option value="${r.name}">${r.name} (${r.grade || ''})</option>`;
          });
      } else {
          routeSelect.disabled = true;
      }
  }
+
+ // Unused wrapper functions to maintain compatibility with legacy handlers
+ function onCragChange() {}
 
  function onRouteSelect() {
      const routeName = document.getElementById('cascade-route').value;
