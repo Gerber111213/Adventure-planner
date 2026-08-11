@@ -1,0 +1,98 @@
+{
+  "rock-climb": {
+    "name": "Rock Climbing",
+    "icon": "<svg viewBox=\"0 0 24 24\"><path d=\"M12 2c1.1 0 2 .9 2 2s-.9 2-2 2-2-.9-2-2 .9-2 2-2zm9 7h-6l-2-3H9L7 9H3v2h2.5l2.5 8h2l1-5 1 5h2l2.5-8H21V9z\"/></svg>",
+    "safety": ["Garmin inReach / Satellite Communicator", "ACMG First Aid Kit + Trauma Compress", "Headlamp + Extra Batteries"],
+    "hardware": ["70m Dynamic Single Rope (Dry-treated)", "Climbing Helmet (UIAA Certified)", "Certified Climbing Harness", "Sticky-Rubber Approach Shoes", "Climbing Shoes & Chalk Bag", "Assisted-Braking Belay Device + HMS Locker", "12x Standard Quickdraws"],
+    "clothing": ["Synthetic Base Layer", "Lightweight Windshell or Softshell", "Synthetic Mid-Layer Insulation"],
+    "fuel": ["2L Hydration System or Bottles", "High-Calorie Snacks"]
+  },
+  "alpine-climb": {
+    "name": "Alpine Climbing",
+    "icon": "<svg viewBox=\"0 0 24 24\"><path d=\"M14 2h-4l-6 18h3l1.5-4h7l1.5 4h3L14 2zm-2.3 9L13 6.8 14.3 11h-2.6z\"/></svg>",
+    "safety": ["Garmin inReach Satellite Communicator", "Mountain First Aid Kit + Bivy Shelter"],
+    "hardware": ["Mountaineering Helmet", "Glacier Travel Kit", "Mountaineering Boots", "12-Point Steel Crampons", "Technical Ice Axe"],
+    "clothing": ["Thermal Base Layers", "Hardshell Jacket & Pants", "Insulated Parka"],
+    "fuel": ["Wide-mouth Nalgene Bottles", "Compact Alpine Stove"]
+  },
+  "ice-climb": {
+    "name": "Ice & Mixed",
+    "icon": "<svg viewBox=\"0 0 24 24\"><path d=\"M15 2l-3 3 2 2-3 3-5-5-2 2 7 7 4-4 2 2 3-3-4-4z\"/></svg>",
+    "safety": ["Garmin inReach Satellite Communicator", "Winter Trauma First Aid Kit"],
+    "hardware": ["Ice Helmet", "Dual Ice Tools", "Rigid Boots", "Steel Crampons", "Ice Screw Rack"],
+    "clothing": ["Heavy Thermal Layers", "Belay Parka", "Technical Ice Gloves"],
+    "fuel": ["Insulated Thermos with Hot Drink", "High-Fat Energy Bars"]
+  },
+  "mountaineering": {
+    "name": "Mountaineering",
+    "icon": "<svg viewBox=\"0 0 24 24\"><path d=\"M12 2L2 22h20L12 2zm0 4.5l6.5 13H5.5L12 6.5z\"/></svg>",
+    "safety": ["Satellite Communicator", "Alpine First Aid Kit", "Crevasse Rescue Gear"],
+    "hardware": ["Mountaineering Boots", "Crampons", "Ice Axe", "Helmet", "Rope & Pickets"],
+    "clothing": ["Expedition Base Layers", "Windproof Shells", "Heavy Insulation"],
+    "fuel": ["Melt Water Gear", "High-Calorie Rations"]
+  },
+  "hike": {
+    "name": "Hiking & Trekking",
+    "icon": "<svg viewBox=\"0 0 24 24\"><path d=\"M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-2.1 0-3.9-1.1-4.8-2.8l-1-1.7c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.2L6 8.5V13h2V9.6l1.8-.7z\"/></svg>",
+    "safety": ["GPS Communicator", "Wilderness First Aid Kit", "Headlamp"],
+    "hardware": ["Trekking Poles", "Waterproof Hiking Boots", "Multi-tool"],
+    "clothing": ["Moisture-Wicking Base", "Rain Shell", "Extra Wool Socks"],
+    "fuel": ["3L Water Capacity / Filtration", "Trail Snacks"]
+  },
+  "backpacking": {
+    "name": "Backpacking",
+    "icon": "<svg viewBox=\"0 0 24 24\"><path d=\"M18 6h-2V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H6C4.9 6 4 6.9 4 8v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6-2h4v2h-4V4zm6 16H6V8h2v3h2V8h4v3h2V8h2v12z\"/></svg>",
+    "safety": ["Satellite Communicator", "First Aid Kit", "Emergency Shelter"],
+    "hardware": ["Backpacking Tent", "Sleeping Bag & Pad", "Trekking Poles", "Water Filter"],
+    "clothing": ["Merino Wool Layers", "Rain Jacket & Pants"],
+    "fuel": ["Stove & Fuel Canister", "Cookset & Trail Meals"]
+  },
+  "car-camping": {
+    "name": "Car Camping",
+    "icon": "<svg viewBox=\"0 0 24 24\"><path d=\"M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.22.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.85 7h10.29l1.04 3H5.81l1.04-3zM19 17H5v-4.66l.12-.34h13.76l.12.34V17z\"/></svg>",
+    "safety": ["Compact First Aid Kit", "Lanterns", "Bear Spray"],
+    "hardware": ["Family Tent", "Air Mattress", "Cooler", "Camp Chairs"],
+    "clothing": ["Leisure Layers", "Evening Jacket", "Camp Slippers"],
+    "fuel": ["Camp Stove", "Kitchen Set", "Water Jugs"]
+  },
+  "bikepacking": {
+    "name": "Bikepacking",
+    "icon": "<svg viewBox=\"0 0 24 24\"><path d=\"M15.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 zM5 12c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5zm0 8c-1.7 0-3-1.3-3-3s1.3-3 3-3 3 1.3 3 3-1.3 3-3 3zm14-8c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5zm0 8c-1.7 0-3-1.3-3-3s1.3-3 3-3 3 1.3 3 3-1.3 3-3 3z\"/></svg>",
+    "safety": ["Satellite Comms", "Cyclist First Aid", "Lights"],
+    "hardware": ["Bikepacking Bags", "Multi-tool with Chain Breaker", "Tubeless Repair Kit"],
+    "clothing": ["Cycling Bibs", "Merino Jersey", "Rain Jacket"],
+    "fuel": ["Water Bottles & Filtration", "Stove Set", "Trail Nutrition"]
+  },
+  "packrafting": {
+    "name": "Packrafting",
+    "icon": "<svg viewBox=\"0 0 24 24\"><path d=\"M20 15c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-16 2c0 1.1.9 2 2 2s2-.9 2-2-.9-2-2-2-2 .9-2 2zm15.8-9h-1.6l-2.4-4.8c-.3-.6-.9-1-1.6-1h-6.8c-.7 0-1.3.4-1.6 1L4.2 8H2.6C1.7 8 1 8.7 1 9.6v1.8c0 .9.7 1.6 1.6 1.6h.4c0 2.2 1.8 4 4 4s4-1.8 4-4h4c0 2.2 1.8 4 4 4s4-1.8 4-4h.4c.9 0 1.6-.7 1.6-1.6V9.6c0-.9-.7-1.6-1.6-1.6z\"/></svg>",
+    "safety": ["Satellite Comms", "Whitewater PFD", "Helmet", "Throw Bag", "River Knife"],
+    "hardware": ["Packraft", "Paddle", "Dry Bags", "Wading Boots"],
+    "clothing": ["Dry Suit", "Neoprene Booties", "Thermal Baselayer"],
+    "fuel": ["Waterproof Containers", "Expedition Food", "Water Filtration"]
+  },
+  "canyoning": {
+    "name": "Canyoning",
+    "icon": "<svg viewBox=\"0 0 24 24\"><path d=\"M12 2L2 22h20L12 2zm0 4.5l6.5 13H5.5L12 6.5z\"/></svg>",
+    "safety": ["Satellite Comms", "Waterproof First Aid", "Whistle & Knife"],
+    "hardware": ["Canyoneering Harness", "Canyon Backpack", "Static Canyoneering Ropes", "Descender", "Canyon Shoes"],
+    "clothing": ["5mm Neoprene Wetsuit", "Neoprene Socks"],
+    "fuel": ["Dry Barrel", "Snacks & Electrolytes"]
+  },
+  "ski-mountaineering": {
+    "name": "Ski Touring / Skimo",
+    "icon": "<svg viewBox=\"0 0 24 24\"><path d=\"M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z\"/></svg>",
+    "safety": ["Satellite Comms", "Avalanche Transceiver, Probe, and Shovel"],
+    "hardware": ["Touring Skis / Splitboard with Skins", "Touring Boots", "Ski Poles", "Ski Helmet", "Glacier Harness"],
+    "clothing": ["Breathable Touring Layers", "Insulated Puffy", "Gore-Tex Shell"],
+    "fuel": ["Thermos", "High-Energy Snacks"]
+  },
+  "multi-sport": {
+    "name": "Complex / Multi-Sport",
+    "icon": "<svg viewBox=\"0 0 24 24\"><path d=\"M12 2L1 21h22L12 2zm0 3.8l7.5 13.2H4.5L12 5.8z\"/></svg>",
+    "safety": ["Satellite Comms", "Multi-Discipline First Aid", "Headlamp"],
+    "hardware": ["Multi-Sport Backpack", "GPS Navigation Unit", "Repair Kit"],
+    "clothing": ["Layering System for All Climates", "Waterproof Shells"],
+    "fuel": ["Hydration Bladders & Filtration", "Expedition Nutrition"]
+  }
+}
