@@ -1,444 +1,278 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Rock Climbing Adventure & Life-Safety Engine</title>
-    <style>
-        :root {--bg: #0d1117; --card-bg: #161b22; --border: #30363d; --accent: #238636; --accent-hover: #2ea043; --warning: #d29922; --text: #c9d1d9; --text-bright: #ffffff; --link-blue: #58a6ff; --garmin-blue: #007cc3; }
-        body {font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 16px; line-height: 1.5; }
-        .container {max-width: 800px; margin: 0 auto; }
-        h1, h2, h3 {color: var(--text-bright); margin-top: 0; }
-        .card {background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 24px; margin-bottom: 20px; }
-        .hero-banner {text-align: center; padding: 35px 20px; background: linear-gradient(135deg, #1f242d 0%, #161b22 100%); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 24px; }
-        .hero-banner h1 {font-size: 26px; margin-bottom: 8px; color: var(--text-bright); }
-        .hero-banner p {color: #8b949e; font-size: 15px; margin: 0; }
-        .form-group {margin-bottom: 16px; position: relative; }
-        label {display: block; font-weight: 600; margin-bottom: 6px; color: var(--text-bright); }
-        select, input[type="text"], input[type="number"], input[type="date"], textarea {width: 100%; padding: 10px; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; color: var(--text-bright); box-sizing: border-box; font-size: 15px; }
-        .cascade-row {display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
-        .row-inputs {display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        button.primary-btn {background: var(--accent); color: var(--text-bright); border: none; padding: 12px 20px; border-radius: 6px; font-weight: bold; font-size: 16px; width: 100%; cursor: pointer; transition: background 0.2s ease; margin-top: 8px; }
-        button.primary-btn:hover {background: var(--accent-hover); }
-        button.secondary-btn {background: #21262d; color: var(--link-blue); border: 1px solid var(--link-blue); padding: 12px 16px; border-radius: 6px; font-weight: bold; font-size: 14px; width: 100%; cursor: pointer; transition: all 0.2s ease; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; }
-        button.secondary-btn:hover {background: rgba(88, 166, 255, 0.1); }
-        .back-link {background: none; border: none; color: var(--link-blue); cursor: pointer; padding: 0; font-size: 14px; margin-bottom: 16px; display: inline-flex; align-items: center; gap: 4px; text-decoration: none; }
-        .back-link:hover {text-decoration: underline; }
-        .badge {display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: bold; margin-left: 6px; }
-        .badge-protocol { background: rgba(56, 139, 253, 0.2); color: #58a6ff; border: 1px solid #58a6ff; }
-        ul.gear-manifest {list-style-type: none; padding-left: 0; margin: 0; }
-        ul.gear-manifest li {padding: 10px 0; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
-        ul.gear-manifest li:last-child {border-bottom: none; }
-        .gear-item-left {display: flex; align-items: flex-start; gap: 10px; }
-        ul.gear-manifest input[type="checkbox"] {margin-top: 4px; width: 18px; height: 18px; cursor: pointer; }
-        .delete-gear-btn {background: none; border: none; color: #f85149; cursor: pointer; font-size: 14px; padding: 0 4px; }
-        .section-header {font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #8b949e; margin-top: 16px; margin-bottom: 8px; border-bottom: 1px solid var(--border); padding-bottom: 4px; }
-        .route-beta-card {background: rgba(35, 134, 54, 0.08); border: 1px solid var(--accent); border-radius: 6px; padding: 14px; margin-bottom: 16px; }
-        .route-beta-card h4 {margin-top: 0; margin-bottom: 8px; color: var(--text-bright); display: flex; align-items: center; gap: 6px; }
-        .route-beta-grid {display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 8px; font-size: 14px; }
-        .action-button-row {display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <a href="index.html" class="back-link">← Back to Sports Landing Page</a>
-        
-        <div class="hero-banner">
-            <h1>🧗‍♂️ Rock Climbing Safety & Route Planner</h1>
-            <p>Tailored protocols, multi-pitch beta, and intelligent equipment manifests for rock objectives.</p>
-        </div>
+<script>
+    let MASTER_DATABASE = [];
+    let SPORT_GEAR_TEMPLATES = {};
+    let selectedRouteData = null;
+    const sportKey = 'rock-climb';
 
-        <div class="card">
-            <h2>Objective Setup</h2>
-
-            <!-- NESTED REGION -> CRAG -> ROUTE SELECTOR -->
-            <div id="regional-cascade-group" class="form-group">
-                <label>📍 Detailed Regional & Crag Hierarchy</label>
-                <div class="cascade-row">
-                    <select id="cascade-region" onchange="onRegionChange()">
-                        <option value="">Select Region</option>
-                    </select>
-                    <select id="cascade-crag" onchange="onCragChange()" disabled>
-                        <option value="">Select Crag / Area</option>
-                    </select>
-                </div>
-                <select id="cascade-route" onchange="onRouteSelect()" disabled style="margin-top: 6px; max-height: 200px; overflow-y: auto;">
-                    <option value="">Select Specific Route / Objective</option>
-                </select>
-            </div>
-
-            <!-- GPX FILE IMPORT CONTAINER -->
-            <div class="form-group" style="background: rgba(88, 166, 255, 0.05); padding: 12px; border: 1px dashed var(--link-blue); border-radius: 6px;">
-                <label for="gpx-file-input" style="font-size: 14px; margin-bottom: 4px; cursor: pointer;">📂 Import GPX Track / Waypoint File</label>
-                <input type="file" id="gpx-file-input" accept=".gpx" onchange="importGpxFile(event)" style="font-size: 13px; padding: 6px;">
-            </div>
-
-            <form id="planner-form">
-                <div class="form-group">
-                    <label for="route-search">Search Specific Route Name</label>
-                    <input type="text" id="route-search" placeholder="Type exact route name...">
-                </div>
-
-                <div class="row-inputs">
-                    <div class="form-group">
-                        <label for="start-date">Start Date</label>
-                        <input type="date" id="start-date" onchange="calculateDuration()">
-                    </div>
-                    <div class="form-group">
-                        <label for="end-date">End Date</label>
-                        <input type="date" id="end-date" onchange="calculateDuration()">
-                    </div>
-                </div>
-
-                <div class="row-inputs">
-                    <div class="form-group">
-                        <label for="duration-days">Duration (Days)</label>
-                        <input type="number" id="duration-days" value="1" min="1" onchange="updateNights()">
-                    </div>
-                    <div class="form-group">
-                        <label for="duration-nights">Nights</label>
-                        <input type="number" id="duration-nights" value="0" min="0">
-                    </div>
-                </div>
-
-                <div class="form-group">
-                    <label for="accommodation">Sleeping Accommodation</label>
-                    <select id="accommodation">
-                        <option value="none">Day Trip / Unsupported (No Overnight)</option>
-                        <option value="tent">Backcountry Tent / Bivy</option>
-                        <option value="cabin">Mountain Cabin / Hut</option>
-                        <option value="car">Vehicle / Rooftop Tent</option>
-                    </select>
-                </div>
-
-                <div class="form-group">
-                    <label for="route-notes">Custom Route & Approach Notes</label>
-                    <textarea id="route-notes" rows="4" placeholder="Specific parking coordinates, beta, hazards, technical pitches, gear racks..."></textarea>
-                </div>
-
-                <button type="button" class="primary-btn" onclick="generateManifest()">Generate Optimized Life-Safety Manifest</button>
-            </form>
-        </div>
-
-        <!-- MANIFEST DISPLAY -->
-        <div class="card" id="manifest-card" style="display: none;">
-            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                <h2 style="margin: 0;">Gear Manifest</h2>
-                <span class="badge badge-protocol">Guide-Vetted Protocol</span>
-            </div>
-
-            <!-- ROUTE STATS & BETA SCREEN -->
-            <div id="route-beta-display" class="route-beta-card">
-                <h4>📊 Comprehensive Route & Safety Profile</h4>
-                <div class="route-beta-grid">
-                    <div><strong>Grade / Rating:</strong> <span id="stat-grade">-</span></div>
-                    <div><strong>Length / Stats:</strong> <span id="stat-pitches">-</span></div>
-                </div>
-                <div style="margin-top: 8px;"><strong>Approach & Location Beta:</strong></div>
-                <div id="stat-approach" style="font-size: 14px; color: var(--text-bright); margin-top: 2px; white-space: pre-line;">-</div>
-                <div style="margin-top: 8px;"><strong>Pitch Breakdown & Notes:</strong></div>
-                <div id="stat-beta" style="font-size: 14px; color: var(--text-bright); margin-top: 2px; white-space: pre-line;">-</div>
-
-                <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.1);">
-                    <strong>🌤️ Mountain Weather & Safety Bulletins:</strong>
-                    <div style="display: flex; gap: 10px; margin-top: 6px; flex-wrap: wrap;">
-                        <a id="weather-forecast-link" href="https://www.pc.gc.ca/en/pn-np/ab/banff/visit/meteo-weather" target="_blank" class="secondary-btn" style="margin:0; font-size: 12px; padding: 6px 10px;">Parks Canada Weather</a>
-                        <a href="https://www.avalanche.ca/" target="_blank" class="secondary-btn" style="margin:0; font-size: 12px; padding: 6px 10px;">Avalanche Canada Bulletin</a>
-                    </div>
-                </div>
-
-                <div class="action-button-row">
-                    <a id="maps-link-btn" href="#" target="_blank" class="secondary-btn" style="display: none;">Open in Google Maps</a>
-                </div>
-                <button type="button" class="secondary-btn" onclick="exportGpxFile()" style="margin-top: 10px; background: rgba(35, 134, 54, 0.2); border-color: var(--accent); color: var(--text-bright);">
-                    📥 Export Route & Waypoints as .GPX File
-                </button>
-            </div>
-
-            <div class="section-header">Core Safety & Navigation</div>
-            <ul class="gear-manifest" id="list-safety"></ul>
-            <div class="section-header">Technical & Sport Equipment</div>
-            <ul class="gear-manifest" id="list-hardware"></ul>
-            <div class="section-header">Layering & Clothing</div>
-            <ul class="gear-manifest" id="list-clothing"></ul>
-            <div class="section-header">Hydration, Fuel & Camp Systems</div>
-            <ul class="gear-manifest" id="list-fuel"></ul>
-        </div>
-    </div>
-
-    <script>
-        let MASTER_DATABASE = [];
-        let SPORT_GEAR_TEMPLATES = {};
-        let selectedRouteData = null;
-        const sportKey = 'rock-climb';
-
-        async function loadRockClimbingData() {
-            try {
-                const sportRes = await fetch('https://raw.githubusercontent.com/Gerber111213/Adventure-planner/main/sports.json');
-                if (sportRes.ok) {
-                    const templates = await sportRes.json();
-                    if (templates[sportKey]) {
-                        SPORT_GEAR_TEMPLATES = templates[sportKey];
-                    }
+    async function loadRockClimbingData() {
+        try {
+            const sportRes = await fetch('https://raw.githubusercontent.com/Gerber111213/Adventure-planner/main/sports.json');
+            if (sportRes.ok) {
+                const templates = await sportRes.json();
+                if (templates[sportKey]) {
+                    SPORT_GEAR_TEMPLATES = templates[sportKey];
                 }
-
-                const routeRes = await fetch('https://raw.githubusercontent.com/Gerber111213/Adventure-planner/main/climbing-routes.json');
-                if (routeRes.ok) {
-                    MASTER_DATABASE = await routeRes.json();
-                    setupRockClimbingUI();
-                } else {
-                    console.warn("Could not load climbing-routes.json");
-                }
-            } catch (e) {
-                console.warn("Error loading data:", e);
-            }
-        }
-
-        function setupRockClimbingUI() {
-            const regSelect = document.getElementById('cascade-region');
-            regSelect.innerHTML = '<option value="">Select Region</option>';
-
-            const uniqueRegions = [...new Set(MASTER_DATABASE.map(reg => reg.regionName || reg.region))].filter(Boolean);
-
-            uniqueRegions.forEach(regName => {
-                regSelect.innerHTML += `<option value="${regName}">${regName}</option>`;
-            });
-        }
-
-        function onRegionChange() {
-            const regVal = document.getElementById('cascade-region').value;
-            const cragSelect = document.getElementById('cascade-crag');
-            const routeSelect = document.getElementById('cascade-route');
-
-            cragSelect.innerHTML = '<option value="">Select Crag / Area</option>';
-            routeSelect.innerHTML = '<option value="">Select Specific Route</option>';
-            routeSelect.disabled = true;
-
-            if (!regVal) {
-                cragSelect.disabled = true;
-                return;
             }
 
-            cragSelect.disabled = false;
-            
-            const matchingRegions = MASTER_DATABASE.filter(r => (r.regionName || r.region) === regVal);
-            
-            let allCrags = [];
-            matchingRegions.forEach(regionObj => {
-                const cragsList = regionObj.crags || regionObj.areas || [];
-                cragsList.forEach(crag => {
-                    const cragName = crag.cragName || crag.crag || crag.name;
-                    if (cragName && !allCrags.includes(cragName)) {
-                        allCrags.push(cragName);
-                    }
-                });
-            });
-
-            allCrags.forEach(cragName => {
-                cragSelect.innerHTML += `<option value="${cragName}">${cragName}</option>`;
-            });
-        }
-
-        function onCragChange() {
-            const regVal = document.getElementById('cascade-region').value;
-            const cragVal = document.getElementById('cascade-crag').value;
-            const routeSelect = document.getElementById('cascade-route');
-
-            routeSelect.innerHTML = '<option value="">Select Specific Route</option>';
-
-            if (regVal && cragVal) {
-                routeSelect.disabled = false;
-                const matchingRegions = MASTER_DATABASE.filter(r => (r.regionName || r.region) === regVal);
-                
-                let foundCragObj = null;
-                matchingRegions.forEach(regionObj => {
-                    const cragsList = regionObj.crags || regionObj.areas || [];
-                    const match = cragsList.find(c => (c.cragName || c.crag || c.name) === cragVal);
-                    if (match) foundCragObj = match;
-                });
-
-                if (foundCragObj && foundCragObj.routes) {
-                    foundCragObj.routes.forEach(route => {
-                        routeSelect.innerHTML += `<option value="${route.name}">${route.name} (${route.grade})</option>`;
-                    });
-                }
+            const routeRes = await fetch('https://raw.githubusercontent.com/Gerber111213/Adventure-planner/main/climbing-routes.json');
+            if (routeRes.ok) {
+                MASTER_DATABASE = await routeRes.json();
+                console.log("Loaded Climbing Database:", MASTER_DATABASE); // Check your browser console (F12) to see exact keys
+                setupRockClimbingUI();
             } else {
-                routeSelect.disabled = true;
+                console.warn("Could not load climbing-routes.json");
             }
+        } catch (e) {
+            console.warn("Error loading data:", e);
+        }
+    }
+
+    function setupRockClimbingUI() {
+        const regSelect = document.getElementById('cascade-region');
+        regSelect.innerHTML = '<option value="">Select Region</option>';
+
+        const uniqueRegions = [...new Set(MASTER_DATABASE.map(reg => reg.regionName || reg.region || reg.name))].filter(Boolean);
+
+        uniqueRegions.forEach(regName => {
+            regSelect.innerHTML += `<option value="${regName}">${regName}</option>`;
+        });
+    }
+
+    function onRegionChange() {
+        const regVal = document.getElementById('cascade-region').value;
+        const cragSelect = document.getElementById('cascade-crag');
+        const routeSelect = document.getElementById('cascade-route');
+
+        cragSelect.innerHTML = '<option value="">Select Crag / Area</option>';
+        routeSelect.innerHTML = '<option value="">Select Specific Route</option>';
+        routeSelect.disabled = true;
+
+        if (!regVal) {
+            cragSelect.disabled = true;
+            return;
         }
 
-        function onRouteSelect() {
-            const routeName = document.getElementById('cascade-route').value;
-            if (!routeName) return;
-
-            const regVal = document.getElementById('cascade-region').value;
-            const cragVal = document.getElementById('cascade-crag').value;
-            const matchingRegions = MASTER_DATABASE.filter(r => (r.regionName || r.region) === regVal);
+        cragSelect.disabled = false;
+        
+        const matchingRegions = MASTER_DATABASE.filter(r => (r.regionName || r.region || r.name) === regVal);
+        
+        let allCrags = [];
+        matchingRegions.forEach(regionObj => {
+            // Check all possible property names where crags/areas might live in your JSON
+            const possibleCrags = regionObj.crags || regionObj.areas || regionObj.subregions || regionObj.locations || [];
             
-            let matchedRoute = null;
-            matchingRegions.forEach(regionObj => {
-                const cragsList = regionObj.crags || regionObj.areas || [];
-                const cragObj = cragsList.find(c => (c.cragName || c.crag || c.name) === cragVal);
-                if (cragObj && cragObj.routes) {
-                    const route = cragObj.routes.find(rt => rt.name === routeName);
-                    if (route) matchedRoute = route;
+            possibleCrags.forEach(crag => {
+                const cragName = crag.cragName || crag.crag || crag.name || crag.title;
+                if (cragName && !allCrags.includes(cragName)) {
+                    allCrags.push(cragName);
                 }
             });
-
-            if (matchedRoute) {
-                selectedRouteData = matchedRoute;
-                document.getElementById('route-search').value = matchedRoute.name;
-                applyRouteData(matchedRoute);
-            }
-        }
-
-        function applyRouteData(item) {
-            let betaText = item.notes || 'No specific technical beta recorded.';
-            
-            if (item.pitchesBreakdown && Array.isArray(item.pitchesBreakdown)) {
-                betaText += '<br><br><strong>🧗‍♂️ Pitch-by-Pitch Breakdown:</strong><ul style="margin: 4px 0 0 20px; padding: 0;">';
-                item.pitchesBreakdown.forEach(p => {
-                    betaText += `<li><strong>Pitch ${p.pitch} (${p.grade}):</strong> ${p.description}</li>`;
-                });
-                betaText += '</ul>';
-            }
-
-            document.getElementById('route-notes').value = item.notes || '';
-            document.getElementById('stat-grade').textContent = item.grade || 'Standard';
-            document.getElementById('stat-pitches').textContent = item.length ? `${item.length} (${item.pitches} Pitches)` : `${item.pitches || 1} Pitches`;
-            document.getElementById('stat-approach').textContent = item.approach || 'No specific approach notes recorded.';
-            document.getElementById('stat-beta').innerHTML = betaText;
-            document.getElementById('route-beta-display').style.display = 'block';
-
-            if (item.mapSearchQuery) {
-                const mapsBtn = document.getElementById('maps-link-btn');
-                mapsBtn.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.mapSearchQuery)}`;
-                mapsBtn.style.display = 'flex';
-            }
-        }
-
-        window.addEventListener('DOMContentLoaded', () => {
-            loadRockClimbingData();
         });
 
-        function calculateDuration() {
-            const start = new Date(document.getElementById('start-date').value);
-            const end = new Date(document.getElementById('end-date').value);
-            if (start && end && end >= start) {
-                const diffDays = Math.round((end - start) / (1000 * 60 * 60 * 24)) + 1;
-                document.getElementById('duration-days').value = diffDays;
-                document.getElementById('duration-nights').value = diffDays - 1;
-            }
-        }
+        allCrags.forEach(cragName => {
+            cragSelect.innerHTML += `<option value="${cragName}">${cragName}</option>`;
+        });
+    }
 
-        function updateNights() {
-            const days = parseInt(document.getElementById('duration-days').value) || 1;
-            document.getElementById('duration-nights').value = days > 1 ? days - 1 : 0;
-        }
+    function onCragChange() {
+        const regVal = document.getElementById('cascade-region').value;
+        const cragVal = document.getElementById('cascade-crag').value;
+        const routeSelect = document.getElementById('cascade-route');
 
-        // INTELLIGENT HARDWARE & GEAR GENERATOR
-        function generateManifest() {
-            const defaultSafety = ["Garmin inReach / Satellite Communicator", "First Aid Kit", "Headlamp with extra batteries"];
-            const defaultClothing = ["Base Layer", "Insulating Mid-layer", "Wind/Shell Jacket", "Climbing Helmet"];
-            const defaultFuel = ["Water Storage (2L minimum)", "High-Energy Nutrition / Snacks"];
+        routeSelect.innerHTML = '<option value="">Select Specific Route</option>';
 
-            let hardwareList = ["Climbing Harness", "Locking Carabiners (x3-4)", "Belay/Rappel Device", "Personal Anchor System (PAS)"];
-
-            let boltCount = 0;
-            if (selectedRouteData) {
-                const textToCheck = (selectedRouteData.notes || '') + ' ' + (selectedRouteData.approach || '');
-                if (selectedRouteData.pitchesBreakdown && Array.isArray(selectedRouteData.pitchesBreakdown)) {
-                    selectedRouteData.pitchesBreakdown.forEach(p => {
-                        const match = (p.description || '').match(/(\d+)\s*bolts?/i);
-                        if (match) boltCount += parseInt(match[1]);
-                    });
-                }
-                const generalMatch = textToCheck.match(/(\d+)\s*bolts?/i);
-                if (boltCount === 0 && generalMatch) {
-                    boltCount = parseInt(generalMatch[1]);
-                }
-            }
-
-            if (boltCount > 0) {
-                const totalDraws = boltCount + 2;
-                hardwareList.unshift(`Quickdraws: ${totalDraws} total (${boltCount} for bolts + 2 extra for anchor/extensions)`);
-            } else {
-                hardwareList.unshift("Quickdraws: 12 total (10 standard + 2 extra for anchor/extensions)");
-            }
-
-            let ropeRecommendation = "Single Rope: 70m dynamic climbing rope (Standard)";
-            if (selectedRouteData) {
-                const lengthStr = (selectedRouteData.length || '').toLowerCase();
-                const notesStr = (selectedRouteData.notes || '').toLowerCase();
-                const totalPitches = selectedRouteData.pitches || 1;
-
-                if (totalPitches > 1 || lengthStr.includes('multi') || lengthStr.includes('alpine') || notesStr.includes('alpine')) {
-                    ropeRecommendation = "Ropes: Dual 60m half/twin ropes (Recommended for multi-pitch rappels and rope drag reduction)";
-                } else if (lengthStr.includes('80m') || lengthStr.includes('long pitch') || lengthStr.includes('40m')) {
-                    ropeRecommendation = "Single Rope: 80m dynamic climbing rope (Required for long pitch length)";
-                } else if (lengthStr.includes('60m') || lengthStr.includes('short')) {
-                    ropeRecommendation = "Single Rope: 60m dynamic climbing rope";
-                }
-            }
-            hardwareList.push(ropeRecommendation);
-
-            const template = SPORT_GEAR_TEMPLATES.safety ? SPORT_GEAR_TEMPLATES : {
-                safety: defaultSafety,
-                clothing: defaultClothing,
-                fuel: defaultFuel
-            };
-
-            renderManifestCategory('list-safety', template.safety || defaultSafety, 'safety');
-            renderManifestCategory('list-hardware', hardwareList, 'hardware');
-            renderManifestCategory('list-clothing', template.clothing || defaultClothing, 'clothing');
-            renderManifestCategory('list-fuel', template.fuel || defaultFuel, 'fuel');
+        if (regVal && cragVal) {
+            routeSelect.disabled = false;
+            const matchingRegions = MASTER_DATABASE.filter(r => (r.regionName || r.region || r.name) === regVal);
             
-            document.getElementById('manifest-card').style.display = 'block';
-            document.getElementById('manifest-card').scrollIntoView({ behavior: 'smooth' });
-        }
-
-        function renderManifestCategory(elementId, items, categoryKey) {
-            const ul = document.getElementById(elementId);
-            ul.innerHTML = '';
-            items.forEach((item, index) => {
-                const li = document.createElement('li');
-                li.innerHTML = `
-                    <div class="gear-item-left">
-                        <input type="checkbox" id="${categoryKey}-${index}">
-                        <label for="${categoryKey}-${index}" style="font-weight: normal; margin-bottom: 0; cursor: pointer;">${item}</label>
-                    </div>
-                    <button type="button" class="delete-gear-btn" onclick="this.parentElement.remove()" title="Remove Item">✕</button>
-                `;
-                ul.appendChild(li);
+            let foundCragObj = null;
+            matchingRegions.forEach(regionObj => {
+                const possibleCrags = regionObj.crags || regionObj.areas || regionObj.subregions || regionObj.locations || [];
+                const match = possibleCrags.find(c => (c.cragName || c.crag || c.name || c.title) === cragVal);
+                if (match) foundCragObj = match;
             });
+
+            const routesList = foundCragObj ? (foundCragObj.routes || foundCragObj.climbs || foundCragObj.objectives || []) : [];
+            routesList.forEach(route => {
+                const routeName = route.name || route.routeName || route.title;
+                const routeGrade = route.grade || route.rating || '';
+                routeSelect.innerHTML += `<option value="${routeName}">${routeName} (${routeGrade})</option>`;
+            });
+        } else {
+            routeSelect.disabled = true;
+        }
+    }
+
+    function onRouteSelect() {
+        const routeName = document.getElementById('cascade-route').value;
+        if (!routeName) return;
+
+        const regVal = document.getElementById('cascade-region').value;
+        const cragVal = document.getElementById('cascade-crag').value;
+        const matchingRegions = MASTER_DATABASE.filter(r => (r.regionName || r.region || r.name) === regVal);
+        
+        let matchedRoute = null;
+        matchingRegions.forEach(regionObj => {
+            const possibleCrags = regionObj.crags || regionObj.areas || regionObj.subregions || regionObj.locations || [];
+            const cragObj = possibleCrags.find(c => (c.cragName || c.crag || c.name || c.title) === cragVal);
+            if (cragObj) {
+                const routesList = cragObj.routes || cragObj.climbs || cragObj.objectives || [];
+                const route = routesList.find(rt => (rt.name || rt.routeName || rt.title) === routeName);
+                if (route) matchedRoute = route;
+            }
+        });
+
+        if (matchedRoute) {
+            selectedRouteData = matchedRoute;
+            document.getElementById('route-search').value = matchedRoute.name || matchedRoute.routeName || matchedRoute.title;
+            applyRouteData(matchedRoute);
+        }
+    }
+
+    function applyRouteData(item) {
+        let betaText = item.notes || item.description || 'No specific technical beta recorded.';
+        
+        if (item.pitchesBreakdown && Array.isArray(item.pitchesBreakdown)) {
+            betaText += '<br><br><strong>🧗‍♂️ Pitch-by-Pitch Breakdown:</strong><ul style="margin: 4px 0 0 20px; padding: 0;">';
+            item.pitchesBreakdown.forEach(p => {
+                betaText += `<li><strong>Pitch ${p.pitch || ''} (${p.grade || ''}):</strong> ${p.description || ''}</li>`;
+            });
+            betaText += '</ul>';
         }
 
-        function importGpxFile(event) {
-            const file = event.target.files[0];
-            if (!file) return;
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                document.getElementById('route-notes').value += `\n[GPX Imported: ${file.name}] Track metadata successfully parsed.`;
-                alert(`Successfully imported GPX track: ${file.name}!`);
-            };
-            reader.readAsText(file);
+        document.getElementById('route-notes').value = item.notes || item.description || '';
+        document.getElementById('stat-grade').textContent = item.grade || item.rating || 'Standard';
+        document.getElementById('stat-pitches').textContent = item.length ? `${item.length} (${item.pitches || 1} Pitches)` : `${item.pitches || 1} Pitches`;
+        document.getElementById('stat-approach').textContent = item.approach || 'No specific approach notes recorded.';
+        document.getElementById('stat-beta').innerHTML = betaText;
+        document.getElementById('route-beta-display').style.display = 'block';
+
+        if (item.mapSearchQuery) {
+            const mapsBtn = document.getElementById('maps-link-btn');
+            mapsBtn.href = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(item.mapSearchQuery)}`;
+            mapsBtn.style.display = 'flex';
+        }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+        loadRockClimbingData();
+    });
+
+    function calculateDuration() {
+        const start = new Date(document.getElementById('start-date').value);
+        const end = new Date(document.getElementById('end-date').value);
+        if (start && end && end >= start) {
+            const diffDays = Math.round((end - start) / (1000 * 60 * 60 * 24)) + 1;
+            document.getElementById('duration-days').value = diffDays;
+            document.getElementById('duration-nights').value = diffDays - 1;
+        }
+    }
+
+    function updateNights() {
+        const days = parseInt(document.getElementById('duration-days').value) || 1;
+        document.getElementById('duration-nights').value = days > 1 ? days - 1 : 0;
+    }
+
+    function generateManifest() {
+        const defaultSafety = ["Garmin inReach / Satellite Communicator", "First Aid Kit", "Headlamp with extra batteries"];
+        const defaultClothing = ["Base Layer", "Insulating Mid-layer", "Wind/Shell Jacket", "Climbing Helmet"];
+        const defaultFuel = ["Water Storage (2L minimum)", "High-Energy Nutrition / Snacks"];
+
+        let hardwareList = ["Climbing Harness", "Locking Carabiners (x3-4)", "Belay/Rappel Device", "Personal Anchor System (PAS)"];
+
+        let boltCount = 0;
+        if (selectedRouteData) {
+            const textToCheck = (selectedRouteData.notes || '') + ' ' + (selectedRouteData.approach || '');
+            if (selectedRouteData.pitchesBreakdown && Array.isArray(selectedRouteData.pitchesBreakdown)) {
+                selectedRouteData.pitchesBreakdown.forEach(p => {
+                    const match = (p.description || '').match(/(\d+)\s*bolts?/i);
+                    if (match) boltCount += parseInt(match[1]);
+                });
+            }
+            const generalMatch = textToCheck.match(/(\d+)\s*bolts?/i);
+            if (boltCount === 0 && generalMatch) {
+                boltCount = parseInt(generalMatch[1]);
+            }
         }
 
-        function exportGpxFile() {
-            let gpxData = `<?xml version="1.0" encoding="UTF-8"?>\n<gpx version="1.1" creator="Adventure Planner Engine">\n`;
-            gpxData += `  <wpt lat="51.4968" lon="-115.9281">\n    <name>${document.getElementById('route-search').value || 'Rock Route'}</name>\n    <cmt>${document.getElementById('route-notes').value}</cmt>\n  </wpt>\n`;
-            gpxData += `</gpx>`;
-            
-            const blob = new Blob([gpxData], { type: 'application/gpx+xml' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = 'rock-climbing-export.gpx';
-            document.body.appendChild(a);
-            a.click();
-            document.body.removeChild(a);
-            URL.revokeObjectURL(url);
+        if (boltCount > 0) {
+            const totalDraws = boltCount + 2;
+            hardwareList.unshift(`Quickdraws: ${totalDraws} total (${boltCount} for bolts + 2 extra for anchor/extensions)`);
+        } else {
+            hardwareList.unshift("Quickdraws: 12 total (10 standard + 2 extra for anchor/extensions)");
         }
-    </script>
-</body>
-</html>
+
+        let ropeRecommendation = "Single Rope: 70m dynamic climbing rope (Standard)";
+        if (selectedRouteData) {
+            const lengthStr = (selectedRouteData.length || '').toLowerCase();
+            const notesStr = (selectedRouteData.notes || '').toLowerCase();
+            const totalPitches = selectedRouteData.pitches || 1;
+
+            if (totalPitches > 1 || lengthStr.includes('multi') || lengthStr.includes('alpine') || notesStr.includes('alpine')) {
+                ropeRecommendation = "Ropes: Dual 60m half/twin ropes (Recommended for multi-pitch rappels and rope drag reduction)";
+            } else if (lengthStr.includes('80m') || lengthStr.includes('long pitch') || lengthStr.includes('40m')) {
+                ropeRecommendation = "Single Rope: 80m dynamic climbing rope (Required for long pitch length)";
+            } else if (lengthStr.includes('60m') || lengthStr.includes('short')) {
+                ropeRecommendation = "Single Rope: 60m dynamic climbing rope";
+            }
+        }
+        hardwareList.push(ropeRecommendation);
+
+        const template = SPORT_GEAR_TEMPLATES.safety ? SPORT_GEAR_TEMPLATES : {
+            safety: defaultSafety,
+            clothing: defaultClothing,
+            fuel: defaultFuel
+        };
+
+        renderManifestCategory('list-safety', template.safety || defaultSafety, 'safety');
+        renderManifestCategory('list-hardware', hardwareList, 'hardware');
+        renderManifestCategory('list-clothing', template.clothing || defaultClothing, 'clothing');
+        renderManifestCategory('list-fuel', template.fuel || defaultFuel, 'fuel');
+        
+        document.getElementById('manifest-card').style.display = 'block';
+        document.getElementById('manifest-card').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function renderManifestCategory(elementId, items, categoryKey) {
+        const ul = document.getElementById(elementId);
+        ul.innerHTML = '';
+        items.forEach((item, index) => {
+            const li = document.createElement('li');
+            li.innerHTML = `
+                <div class="gear-item-left">
+                    <input type="checkbox" id="${categoryKey}-${index}">
+                    <label for="${categoryKey}-${index}" style="font-weight: normal; margin-bottom: 0; cursor: pointer;">${item}</label>
+                </div>
+                <button type="button" class="delete-gear-btn" onclick="this.parentElement.remove()" title="Remove Item">✕</button>
+            `;
+            ul.appendChild(li);
+        });
+    }
+
+    function importGpxFile(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            document.getElementById('route-notes').value += `\n[GPX Imported: ${file.name}] Track metadata successfully parsed.`;
+            alert(`Successfully imported GPX track: ${file.name}!`);
+        };
+        reader.readAsText(file);
+    }
+
+    function exportGpxFile() {
+        let gpxData = `<?xml version="1.0" encoding="UTF-8"?>\n<gpx version="1.1" creator="Adventure Planner Engine">\n`;
+        gpxData += `  <wpt lat="51.4968" lon="-115.9281">\n    <name>${document.getElementById('route-search').value || 'Rock Route'}</name>\n    <cmt>${document.getElementById('route-notes').value}</cmt>\n  </wpt>\n`;
+        gpxData += `</gpx>`;
+        
+        const blob = new Blob([gpxData], { type: 'application/gpx+xml' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'rock-climbing-export.gpx';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    }
+</script>
