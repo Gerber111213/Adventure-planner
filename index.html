@@ -366,7 +366,7 @@
 
  async function loadClimbingDatabase() {
      try {
-         const response = await fetch('climbing-routes.json');
+         const response = await fetch('./climbing-routes.json');
          if (!response.ok) throw new Error('Could not fetch climbing-routes.json');
          const climbingRoutes = await response.json();
          
