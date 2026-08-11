@@ -296,6 +296,7 @@
       border-bottom: 1px solid var(--border);
       display: flex;
       align-items: flex-start;
+      justify-content: space-between;
       gap: 10px;
     }
 
@@ -303,11 +304,29 @@
       border-bottom: none;
     }
 
+    .gear-item-left {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+
     ul.gear-manifest input[type="checkbox"] {
       margin-top: 4px;
       width: 18px;
       height: 18px;
       cursor: pointer;
+    }
+
+    .delete-gear-btn {
+      background: none;
+      border: none;
+      color: #f85149;
+      cursor: pointer;
+      font-size: 14px;
+      padding: 0 4px;
+    }
+    .delete-gear-btn:hover {
+      color: #ff7b72;
     }
 
     .section-header {
@@ -353,6 +372,14 @@
       margin-top: 12px;
     }
 
+    .custom-route-box {
+      background: rgba(210, 153, 34, 0.08);
+      border: 1px solid var(--warning);
+      border-radius: 6px;
+      padding: 14px;
+      margin-bottom: 16px;
+    }
+
     @media print {
       body {
         background-color: #ffffff;
@@ -363,7 +390,7 @@
         border: 1px solid #ccc;
         box-shadow: none;
       }
-      .screen, button, .back-link, .hero-banner, #screen-welcome, #planner-form, .form-group, #permit-container, .action-button-row {
+      .screen, button, .back-link, .hero-banner, #screen-welcome, #planner-form, .form-group, #permit-container, .action-button-row, .custom-route-box {
         display: none !important;
       }
       #manifest-card {
@@ -396,7 +423,7 @@
   <div id="screen-welcome" class="screen active">
     <div class="hero-banner">
       <h1>"Out of the office, into the wild."</h1>
-      <p>Select your sport discipline for tailored life-safety protocols, objective beta, and GPS/Garmin integration.</p>
+      <p>Select your specific sport discipline for tailored life-safety protocols, route beta, and Garmin Explore integration.</p>
     </div>
 
     <div class="card">
@@ -418,37 +445,13 @@
           <svg viewBox="0 0 24 24"><path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-2.1 0-3.9-1.1-4.8-2.8l-1-1.7c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.2L6 8.5V13h2V9.6l1.8-.7z"/></svg>
           Hiking & Trekking
         </button>
-        <button class="activity-btn" onclick="selectSport('backpacking')">
-          <svg viewBox="0 0 24 24"><path d="M19 5h-2V3c0-1.1-.9-2-2-2H9c-1.1 0-2 .9-2 2v2H5c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-4 0H9V3h6v2z"/></svg>
-          Backpacking
-        </button>
-        <button class="activity-btn" onclick="selectSport('car-camping')">
-          <svg viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.22.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.85 7h10.29l1.04 3H5.81l1.04-3zM19 17H5v-4.66l.12-.34h13.76l.12.34V17z"/></svg>
-          Car Camping
-        </button>
         <button class="activity-btn" onclick="selectSport('bikepacking')">
           <svg viewBox="0 0 24 24"><path d="M15.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 zM5 12c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5zm0 8c-1.7 0-3-1.3-3-3s1.3-3 3-3 3 1.3 3 3-1.3 3-3 3zm14-8c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5zm0 8c-1.7 0-3-1.3-3-3s1.3-3 3-3 3 1.3 3 3-1.3 3-3 3zm-7.2-7.5l-2.4-4.8C9 4.2 8.5 4 8 4H4v2h3.2l1.8 3.6-1.5.8L6.2 8H4v2h1.8l1.4.7 1.6-3.2 2 4h3.2V8h-2.2l-.8-1.5z"/></svg>
           Bikepacking
         </button>
-        <button class="activity-btn" onclick="selectSport('gravel-biking')">
-          <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm1 17.93c-3.95-.49-7-3.85-7-7.93 0-.62.08-1.21.21-1.79L9 15v1c0 1.1.9 2 2 2v1.93zm6.9-2.54c-.26-.81-1-1.39-1.9-1.39h-1v-3c0-.55-.45-1-1-1H8v-2h2c.55 0 1-.45 1-1V7h2c1.1 0 2-.9 2-2v-.41c2.93 1.19 5 4.06 5 7.41 0 2.08-.8 3.97-2.1 5.39z"/></svg>
-          Gravel Biking
-        </button>
-        <button class="activity-btn" onclick="selectSport('packrafting')">
-          <svg viewBox="0 0 24 24"><path d="M20 18c-1.1 0-2-.9-2-2H6c-1.1 0-2 .9-2 2H2v2h20v-2h-2zM4.08 14h15.84c.77 0 1.35-.69 1.17-1.44l-1.54-6.4C19.26 5.56 18.44 5 17.5 5H6.5c-.94 0-1.76.56-2.05 1.16L2.91 12.56c-.18.75.4 1.44 1.17 1.44z"/></svg>
-          Packrafting
-        </button>
-        <button class="activity-btn" onclick="selectSport('canyoning')">
-          <svg viewBox="0 0 24 24"><path d="M12 2L2 22h20L12 2zm0 4.5l6.5 13.5H5.5L12 6.5z"/></svg>
-          Canyoning
-        </button>
         <button class="activity-btn" onclick="selectSport('ski-mountaineering')">
           <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
           Ski Touring / Skimo
-        </button>
-        <button class="activity-btn" onclick="selectSport('multi-sport')">
-          <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-          Complex / Multi-Sport
         </button>
       </div>
     </div>
@@ -479,6 +482,12 @@
         <select id="cascade-route" onchange="onRouteSelect()" disabled style="margin-top: 6px;">
           <option value="">Select Specific Route / Objective</option>
         </select>
+      </div>
+
+      <!-- GPX FILE IMPORT CONTAINER -->
+      <div class="form-group" style="background: rgba(88, 166, 255, 0.05); padding: 12px; border: 1px dashed var(--link-blue); border-radius: 6px;">
+        <label for="gpx-file-input" style="font-size: 14px; margin-bottom: 4px; cursor: pointer;">📂 Import GPX Track / Waypoint File</label>
+        <input type="file" id="gpx-file-input" accept=".gpx" onchange="importGpxFile(event)" style="font-size: 13px; padding: 6px;">
       </div>
 
       <!-- PERMIT / JURISDICTION BANNER CONTAINER -->
@@ -528,6 +537,18 @@
           <textarea id="route-notes" rows="4" placeholder="Specific parking coordinates, beta, hazards, technical pitches, water sources..."></textarea>
         </div>
 
+        <!-- ADD CUSTOM ROUTE TO MASTER DB -->
+        <div class="custom-route-box">
+          <label style="font-size: 14px; margin-bottom: 6px; color: var(--warning);">⭐ Permanently Add New Route to Master DB</label>
+          <div class="row-inputs" style="margin-bottom: 8px;">
+            <input type="text" id="new-route-name" placeholder="Route / Trail Name">
+            <input type="text" id="new-route-grade" placeholder="Grade / Rating (e.g. 5.9, Moderate)">
+          </div>
+          <button type="button" class="secondary-btn" style="margin-top: 0; color: var(--warning); border-color: var(--warning);" onclick="addNewRouteToMasterDatabase()">
+            Save Route to Permanent Local Database
+          </button>
+        </div>
+
         <button type="button" class="primary-btn" onclick="generateManifest()">Generate Optimized Life-Safety Manifest</button>
       </form>
     </div>
@@ -551,7 +572,16 @@
         <div style="margin-top: 8px;"><strong>Crux & Descent Notes:</strong></div>
         <div id="stat-beta" style="font-size: 14px; color: var(--text-bright); margin-top: 2px; white-space: pre-line;">-</div>
 
-        <!-- ACTION BUTTONS: GOOGLE MAPS & GARMIN EXPLORE -->
+        <!-- WEATHER & FORECAST LINKS -->
+        <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.1);">
+          <strong>🌤️ Mountain Weather & Safety Bulletins:</strong>
+          <div style="display: flex; gap: 10px; margin-top: 6px; flex-wrap: wrap;">
+            <a id="weather-forecast-link" href="https://www.pc.gc.ca/en/pn-np/ab/banff/visit/meteo-weather" target="_blank" class="secondary-btn" style="margin:0; font-size: 12px; padding: 6px 10px;">Parks Canada Weather</a>
+            <a href="https://www.avalanche.ca/" target="_blank" class="secondary-btn" style="margin:0; font-size: 12px; padding: 6px 10px;">Avalanche Canada Bulletin</a>
+          </div>
+        </div>
+
+        <!-- ACTION BUTTONS: GOOGLE MAPS, GARMIN EXPLORE, GPX EXPORT -->
         <div class="action-button-row">
           <a id="maps-link-btn" href="#" target="_blank" class="secondary-btn" style="display: none;">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
@@ -562,6 +592,24 @@
             Open in Garmin Explore
           </a>
         </div>
+        <button type="button" class="secondary-btn" onclick="exportGpxFile()" style="margin-top: 10px; background: rgba(35, 134, 54, 0.2); border-color: var(--accent); color: var(--text-bright);">
+          📥 Export Route & Waypoints as .GPX File
+        </button>
+      </div>
+
+      <!-- ADD CUSTOM GEAR ITEM UI -->
+      <div class="form-group" style="background: rgba(35, 134, 54, 0.05); padding: 12px; border: 1px solid var(--accent); border-radius: 6px; margin-bottom: 20px;">
+        <label style="font-size: 14px; margin-bottom: 6px; color: var(--accent-hover);">➕ Add Custom Gear Item to Manifest</label>
+        <div class="row-inputs" style="margin-bottom: 8px;">
+          <select id="custom-gear-category">
+            <option value="safety">Core Safety & Navigation</option>
+            <option value="hardware">Technical & Sport Equipment</option>
+            <option value="clothing">Layering & Clothing</option>
+            <option value="fuel">Hydration, Fuel & Camp</option>
+          </select>
+          <input type="text" id="custom-gear-name" placeholder="Item Name / Description...">
+        </div>
+        <button type="button" class="primary-btn" style="margin-top: 0; padding: 8px;" onclick="addCustomGearItem()">Add Item to Manifest</button>
       </div>
 
       <div id="manifest-alerts"></div>
@@ -618,59 +666,22 @@
       clothing: ["Moisture-Wicking Base Layer", "Fleece Mid-layer", "Waterproof Rain Shell", "Extra Wool Socks"],
       fuel: ["3L Water Capacity / Filtration System (Sawyer / Katadyn)", "Trail Snacks & Meals", "Emergency Ration Bar"]
     },
-    'backpacking': {
-      safety: ["Garmin inReach Satellite Communicator", "Backcountry First Aid Kit", "Headlamp + Lantern", "Emergency Shelter / Tarp"],
-      hardware: ["Backpacking Pack (55-75L)", "Ultralight Tent or Hammock", "Sleeping Pad (R-Value 3+)", "Down Sleeping Bag / Quilt", "Trekking Poles", "Water Filter / Purifier"],
-      clothing: ["Merino Base Layers", "Insulated Down Jacket", "Rain Jacket & Pants", "Extra Camp Socks"],
-      fuel: ["Backpacking Stove + Fuel Canister", "Lightweight Cookset & Utensils", "Dehydrated Meals & Snacks", "Bear Resistant Food Canister / Bag"]
-    },
-    'car-camping': {
-      safety: ["Standard First Aid Kit", "Flashlights & Lanterns", "Emergency Car Kit"],
-      hardware: ["Car Camping Tent", "Air Mattress or Cot + Pump", "Sleeping Bags & Pillows", "Camping Chairs & Table", "Cooler with Ice"],
-      clothing: ["Comfortable Casual Layers", "Warm Fleece / Sweater", "Insulated Jacket for Evenings", "Camp Shoes / Sandals"],
-      fuel: ["Two-Burner Propane Stove + Fuel", "Cast Iron / Camping Cookset", "Water Jugs (5G)", "Camp Kitchen Box & Utensils"]
-    },
     'bikepacking': {
       safety: ["Garmin inReach / Satellite Comms", "Cyclist Trauma First Aid Kit", "Handlebar & Helmet Headlamps (USB Rechargeable)", "Emergency Shelter / Bivy"],
       hardware: ["Bikepacking Bag Set (Frame, Saddle, Handlebar)", "Multi-tool with Chain Breaker", "Tubeless Tire Repair Kit + Tire Plugs", "Mini Frame Pump / CO2 Inflator", "Spare Inner Tubes & Chain Links"],
       clothing: ["Cycling Shorts / Bibs", "Merino Wool Jersey", "Packable Rain Jacket", "Padded Cycling Gloves", "Off-bike Camp Shoes"],
       fuel: ["Frame-mounted Water Bottles + Filtration System", "Compact Backpacking Stove Set", "High-Calorie Trail Nutrition"]
     },
-    'gravel-biking': {
-      safety: ["GPS Cycling Computer / Phone Mount", "Compact First Aid Kit", "Safety Flashing Lights (Front & Rear)"],
-      hardware: ["Gravel Bike with Tubeless Tires", "Multi-tool + Tyre Levers", "Mini Pump & Spare Tubes", "Frame Pack / Top Tube Bag"],
-      clothing: ["Gravel Jersey & Bib Shorts", "Wind vest", "Fingerless or Full-finger Gloves", "Cycling Shoes"],
-      fuel: ["Hydration Bottles / Camelbak", "Energy Gels & Chews", "Electrolyte Mixes"]
-    },
-    'packrafting': {
-      safety: ["Personal Flotation Device (PFD - Type III/V Whitewater)", "Throw Bag & Rescue Knife", "Satellite Communicator", "Dry Suit / Wetsuit"],
-      hardware: ["Packraft + Inflation Bag", "Break-down Packraft Paddle", "Whitewater Helmet", "Cargo Fly / Internal Storage Dry Bags", "Repair Patch Kit"],
-      clothing: ["Thermal Base Layers / Neoprene", "Paddling Jacket", "River Booties"],
-      fuel: ["Waterproof Dry Bags / Deck Bag", "Compact Camp Stove", "High-Energy Meals"]
-    },
-    'canyoning': {
-      safety: ["Satellite Messenger", "Canyoneering First Aid Kit", "Emergency Bivy / Blanket", "Whistle & Knife"],
-      hardware: ["Canyoneering Harness with Protective Butt Pad", "Canyoneering Rope (Static, Dry-treated)", "Canyoneering Pack with Drainage", "Descending Device (Piranha/SMC) + Locking Carabiners", "Helmet (UIAA/CE Certified)", "Wet/Dry Suit"],
-      clothing: ["Neoprene Wetsuit / Farmer John", "Wool Socks & Sticky Rubber Canyoneering Shoes", "Neoprene Gloves"],
-      fuel: ["Waterproof Barrel / Flask", "High-Calorie Quick Snacks"]
-    },
     'ski-mountaineering': {
       safety: ["Garmin inReach Satellite Communicator", "Avalanche Transceiver, Probe, and Shovel", "Group First Aid & Rescue Bivy", "Headlamp with Extra Batteries"],
       hardware: ["Ski Touring Skis / Splitboard with Skins", "Touring Boots with Walk Mode", "Adjustable Ski Poles", "Lightweight Ski Mountaineering Helmet", "Glacier Harness + Crevasse Rescue Kit", "Ski Crampons (Blades)"],
       clothing: ["Breathable Touring Layers", "Insulated Puffy Jacket", "Gore-Tex Shell", "Lightweight Ascent Gloves & Warm Descent Mitts"],
       fuel: ["Thermos with Warm Hydration", "Insulated Water Bottle", "High-Energy Snacks"]
-    },
-    'multi-sport': {
-      safety: ["Garmin inReach Satellite Communicator", "Comprehensive Multi-Discipline First Aid Kit", "Headlamp + Extra Batteries", "Emergency Shelter"],
-      hardware: ["Universal Technical Hardware & Repair Kits", "Sport-Specific Gear Manifest Additions", "Multi-use Pack"],
-      clothing: ["Full Layering System (Base, Insulation, Shell)", "Spare Socks & Gloves"],
-      fuel: ["Water Filtration & Storage", "High-Calorie Expedition Nutrition", "Compact Stove System"]
     }
   };
 
-  // EXTENSIVE ITEMIZED DATABASE ACROSS ALL DISCIPLINES WITH GPS & MAP URLS
-  const MASTER_DATABASE = [
-    // --- ROCK CLIMBING ---
+  // BASE MASTER DATABASE
+  const BASE_DATABASE = [
     {
       name: "Spring Break (Getaway Crag, David Thompson)",
       category: "rock-climb",
@@ -716,8 +727,6 @@
       gpsCoords: "52.4700,-116.0700",
       mapSearchQuery: "Mount+Ernest+Ross+Nordegg+Alberta"
     },
-
-    // --- ALPINE CLIMBING ---
     {
       name: "Cascade Mountain Normal Route (Banff)",
       category: "alpine-climb",
@@ -741,8 +750,6 @@
       gpsCoords: "51.3320,-116.1850",
       mapSearchQuery: "Mount+Temple+Trailhead+Moraine+Lake"
     },
-
-    // --- ICE & MIXED ---
     {
       name: "Weeping Pillar (Cirque Peak, David Thompson)",
       category: "ice-climb",
@@ -754,8 +761,17 @@
       gpsCoords: "51.8900,-116.5900",
       mapSearchQuery: "Weeping+Wall+David+Thompson+Highway"
     },
-
-    // --- HIKING & TREKKING ---
+    {
+      name: "Polar Circus (Cirque of the Unclimbables / Cirque Peak area)",
+      category: "ice-climb",
+      jurisdiction: "Banff National Park",
+      grade: "WI5",
+      pitches: "700m Sustained Ice",
+      approach: "Park at Bow Summit pullout on Icefields Parkway. Descend to Mistaya River and hike up Cirque Creek.",
+      notes: "One of the Rockies' 50 classic ice climbs. Full day undertaking requiring efficient climbing and V-thread descents.",
+      gpsCoords: "51.7200,-116.4500",
+      mapSearchQuery: "Polar+Circus+Icefields+Parkway"
+    },
     {
       name: "Abraham Lake Ridge Traverse (David Thompson)",
       category: "hike",
@@ -767,34 +783,17 @@
       gpsCoords: "52.1800,-116.3800",
       mapSearchQuery: "Abraham+Lake+Alberta"
     },
-
-    // --- BACKPACKING ---
     {
-      name: "Skyline Trail Loop (Jasper National Park)",
-      category: "backpacking",
-      jurisdiction: "Jasper National Park (Parks Canada)",
-      grade: "Multi-day Backpacking",
-      pitches: "44.5km / 1,400m Gain",
-      approach: "Maligne Lake trailhead or Signal Mountain trailhead.",
-      notes: "Iconic alpine backpacking route above tree line for most of the trek. Permits required.",
-      gpsCoords: "52.7200,-115.9300",
-      mapSearchQuery: "Skyline+Trail+Jasper+National+Park"
+      name: "Plain of Six Glaciers (Lake Louise)",
+      category: "hike",
+      jurisdiction: "Banff National Park",
+      grade: "Moderate Trail",
+      pitches: "14.6km / 400m Gain",
+      approach: "Start at Lake Louise shoreline path past the chateau.",
+      notes: "Extremely popular alpine trail featuring historic teahouse. Watch for rapidly changing mountain weather.",
+      gpsCoords: "51.4150,-116.2200",
+      mapSearchQuery: "Plain+of+Six+Glaciers+Lake+Louise"
     },
-
-    // --- CAR CAMPING ---
-    {
-      name: "Two Jack Main Campground (Banff National Park)",
-      category: "car-camping",
-      jurisdiction: "Banff National Park (Parks Canada)",
-      grade: "Car Camping Site",
-      pitches: "Drive-in Campsite",
-      approach: "Drive via Lake Minnewanka Loop Road from Banff townsite.",
-      notes: "Wooded campsites near Two Jack Lake. Fire permits and park passes required.",
-      gpsCoords: "51.2150,-115.5200",
-      mapSearchQuery: "Two+Jack+Main+Campground+Banff"
-    },
-
-    // --- BIKEPACKING ---
     {
       name: "David Thompson Highway Connector Gravel Loop",
       category: "bikepacking",
@@ -806,47 +805,17 @@
       gpsCoords: "52.4790,-116.0600",
       mapSearchQuery: "Nordegg+Alberta+Forestry+Roads"
     },
-
-    // --- GRAVEL BIKING ---
     {
-      name: "Ghost River / Waiparous Gravel Loop",
-      category: "gravel-biking",
-      jurisdiction: "Alberta Public Lands",
-      grade: "Gravel Grinder",
-      pitches: "60km / 900m Gain",
-      approach: "Waiparous Creek staging area off Highway 583.",
-      notes: "Rolling gravel forestry roads, watch for OHVs and logging trucks.",
-      gpsCoords: "51.3700,-114.8800",
-      mapSearchQuery: "Waiparous+Alberta"
+      name: "High Rockies Trail (Spray Lakes)",
+      category: "bikepacking",
+      jurisdiction: "Kananaskis Country",
+      grade: "Advanced Mountain Bikepacking",
+      pitches: "80km Singletrack / Doubletrack",
+      approach: "Canmore Nordic Centre or Goat Creek parking trailhead.",
+      notes: "Stunning mountain bike traverse with backcountry campsites along Spray Lakes reservoir.",
+      gpsCoords: "51.0500,-115.3500",
+      mapSearchQuery: "High+Rockies+Trail+Kananaskis"
     },
-
-    // --- PACKRAFTING ---
-    {
-      name: "North Saskatchewan River Float (Nordegg to Saunders)",
-      category: "packrafting",
-      jurisdiction: "Alberta Crown Land",
-      grade: "Class I-II River Float",
-      pitches: "25km River Run",
-      approach: "Put in at Highway 11 bridge near Saunders.",
-      notes: "Swift current, cold glacial water, gravel bar hazards.",
-      gpsCoords: "52.4600,-115.9800",
-      mapSearchQuery: "North+Saskatchewan+River+Nordegg"
-    },
-
-    // --- CANYONING ---
-    {
-      name: "Bighorn Canyon Descent (David Thompson)",
-      category: "canyoning",
-      jurisdiction: "Alberta Crown Land",
-      grade: "Technical Canyoneering",
-      pitches: "Multiple RAPPELS / 4km",
-      approach: "Access via Bighorn Dam forestry roads.",
-      notes: "Wet canyoning with technical rappels through limestone slots. Wetsuit and vertical rigging gear required.",
-      gpsCoords: "52.3200,-116.3300",
-      mapSearchQuery: "Bighorn+Dam+Alberta"
-    },
-
-    // --- SKI MOUNTAINEERING ---
     {
       name: "Bow Hut & St. Nicholas Peak Traverse",
       category: "ski-mountaineering",
@@ -860,70 +829,148 @@
     }
   ];
 
+  // PERSISTENT MASTER DATABASE INIT
+  let MASTER_DATABASE = [...BASE_DATABASE];
+  const savedDb = localStorage.getItem('adventure_master_db');
+  if (savedDb) {
+    try {
+      const parsed = JSON.parse(savedDb);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        MASTER_DATABASE = parsed;
+      }
+    } catch(e) {
+      console.error("Error loading saved database", e);
+    }
+  }
+
   // HIERARCHY DATA FOR CLIMBING & REGIONAL CASCADES
-  const HIERARCHY_DATA = {
-    "AB": {
-      "David Thompson": {
-        "Getaway Crag": [
-          { name: "Spring Break (Getaway Crag, David Thompson)", routeObj: MASTER_DATABASE.find(r => r.name.includes("Spring Break")) },
-          { name: "Daycation (Getaway Crag, David Thompson)", routeObj: MASTER_DATABASE.find(r => r.name.includes("Daycation")) }
-        ],
-        "Freyja": [
-          { name: "Helmet Heart (Freyja, David Thompson)", routeObj: MASTER_DATABASE.find(r => r.name.includes("Helmet Heart")) }
-        ],
-        "Abraham Lake & Surrounds": [
-          { name: "Abraham Lake Ridge Traverse (David Thompson)", routeObj: MASTER_DATABASE.find(r => r.name.includes("Abraham Lake Ridge")) }
-        ]
-      },
-      "Nordegg": {
-        "Mount Ernest Ross": [
-          { name: "Starstruck (Mt. Ernest Ross, Nordegg)", routeObj: MASTER_DATABASE.find(r => r.name.includes("Starstruck")) }
-        ],
-        "Forestry Trunk Roads": [
-          { name: "David Thompson Highway Connector Gravel Loop", routeObj: MASTER_DATABASE.find(r => r.name.includes("David Thompson Highway Connector")) }
-        ]
-      },
-      "Banff & Lake Louise": {
-        "Cascade Area": [
-          { name: "Cascade Mountain Normal Route (Banff)", routeObj: MASTER_DATABASE.find(r => r.name.includes("Cascade Mountain")) }
-        ],
-        "Lake Louise": [
-          { name: "Mount Temple Southwest Ridge (Lake Louise)", routeObj: MASTER_DATABASE.find(r => r.name.includes("Mount Temple")) }
-        ],
-        "Icefields Parkway": [
-          { name: "Weeping Pillar (Cirque Peak, David Thompson)", routeObj: MASTER_DATABASE.find(r => r.name.includes("Weeping Pillar")) },
-          { name: "Bow Hut & St. Nicholas Peak Traverse", routeObj: MASTER_DATABASE.find(r => r.name.includes("Bow Hut")) }
-        ]
+  function getHierarchyData() {
+    return {
+      "AB": {
+        "David Thompson": {
+          "Getaway Crag": [
+            { name: "Spring Break (Getaway Crag, David Thompson)", routeObj: MASTER_DATABASE.find(r => r.name.includes("Spring Break")) },
+            { name: "Daycation (Getaway Crag, David Thompson)", routeObj: MASTER_DATABASE.find(r => r.name.includes("Daycation")) }
+          ],
+          "Freyja": [
+            { name: "Helmet Heart (Freyja, David Thompson)", routeObj: MASTER_DATABASE.find(r => r.name.includes("Helmet Heart")) }
+          ],
+          "Abraham Lake & Surrounds": [
+            { name: "Abraham Lake Ridge Traverse (David Thompson)", routeObj: MASTER_DATABASE.find(r => r.name.includes("Abraham Lake Ridge")) }
+          ]
+        },
+        "Nordegg": {
+          "Mount Ernest Ross": [
+            { name: "Starstruck (Mt. Ernest Ross, Nordegg)", routeObj: MASTER_DATABASE.find(r => r.name.includes("Starstruck")) }
+          ],
+          "Forestry Trunk Roads": [
+            { name: "David Thompson Highway Connector Gravel Loop", routeObj: MASTER_DATABASE.find(r => r.name.includes("David Thompson Highway Connector")) }
+          ]
+        },
+        "Banff & Lake Louise": {
+          "Cascade Area": [
+            { name: "Cascade Mountain Normal Route (Banff)", routeObj: MASTER_DATABASE.find(r => r.name.includes("Cascade Mountain")) }
+          ],
+          "Lake Louise": [
+            { name: "Mount Temple Southwest Ridge (Lake Louise)", routeObj: MASTER_DATABASE.find(r => r.name.includes("Mount Temple")) },
+            { name: "Plain of Six Glaciers (Lake Louise)", routeObj: MASTER_DATABASE.find(r => r.name.includes("Plain of Six Glaciers")) }
+          ],
+          "Icefields Parkway": [
+            { name: "Weeping Pillar (Cirque Peak, David Thompson)", routeObj: MASTER_DATABASE.find(r => r.name.includes("Weeping Pillar")) },
+            { name: "Polar Circus (Cirque of the Unclimbables / Cirque Peak area)", routeObj: MASTER_DATABASE.find(r => r.name.includes("Polar Circus")) },
+            { name: "Bow Hut & St. Nicholas Peak Traverse", routeObj: MASTER_DATABASE.find(r => r.name.includes("Bow Hut")) }
+          ]
+        }
+      }
+    };
+  }
+
+  // PERSISTENCE RESTORE ON LOAD
+  window.addEventListener('DOMContentLoaded', () => {
+    const savedForm = localStorage.getItem('adventure_form_state');
+    if (savedForm) {
+      try {
+        const state = JSON.parse(savedForm);
+        if (state.startDate) document.getElementById('start-date').value = state.startDate;
+        if (state.endDate) document.getElementById('end-date').value = state.endDate;
+        if (state.days) document.getElementById('duration-days').value = state.days;
+        if (state.nights) document.getElementById('duration-nights').value = state.nights;
+        if (state.accommodation) document.getElementById('accommodation').value = state.accommodation;
+        if (state.notes) document.getElementById('route-notes').value = state.notes;
+        if (state.search) document.getElementById('route-search').value = state.search;
+        if (state.sport) currentSport = state.sport;
+      } catch(e) {
+        console.error("Error loading form state", e);
       }
     }
-  };
+  });
+
+  function saveFormState() {
+    const state = {
+      sport: currentSport,
+      startDate: document.getElementById('start-date').value,
+      endDate: document.getElementById('end-date').value,
+      days: document.getElementById('duration-days').value,
+      nights: document.getElementById('duration-nights').value,
+      accommodation: document.getElementById('accommodation').value,
+      notes: document.getElementById('route-notes').value,
+      search: document.getElementById('route-search').value
+    };
+    localStorage.setItem('adventure_form_state', JSON.stringify(state));
+  }
+
+  function addNewRouteToMasterDatabase() {
+    const nameInput = document.getElementById('new-route-name').value.trim();
+    const gradeInput = document.getElementById('new-route-grade').value.trim();
+    const notesInput = document.getElementById('route-notes').value.trim();
+
+    if (!nameInput) {
+      alert("Please enter a route or trail name to save.");
+      return;
+    }
+
+    const newEntry = {
+      name: nameInput,
+      category: currentSport,
+      jurisdiction: "Alberta Crown Land / Regional Authority",
+      grade: gradeInput || "Moderate",
+      pitches: "Custom / User Added",
+      approach: "Consult saved notes and GPS coordinates.",
+      notes: notesInput || "Custom added user route.",
+      gpsCoords: "52.1485,-116.3210",
+      mapSearchQuery: encodeURIComponent(nameInput)
+    };
+
+    MASTER_DATABASE.push(newEntry);
+    localStorage.setItem('adventure_master_db', JSON.stringify(MASTER_DATABASE));
+    
+    document.getElementById('route-search').value = newEntry.name;
+    selectedRouteData = newEntry;
+    alert(`Successfully saved "${newEntry.name}" to your permanent local Master Database!`);
+    document.getElementById('new-route-name').value = '';
+    document.getElementById('new-route-grade').value = '';
+  }
 
   function selectSport(sportKey) {
     currentSport = sportKey;
     selectedRouteData = null;
     document.getElementById('route-search').value = '';
     document.getElementById('route-notes').value = '';
+    saveFormState();
 
     const titles = {
       'rock-climb': 'Rock Climbing Objective Setup',
       'alpine-climb': 'Alpine Climbing Objective Setup',
       'ice-climb': 'Ice & Mixed Climbing Objective Setup',
       'hike': 'Hiking & Trekking Objective Setup',
-      'backpacking': 'Backpacking Expedition Setup',
-      'car-camping': 'Car Camping Trip Setup',
       'bikepacking': 'Bikepacking Expedition Setup',
-      'gravel-biking': 'Gravel Biking Route Setup',
-      'packrafting': 'Packrafting Trip Setup',
-      'canyoning': 'Canyoning Route Setup',
-      'ski-mountaineering': 'Ski Touring / Skimo Objective Setup',
-      'multi-sport': 'Complex / Multi-Sport Expedition Setup'
+      'ski-mountaineering': 'Ski Touring / Skimo Objective Setup'
     };
 
     document.getElementById('sport-title').textContent = titles[sportKey] || 'Objective Setup';
 
-    // Show/hide regional cascade based on sport relevancy
     const cascadeGroup = document.getElementById('regional-cascade-group');
-    if (['rock-climb', 'alpine-climb', 'ice-climb', 'ski-mountaineering', 'canyoning'].includes(sportKey)) {
+    if (['rock-climb', 'alpine-climb', 'ice-climb', 'ski-mountaineering'].includes(sportKey)) {
       cascadeGroup.style.display = 'block';
     } else {
       cascadeGroup.style.display = 'none';
@@ -944,6 +991,7 @@
     cragSelect.disabled = true;
     routeSelect.disabled = true;
 
+    const HIERARCHY_DATA = getHierarchyData();
     if (prov && HIERARCHY_DATA[prov]) {
       regSelect.disabled = false;
       Object.keys(HIERARCHY_DATA[prov]).forEach(reg => {
@@ -964,6 +1012,7 @@
     routeSelect.innerHTML = '<option value="">Select Specific Route / Objective</option>';
     cragSelect.disabled = true;
 
+    const HIERARCHY_DATA = getHierarchyData();
     if (prov && reg && HIERARCHY_DATA[prov][reg]) {
       cragSelect.disabled = false;
       Object.keys(HIERARCHY_DATA[prov][reg]).forEach(crag => {
@@ -982,6 +1031,7 @@
 
     routeSelect.innerHTML = '<option value="">Select Specific Route / Objective</option>';
 
+    const HIERARCHY_DATA = getHierarchyData();
     if (prov && reg && crag && HIERARCHY_DATA[prov][reg][crag]) {
       routeSelect.disabled = false;
       HIERARCHY_DATA[prov][reg][crag].forEach(r => {
@@ -1004,16 +1054,18 @@
       document.getElementById('route-notes').value = matched.notes;
       selectedRouteData = matched;
       updateJurisdictionAndPermits(matched.jurisdiction);
+      saveFormState();
     }
   }
 
-  // OPTIMIZED DEBOUNCED SEARCH & CAPPED DOM RENDERING FOR THOUSANDS OF ROUTES
+  // OPTIMIZED DEBOUNCED SEARCH & CAPPED DOM RENDERING
   const searchInput = document.getElementById('route-search');
   searchInput.addEventListener('input', function(e) {
     clearTimeout(searchDebounceTimer);
     const val = this.value;
     closeAllLists();
     selectedRouteData = null;
+    saveFormState();
 
     if (!val || val.trim().length === 0) return false;
 
@@ -1028,20 +1080,23 @@
 
       for (let i = 0; i < MASTER_DATABASE.length; i++) {
         const item = MASTER_DATABASE[i];
-        if (item.name.toLowerCase().includes(query)) {
-          matchCount++;
-          if (matchCount > 10) break; // Hard cap to ensure zero mobile lagging
+        if (item.name.toLowerCase().includes(query) || item.category === currentSport) {
+          if (item.name.toLowerCase().includes(query)) {
+            matchCount++;
+            if (matchCount > 12) break;
 
-          const itemDiv = document.createElement('div');
-          itemDiv.innerHTML = `<strong>${item.name}</strong> - Grade: ${item.grade} (${item.category})`;
-          itemDiv.addEventListener('click', function(e) {
-            searchInput.value = item.name;
-            document.getElementById('route-notes').value = item.notes;
-            selectedRouteData = item;
-            updateJurisdictionAndPermits(item.jurisdiction);
-            closeAllLists();
-          });
-          listDiv.appendChild(itemDiv);
+            const itemDiv = document.createElement('div');
+            itemDiv.innerHTML = `<strong>${item.name}</strong> - Grade: ${item.grade} (${item.category})`;
+            itemDiv.addEventListener('click', function(e) {
+              searchInput.value = item.name;
+              document.getElementById('route-notes').value = item.notes;
+              selectedRouteData = item;
+              updateJurisdictionAndPermits(item.jurisdiction);
+              closeAllLists();
+              saveFormState();
+            });
+            listDiv.appendChild(itemDiv);
+          }
         }
       }
     }, 150);
@@ -1056,6 +1111,7 @@
           selectedRouteData = exactMatch;
           document.getElementById('route-notes').value = exactMatch.notes;
           updateJurisdictionAndPermits(exactMatch.jurisdiction);
+          saveFormState();
         }
       }
     }, 200);
@@ -1098,40 +1154,173 @@
         document.getElementById('duration-nights').value = 0;
       }
     }
+    saveFormState();
   }
 
   function updateNights() {
     const days = parseInt(document.getElementById('duration-days').value) || 1;
     document.getElementById('duration-nights').value = days > 1 ? days - 1 : 0;
+    saveFormState();
   }
 
   function updateJurisdictionAndPermits(jurisdiction) {
     const permitContainer = document.getElementById('permit-container');
     let permitHtml = '';
     
-    if (jurisdiction && jurisdiction.includes('Alberta Crown Land')) {
+    if (jurisdiction.includes('Alberta Crown Land')) {
       permitHtml = `
         <div class="info-box">
           ℹ️ <strong>Crown Land Jurisdiction (${jurisdiction}):</strong> Alberta public lands camping requires a pass. Secure yours through the <a href="https://www.alberta.ca/public-lands-camping-pass" target="_blank">Alberta Public Lands Camping Pass Portal</a>.
         </div>
       `;
-    } else if (jurisdiction && jurisdiction.includes('National Park')) {
+    } else if (jurisdiction.includes('National Park')) {
       permitHtml = `
         <div class="info-box">
-          ℹ️ <strong>National Park Jurisdiction (${jurisdiction}):</strong> Valid Parks Canada National Park Entry Pass and backcountry wilderness permits are strictly required.
+          ℹ️ <strong>National Park Jurisdiction (${jurisdiction}):</strong> Valid <a href="https://www.pc.gc.ca/" target="_blank">Parks Canada</a> National Park Entry Pass and backcountry wilderness permits are strictly required.
         </div>
       `;
     } else {
       permitHtml = `
         <div class="info-box">
-          ℹ️ <strong>Jurisdiction (${jurisdiction || 'General'}):</strong> Check local land management agency regulations for parking passes or wilderness registration.
+          ℹ️ <strong>Jurisdiction (${jurisdiction}):</strong> Check local land management agency regulations for parking passes or wilderness registration.
         </div>
       `;
     }
     permitContainer.innerHTML = permitHtml;
   }
 
+  // GPX FILE EXPORT
+  function exportGpxFile() {
+    const routeName = document.getElementById('route-search').value || "Adventure Route";
+    const lat = selectedRouteData?.gpsCoords ? selectedRouteData.gpsCoords.split(',')[0] : "51.2050";
+    const lon = selectedRouteData?.gpsCoords ? selectedRouteData.gpsCoords.split(',')[1] : "-115.5450";
+    const notes = document.getElementById('route-notes').value || "";
+
+    const gpxContent = `<?xml version="1.0" encoding="UTF-8"?>
+<gpx version="1.1" creator="Smart Multi-Sport Adventure Engine">
+  <wpt lat="${lat}" lon="${lon}">
+    <name>${escapeXml(routeName)}</name>
+    <desc>${escapeXml(notes)}</desc>
+  </wpt>
+</gpx>`;
+
+    const blob = new Blob([gpxContent], { type: 'application/gpx+xml' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `${routeName.replace(/[^a-zA-Z0-9]/g, '_')}.gpx`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  }
+
+  // GPX FILE IMPORT
+  function importGpxFile(event) {
+    const file = event.target.files[0];
+    if (!file) return;
+
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      try {
+        const parser = new DOMParser();
+        const xmlDoc = parser.parseFromString(e.target.result, "text/xml");
+        const wpt = xmlDoc.getElementsByTagName("wpt")[0] || xmlDoc.getElementsByTagName("trkpt")[0];
+        
+        let wptName = "Imported GPX Route";
+        let wptDesc = "";
+        let lat = "52.1485";
+        let lon = "-116.3210";
+
+        if (wpt) {
+          lat = wpt.getAttribute("lat") || lat;
+          lon = wpt.getAttribute("lon") || lon;
+          const nameEl = wpt.getElementsByTagName("name")[0];
+          const descEl = wpt.getElementsByTagName("desc")[0];
+          if (nameEl) wptName = nameEl.textContent;
+          if (descEl) wptDesc = descEl.textContent;
+        }
+
+        document.getElementById('route-search').value = wptName;
+        document.getElementById('route-notes').value = wptDesc || `Imported coordinates: ${lat}, ${lon}`;
+        
+        selectedRouteData = {
+          name: wptName,
+          category: currentSport,
+          jurisdiction: "Imported GPX Waypoint",
+          grade: "Custom",
+          pitches: "GPS Track",
+          approach: "Navigating via imported GPX coordinates.",
+          notes: wptDesc,
+          gpsCoords: `${lat},${lon}`,
+          mapSearchQuery: `${lat},${lon}`
+        };
+
+        alert(`Successfully imported GPX track: "${wptName}" (${lat}, ${lon})`);
+        saveFormState();
+      } catch(err) {
+        alert("Failed to parse GPX file. Ensure it is a valid XML GPX format.");
+        console.error(err);
+      }
+    };
+    reader.readAsText(file);
+  }
+
+  function escapeXml(str) {
+    return str.replace(/[<>&'"]/g, function (c) {
+      switch (c) {
+        case '<': return '&lt;';
+        case '>': return '&gt;';
+        case '&': return '&amp;';
+        case '\'': return '&apos;';
+        case '"': return '&quot;';
+      }
+    });
+  }
+
+  function addCustomGearItem() {
+    const category = document.getElementById('custom-gear-category').value;
+    const itemName = document.getElementById('custom-gear-name').value.trim();
+    if (!itemName) return;
+
+    const listMap = {
+      'safety': 'list-safety',
+      'hardware': 'list-hardware',
+      'clothing': 'list-clothing',
+      'fuel': 'list-fuel'
+    };
+
+    const targetListId = listMap[category];
+    const listEl = document.getElementById(targetListId);
+    
+    const li = document.createElement('li');
+    const leftDiv = document.createElement('div');
+    leftDiv.className = 'gear-item-left';
+    
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    
+    const span = document.createElement('span');
+    span.textContent = "⭐ " + itemName + " (Custom)";
+    span.className = 'item-warning';
+    
+    leftDiv.appendChild(checkbox);
+    leftDiv.appendChild(span);
+
+    const delBtn = document.createElement('button');
+    delBtn.className = 'delete-gear-btn';
+    delBtn.textContent = '✕';
+    delBtn.onclick = () => li.remove();
+
+    li.appendChild(leftDiv);
+    li.appendChild(delBtn);
+    listEl.appendChild(li);
+
+    document.getElementById('custom-gear-name').value = '';
+  }
+
   function generateManifest() {
+    saveFormState();
     const routeName = document.getElementById('route-search').value || "Custom Expedition";
     document.getElementById('manifest-title').textContent = routeName;
 
@@ -1146,7 +1335,6 @@
     document.getElementById('stat-approach').textContent = selectedRouteData?.approach || "No specific approach documentation found. Consult topographic maps and GPS coordinates.";
     document.getElementById('stat-beta').textContent = userNotes || selectedRouteData?.notes || "No additional route beta provided.";
 
-    // CONFIGURE GOOGLE MAPS & GARMIN EXPLORE BUTTONS
     const mapsBtn = document.getElementById('maps-link-btn');
     const garminBtn = document.getElementById('garmin-link-btn');
 
@@ -1167,7 +1355,6 @@
       garminBtn.style.display = 'none';
     }
 
-    // LOAD SPORT TEMPLATES
     const template = SPORT_GEAR_TEMPLATES[currentSport] || SPORT_GEAR_TEMPLATES['rock-climb'];
     let safety = [...template.safety];
     let hardware = [...template.hardware];
@@ -1192,6 +1379,9 @@
     const listEl = document.getElementById(elementId);
     items.forEach(item => {
       const li = document.createElement('li');
+      const leftDiv = document.createElement('div');
+      leftDiv.className = 'gear-item-left';
+
       const checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
       const span = document.createElement('span');
@@ -1199,8 +1389,17 @@
         span.className = 'item-warning';
       }
       span.textContent = item;
-      li.appendChild(checkbox);
-      li.appendChild(span);
+      
+      leftDiv.appendChild(checkbox);
+      leftDiv.appendChild(span);
+
+      const delBtn = document.createElement('button');
+      delBtn.className = 'delete-gear-btn';
+      delBtn.textContent = '✕';
+      delBtn.onclick = () => li.remove();
+
+      li.appendChild(leftDiv);
+      li.appendChild(delBtn);
       listEl.appendChild(li);
     });
   }
