@@ -198,7 +198,6 @@
             const regSelect = document.getElementById('cascade-region');
             regSelect.innerHTML = '<option value="">Select Region</option>';
 
-            // Deduplicate region names using a Set so regions only appear once
             const uniqueRegions = [...new Set(MASTER_DATABASE.map(reg => reg.regionName || reg.region))].filter(Boolean);
 
             uniqueRegions.forEach(regName => {
@@ -222,23 +221,21 @@
 
             cragSelect.disabled = false;
             
-            // Find all matching entries for this region name and aggregate their crags properly
             const matchingRegions = MASTER_DATABASE.filter(r => (r.regionName || r.region) === regVal);
             
             let allCrags = [];
             matchingRegions.forEach(regionObj => {
-                if (regionObj.crags && Array.isArray(regionObj.crags)) {
-                    regionObj.crags.forEach(crag => {
-                        const cragName = crag.cragName || crag.crag;
-                        if (cragName && !allCrags.some(c => c.name === cragName)) {
-                            allCrags.push({ name: cragName, obj: crag });
-                        }
-                    });
-                }
+                const cragsList = regionObj.crags || regionObj.areas || [];
+                cragsList.forEach(crag => {
+                    const cragName = crag.cragName || crag.crag || crag.name;
+                    if (cragName && !allCrags.includes(cragName)) {
+                        allCrags.push(cragName);
+                    }
+                });
             });
 
-            allCrags.forEach(item => {
-                cragSelect.innerHTML += `<option value="${item.name}">${item.name}</option>`;
+            allCrags.forEach(cragName => {
+                cragSelect.innerHTML += `<option value="${cragName}">${cragName}</option>`;
             });
         }
 
@@ -255,10 +252,9 @@
                 
                 let foundCragObj = null;
                 matchingRegions.forEach(regionObj => {
-                    if (regionObj.crags) {
-                        const match = regionObj.crags.find(c => (c.cragName || c.crag) === cragVal);
-                        if (match) foundCragObj = match;
-                    }
+                    const cragsList = regionObj.crags || regionObj.areas || [];
+                    const match = cragsList.find(c => (c.cragName || c.crag || c.name) === cragVal);
+                    if (match) foundCragObj = match;
                 });
 
                 if (foundCragObj && foundCragObj.routes) {
@@ -281,12 +277,11 @@
             
             let matchedRoute = null;
             matchingRegions.forEach(regionObj => {
-                if (regionObj.crags) {
-                    const cragObj = regionObj.crags.find(c => (c.cragName || c.crag) === cragVal);
-                    if (cragObj && cragObj.routes) {
-                        const route = cragObj.routes.find(rt => rt.name === routeName);
-                        if (route) matchedRoute = route;
-                    }
+                const cragsList = regionObj.crags || regionObj.areas || [];
+                const cragObj = cragsList.find(c => (c.cragName || c.crag || c.name) === cragVal);
+                if (cragObj && cragObj.routes) {
+                    const route = cragObj.routes.find(rt => rt.name === routeName);
+                    if (route) matchedRoute = route;
                 }
             });
 
@@ -349,7 +344,6 @@
 
             let hardwareList = ["Climbing Harness", "Locking Carabiners (x3-4)", "Belay/Rappel Device", "Personal Anchor System (PAS)"];
 
-            // Determine Quickdraw Count intelligently from route data
             let boltCount = 0;
             if (selectedRouteData) {
                 const textToCheck = (selectedRouteData.notes || '') + ' ' + (selectedRouteData.approach || '');
@@ -372,7 +366,6 @@
                 hardwareList.unshift("Quickdraws: 12 total (10 standard + 2 extra for anchor/extensions)");
             }
 
-            // Determine Rope Length logically
             let ropeRecommendation = "Single Rope: 70m dynamic climbing rope (Standard)";
             if (selectedRouteData) {
                 const lengthStr = (selectedRouteData.length || '').toLowerCase();
