@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Canyoning Sport Planner</title>
+    <title>Canyoning Adventure Planner</title>
     <style>
         :root {
-            --primary-color: #0b4f6c;
-            --secondary-color: #01baef;
-            --accent-color: #20bf55;
-            --bg-color: #f8f9fa;
+            --primary-color: #2b4c7e;
+            --secondary-color: #52796f;
+            --accent-color: #354f52;
+            --bg-color: #f1f5f9;
             --card-bg: #ffffff;
-            --text-color: #212529;
-            --border-color: #ced4da;
+            --text-color: #1e293b;
+            --border-color: #cbd5e1;
         }
 
         body {
@@ -21,7 +21,7 @@
             color: var(--text-color);
             margin: 0;
             padding: 0;
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
         header {
@@ -33,7 +33,8 @@
 
         header h1 {
             margin: 0;
-            font-size: 2.2rem;
+            font-size: 2.4rem;
+            font-weight: 700;
         }
 
         header p {
@@ -42,111 +43,138 @@
             opacity: 0.9;
         }
 
-        .container {
-            max-width: 800px;
-            margin: 2rem auto;
+        .main-container {
+            max-width: 650px;
+            margin: 2.5rem auto;
             padding: 0 1rem;
         }
 
-        .card {
+        .planner-card {
             background: var(--card-bg);
-            border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
-            padding: 2rem;
-            margin-bottom: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+            padding: 2.5rem;
+            border: 1px solid var(--border-color);
         }
 
-        .form-group {
-            margin-bottom: 1.25rem;
-            display: flex;
-            flex-direction: column;
+        .form-section {
+            margin-bottom: 1.5rem;
         }
 
-        .form-group label {
+        .form-section label {
+            display: block;
             font-weight: 600;
             margin-bottom: 0.5rem;
             color: var(--primary-color);
+            font-size: 0.95rem;
         }
 
-        .form-group select,
-        .form-group input {
-            padding: 0.75rem;
+        .form-section select,
+        .form-section input {
+            width: 100%;
+            padding: 0.8rem 1rem;
             border: 1px solid var(--border-color);
-            border-radius: 4px;
+            border-radius: 8px;
             font-size: 1rem;
             background-color: #fff;
+            box-sizing: border-box;
+            transition: border-color 0.2s, box-shadow 0.2s;
         }
 
-        .row {
+        .form-section select:focus,
+        .form-section input:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(43, 76, 126, 0.15);
+        }
+
+        .form-row {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 1rem;
+            gap: 1.2rem;
         }
 
-        .btn {
+        .action-btn {
             background-color: var(--primary-color);
             color: white;
             border: none;
-            padding: 0.75rem 1.5rem;
+            padding: 0.85rem 1.5rem;
             font-size: 1rem;
             font-weight: 600;
-            border-radius: 4px;
+            border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.2s ease;
             width: 100%;
+            transition: background-color 0.2s, transform 0.1s;
+            box-sizing: border-box;
             margin-top: 0.5rem;
         }
 
-        .btn:hover {
-            background-color: #07384f;
+        .action-btn:hover {
+            background-color: #1f375c;
         }
 
-        .btn-secondary {
+        .action-btn:active {
+            transform: scale(0.98);
+        }
+
+        .map-btn {
             background-color: var(--secondary-color);
+            margin-top: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .map-btn:hover {
+            background-color: #3e5c53;
+        }
+
+        .map-display {
+            background-color: #e2e8f0;
+            border: 1px dashed var(--border-color);
+            border-radius: 8px;
+            padding: 1.5rem;
+            text-align: center;
+            color: #475569;
+            font-weight: 600;
             margin-top: 1rem;
         }
 
-        .btn-secondary:hover {
-            background-color: #0195be;
-        }
-
-        .map-preview {
-            margin-top: 1.5rem;
-            border: 1px solid var(--border-color);
-            border-radius: 4px;
-            height: 250px;
-            background-color: #e9ecef;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #6c757d;
-            font-weight: 600;
-        }
-
-        .packing-list {
-            margin-top: 1.5rem;
-            border-top: 2px solid var(--bg-color);
+        .packing-container {
+            margin-top: 2rem;
+            border-top: 2px solid #f1f5f9;
             padding-top: 1.5rem;
         }
 
-        .packing-list h3 {
+        .packing-container h3 {
             color: var(--primary-color);
             margin-top: 0;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
         }
 
-        .checkbox-item {
+        .checklist-item {
             display: flex;
             align-items: center;
             margin-bottom: 0.75rem;
-            font-size: 1rem;
+            background: #f8fafc;
+            padding: 0.6rem 0.8rem;
+            border-radius: 6px;
+            border: 1px solid #e2e8f0;
         }
 
-        .checkbox-item input {
-            margin-right: 0.75rem;
-            width: 18px;
-            height: 18px;
+        .checklist-item input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
             accent-color: var(--primary-color);
+            margin-right: 0.8rem;
             cursor: pointer;
+        }
+
+        .checklist-item label {
+            font-weight: normal;
+            cursor: pointer;
+            color: var(--text-color);
+            margin-bottom: 0;
+            user-select: none;
         }
 
         .hidden {
@@ -154,8 +182,11 @@
         }
 
         @media (max-width: 600px) {
-            .row {
+            .form-row {
                 grid-template-columns: 1fr;
+            }
+            .planner-card {
+                padding: 1.5rem;
             }
         }
     </style>
@@ -164,173 +195,176 @@
 
     <header>
         <h1>Canyoning Adventure Planner</h1>
-        <p>Plan your descent, check logistics, and gear up safely</p>
+        <p>Coordinate your descent, map routes, and gear up precisely</p>
     </header>
 
-    <div class="container">
-        <div class="card">
-            <form id="canyoning-form">
+    <div class="main-container">
+        <div class="planner-card">
+            <form id="canyoning-planner-form">
+                
                 <!-- Region Dropdown -->
-                <div class="form-group">
-                    <label for="region">Region</label>
-                    <select id="region" required>
-                        <option value="">-- Select Region --</option>
+                <div class="form-section">
+                    <label for="region-select">Region</label>
+                    <select id="region-select" required>
+                        <option value="">-- Choose a Region --</option>
                     </select>
                 </div>
 
                 <!-- Canyon Dropdown -->
-                <div class="form-group">
-                    <label for="canyon">Canyon</label>
-                    <select id="canyon" required disabled>
+                <div class="form-section">
+                    <label for="canyon-select">Canyon</label>
+                    <select id="canyon-select" required disabled>
                         <option value="">-- Select Region First --</option>
                     </select>
                 </div>
 
-                <!-- Date and Days Row -->
-                <div class="row">
-                    <div class="form-group">
+                <!-- Date and Duration Row -->
+                <div class="form-row">
+                    <div class="form-section">
                         <label for="trip-date">Trip Date</label>
                         <input type="date" id="trip-date" required>
                     </div>
-                    <div class="form-group">
+                    <div class="form-section">
                         <label for="trip-days">Number of Days</label>
                         <input type="number" id="trip-days" min="1" value="1" required>
                     </div>
                 </div>
 
                 <!-- GPS Map Integration Option -->
-                <button type="button" id="load-map-btn" class="btn btn-secondary">View GPS Route via Google Maps</button>
-                <div id="map-container" class="map-preview hidden">
+                <button type="button" id="map-toggle-btn" class="action-btn map-btn">View GPS Route via Google Maps</button>
+                <div id="map-box" class="map-display hidden">
                     Google Maps GPS View Loaded for Selected Canyon
                 </div>
 
-                <!-- Packing List Button -->
-                <button type="button" id="packing-btn" class="btn" style="margin-top: 1.5rem;">Generate Suggested Packing List</button>
+                <!-- Suggested Packing List Button -->
+                <button type="button" id="packing-gen-btn" class="action-btn">Generate Suggested Packing List</button>
             </form>
 
-            <!-- Packing List Output Area -->
-            <div id="packing-section" class="packing-list hidden">
+            <!-- Dynamic Packing List Output -->
+            <div id="packing-output-section" class="packing-container hidden">
                 <h3>Required Canyoning Gear Checklist</h3>
-                <div id="checklist-items">
-                    <!-- Dynamic Checklist items injected via JS -->
+                <div id="gear-checklist-container">
+                    <!-- Checkboxes injected via JavaScript -->
                 </div>
             </div>
         </div>
     </div>
 
     <script>
-        let canyonData = [];
+        let canyoningDatabase = [];
 
-        // Fetch the canyoning JSON dataset
-        async function loadCanyonData() {
+        // Load canyoning.json containing region and canyon datasets
+        async function fetchCanyoningData() {
             try {
-                const response = await fetch('canyoning.json');
-                if (!response.ok) throw new Error('Could not load canyon data');
-                canyonData = await response.json();
-                populateRegions();
-            } catch (error) {
-                console.error('Error fetching JSON, using fallback mock data:', error);
-                // Fallback structure mirroring a typical canyoning database format
-                canyonData = [
+                const res = await fetch('canyoning.json');
+                if (!res.ok) throw new Error('Network response failed');
+                canyoningDatabase = await res.json();
+                initializeRegions();
+            } catch (err) {
+                console.warn('Could not load canyoning.json directly, fallback data active:', err);
+                // Fallback structured data matching standard rock-climb/canyoning format specs
+                canyoningDatabase = [
                     { region: "Alps (France)", name: "Riolan Canyon", gps: "43.882, 6.954" },
                     { region: "Alps (France)", name: "Maglia Canyon", gps: "43.904, 7.422" },
                     { region: "Sierra de Guara (Spain)", name: "Mascun Canyon", gps: "42.278, -0.124" },
-                    { region: "Sierra de Guara (Spain)", name: "Formiga Canyon", gps: "42.245, -0.211" }
+                    { region: "Sierra de Guara (Spain)", name: "Formiga Canyon", gps: "42.245, -0.211" },
+                    { region: "Ticino (Switzerland)", name: "Boggera Canyon", gps: "46.265, 9.012" }
                 ];
-                populateRegions();
+                initializeRegions();
             }
         }
 
-        const regionSelect = document.getElementById('region');
-        const canyonSelect = document.getElementById('canyon');
-        const mapBtn = document.getElementById('load-map-btn');
-        const mapContainer = document.getElementById('map-container');
-        const packingBtn = document.getElementById('packing-btn');
-        const packingSection = document.getElementById('packing-section');
-        const checklistItems = document.getElementById('checklist-items');
+        const regionDropdown = document.getElementById('region-select');
+        const canyonDropdown = document.getElementById('canyon-select');
+        const mapToggleButton = document.getElementById('map-toggle-btn');
+        const mapBoxContainer = document.getElementById('map-box');
+        const packingGenButton = document.getElementById('packing-gen-btn');
+        const packingOutputSection = document.getElementById('packing-output-section');
+        const gearChecklistContainer = document.getElementById('gear-checklist-container');
 
-        function populateRegions() {
-            const regions = [...new Set(canyonData.map(item => item.region))].sort();
-            regionSelect.innerHTML = '<option value="">-- Select Region --</option>';
-            regions.forEach(region => {
+        function initializeRegions() {
+            const uniqueRegions = [...new Set(canyoningDatabase.map(item => item.region))].sort();
+            regionDropdown.innerHTML = '<option value="">-- Choose a Region --</option>';
+            uniqueRegions.forEach(regionName => {
                 const opt = document.createElement('option');
-                opt.value = region;
-                opt.textContent = region;
-                regionSelect.appendChild(opt);
+                opt.value = regionName;
+                opt.textContent = regionName;
+                regionDropdown.appendChild(opt);
             });
         }
 
-        regionSelect.addEventListener('change', (e) => {
-            const selectedRegion = e.target.value;
-            canyonSelect.innerHTML = '<option value="">-- Select Canyon --</option>';
+        regionDropdown.addEventListener('change', (e) => {
+            const selectedRegionValue = e.target.value;
+            canyonDropdown.innerHTML = '<option value="">-- Choose a Canyon --</option>';
             
-            if (!selectedRegion) {
-                canyonSelect.disabled = true;
+            if (!selectedRegionValue) {
+                canyonDropdown.disabled = true;
                 return;
             }
 
-            const filteredCanyons = canyonData.filter(item => item.region === selectedRegion);
-            filteredCanyons.forEach(canyon => {
+            const matchingCanyons = canyoningDatabase.filter(item => item.region === selectedRegionValue);
+            matchingCanyons.forEach(canyonItem => {
                 const opt = document.createElement('option');
-                opt.value = canyon.name;
-                opt.textContent = canyon.name;
-                canyonSelect.appendChild(opt);
+                opt.value = canyonItem.name;
+                opt.textContent = canyonItem.name;
+                canyonDropdown.appendChild(opt);
             });
-            canyonSelect.disabled = false;
+            canyonDropdown.disabled = false;
         });
 
-        mapBtn.addEventListener('click', () => {
-            const selectedCanyonName = canyonSelect.value;
-            if (!selectedCanyonName) {
-                alert('Please select a region and canyon first.');
+        mapToggleButton.addEventListener('click', () => {
+            const chosenCanyon = canyonDropdown.value;
+            if (!chosenCanyon) {
+                alert('Please select a specific region and canyon first to load GPS.');
                 return;
             }
-            const canyonObj = canyonData.find(c => c.name === selectedCanyonName);
-            mapContainer.classList.remove('hidden');
-            mapContainer.textContent = `GPS Route Active: ${canyonObj ? canyonObj.name + ' (' + canyonObj.gps + ')' : selectedCanyonName}`;
+            const foundRecord = canyoningDatabase.find(c => c.name === chosenCanyon);
+            mapBoxContainer.classList.remove('hidden');
+            mapBoxContainer.textContent = `GPS Route Active: ${foundRecord ? foundRecord.name + ' [Coordinates: ' + foundRecord.gps + ']' : chosenCanyon}`;
         });
 
-        packingBtn.addEventListener('click', () => {
-            const region = regionSelect.value;
-            const canyon = canyonSelect.value;
-            const date = document.getElementById('trip-date').value;
+        packingGenButton.addEventListener('click', () => {
+            const regVal = regionDropdown.value;
+            const canVal = canyonDropdown.value;
+            const dateVal = document.getElementById('trip-date').value;
 
-            if (!region || !canyon || !date) {
-                alert('Please fill out the Region, Canyon, and Trip Date before generating a packing list.');
+            if (!regVal || !canVal || !dateVal) {
+                alert('Please fill out the Region, Canyon, and Trip Date fields prior to building your packing list.');
                 return;
             }
 
-            const gearList = [
-                "Canyoning Wetsuit (Neoprene 5mm jacket & pants)",
-                "Canyoning Harness with protective seat cover",
-                "Canyoning Helmet (CE certified)",
-                "Canyoning Boots with high-friction rubber soles",
-                "Neoprene Socks",
-                "Dynamic Canyoning Ropes (water-resistant)",
-                "Double Cowstails / Lanyards with locking carabiners",
-                "Descender (e.g., Pirana or stock figure 8 modified)",
-                "Waterproof Container / Dry Bag",
-                "First Aid Kit & Emergency Blanket",
-                "Whistle",
-                "Energy Snacks and Hydration"
+            const essentialGear = [
+                "Canyoning Wetsuit (5mm Neoprene Jacket & Long Johns)",
+                "Canyoning Harness with integrated protective seat rump",
+                "UIAA/CE Certified Canyoning Helmet",
+                "High-Friction Rubber Soled Canyoning Boots",
+                "Neoprene Thermal Socks",
+                "Dynamic Canyoning Main & Backup Ropes",
+                "Dual Cowstails / Lanyards with Screw-lock Carabiners",
+                "Specialized Canyoning Descender (e.g., Pirana)",
+                "Waterproof Barrel / Dry Bag Container",
+                "First Aid Kit & Thermal Emergency Blanket",
+                "Emergency Pealess Whistle",
+                "High-Energy Nutrition & Electrolyte Hydration"
             ];
 
-            checklistItems.innerHTML = '';
-            gearList.forEach((item, index) => {
-                const div = document.createElement('div');
-                div.className = 'checkbox-item';
-                div.innerHTML = `
-                    <input type="checkbox" id="gear-${index}">
-                    <label for="gear-${index}" style="margin-bottom:0; font-weight:normal; cursor:pointer;">${item}</label>
+            gearChecklistContainer.innerHTML = '';
+            essentialGear.forEach((gearItem, idx) => {
+                const wrapper = document.createElement('div');
+                wrapper.className = 'checklist-item';
+                wrapper.innerHTML = `
+                    <input type="checkbox" id="gear-chk-${idx}">
+                    <label for="gear-chk-${idx}">${gearItem}</label>
                 `;
-                checklistItems.appendChild(div);
+                gearChecklistContainer.appendChild(wrapper);
             });
 
-            packingSection.classList.remove('hidden');
-            packingSection.scrollIntoView({ behavior: 'smooth' });
+            packingOutputSection.classList.remove('hidden');
+            packingOutputSection.scrollIntoView({ behavior: 'smooth' });
         });
 
-        loadCanyonData();
+        // Initialize script logic on load
+        fetchCanyoningData();
     </script>
 </body>
 </html>
