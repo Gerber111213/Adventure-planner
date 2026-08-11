@@ -58,9 +58,7 @@
  </div>
  <div class="card">
  <h3 style="margin-bottom: 14px;">Choose Your Sport Discipline</h3>
- <div id="activity-grid" class="activity-grid">
- <!-- Populated dynamically from sports.json to prevent truncation -->
- </div>
+ <div id="activity-grid" class="activity-grid"></div>
  </div>
  </div>
 
@@ -181,7 +179,7 @@
  <ul class="gear-manifest" id="list-hardware"></ul>
  <div class="section-header">Layering & Clothing</div>
  <ul class="gear-manifest" id="list-clothing"></ul>
- <div class="section-header">Hydration, Fuel & Camp Systems</div>
+ <div class="section-headerpx">Hydration, Fuel & Camp Systems</div>
  <ul class="gear-manifest" id="list-fuel"></ul>
  </div>
  </div>
@@ -193,18 +191,7 @@
  let MASTER_DATABASE = [];
  let SPORT_GEAR_TEMPLATES = {};
 
- // Load both databases externally on boot
  async function loadDatabases() {
-     try {
-         const routeRes = await fetch('climbing-routes.json');
-         if (routeRes.ok) {
-             MASTER_DATABASE = await routeRes.json();
-             populateRegions();
-         }
-     } catch (e) {
-         console.warn("climbing-routes.json not detected or failed to load.");
-     }
-
      try {
          const sportRes = await fetch('sports.json');
          if (sportRes.ok) {
@@ -228,6 +215,31 @@
          btn.innerHTML = `${sport.icon} ${sport.name}`;
          grid.appendChild(btn);
      });
+ }
+
+ function selectSport(sportKey) {
+     currentSport = sportKey;
+     let routeFileName = `${sportKey}-routes.json`;
+     loadSportRoutes(routeFileName);
+     goToScreen('screen-planner');
+ }
+
+ async function loadSportRoutes(fileName) {
+     try {
+         const response = await fetch(fileName);
+         if (response.ok) {
+             MASTER_DATABASE = await response.json();
+             populateRegions();
+         } else {
+             console.warn(`Could not load ${fileName}, starting with empty database.`);
+             MASTER_DATABASE = [];
+             populateRegions();
+         }
+     } catch (e) {
+         console.warn("Error fetching route database:", e);
+         MASTER_DATABASE = [];
+         populateRegions();
+     }
  }
 
  function populateRegions() {
@@ -316,37 +328,6 @@
  window.addEventListener('DOMContentLoaded', async () => {
      await loadDatabases();
  });
-
-function selectSport(sportKey) {
-    currentSport = sportKey;
-    
-    // Automatically maps the button ID to its matching JSON file name in your repo (e.g., 'canyoning' -> 'canyoning-routes.json')
-    let routeFileName = `${sportKey}-routes.json`;
-
-    loadSportRoutes(routeFileName);
-    goToScreen('screen-planner');
-}
-    loadSportRoutes(routeFileName);
-    goToScreen('screen-planner');
-}
-
-async function loadSportRoutes(fileName) {
-    try {
-        const response = await fetch(fileName);
-        if (response.ok) {
-            MASTER_DATABASE = await response.json();
-            populateRegions();
-        } else {
-            console.warn(`Could not load ${fileName}, starting with empty database.`);
-            MASTER_DATABASE = [];
-            populateRegions();
-        }
-    } catch (e) {
-        console.warn("Error fetching route database:", e);
-        MASTER_DATABASE = [];
-        populateRegions();
-    }
-}
 
  function goToScreen(screenId) {
      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
