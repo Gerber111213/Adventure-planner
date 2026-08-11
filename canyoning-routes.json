@@ -1,0 +1,23 @@
+{
+  "region": "Jasper / Canadian Rockies",
+  "crag": "Ogre Canyon",
+  "name": "Ogre Canyon Complete Descent",
+  "grade": "v2 A2 III",
+  "pitches": 10,
+  "length": "Full Canyon Descent",
+  "approach": "Hike to the top of the ridge. Optional side trip: Head south 100m to check out the cave (requires a 35m rope drop from a bolted anchor; do not descend unless equipped with proper ascending gear as walls are extremely slippery). Continue to the end of the approach trail to drop into the canyon via downclimb or handline off an obvious tree.",
+  "notes": "Upper section features 6 straightforward rappels (8m–12m). Lower section includes intense waterfall rappels ('Turbo Wash' and R8). Make sure to select anchor options carefully based on water flow and personal comfort.",
+  "mapSearchQuery": "53°14'44.0\"N 117°52'31.7\"W",
+  "pitchesBreakdown": [
+    { "pitch": 1, "grade": "8m-12m", "description": "R1 (TR): First of 6 consecutive easy rappels (8m-12m) with bolted anchors through mostly dry upper section." },
+    { "pitch": 2, "grade": "8m-12m", "description": "R2 (TL): Straightforward bolted rappel." },
+    { "pitch": 3, "grade": "8m-12m", "description": "R3 (TL): Straightforward bolted rappel." },
+    { "pitch": 4, "grade": "8m-12m", "description": "R4 (TR): Straightforward bolted rappel." },
+    { "pitch": 5, "grade": "8m-12m", "description": "R5 (TR): Offers great views of the big waterfall." },
+    { "pitch": 6, "grade": "8m-12m", "description": "R6 (TR): Final rappel of the upper sequence." },
+    { "pitch": 7, "grade": "20m", "description": "R7 Turbo Wash (TL): Slide initial chute, go left around the big boulder, follow flow down. High water impact and low visibility; ends in a chest-deep pool." },
+    { "pitch": 8, "grade": "25m", "description": "R8: Two anchor options. Right anchor (TR) goes behind the waterfall (easier flow avoidance and rope pull). Left anchor (TL) looks easier from top but subjects rappelers to heavy water flow." },
+    { "pitch": 9, "grade": "4m", "description": "R9 (TR): Short and easy rappel off a single bolt anchor (or downclimb out of flow)." },
+    { "pitch": 10, "grade": "8m", "description": "R10 (TR): Final easy rappel off a bolted anchor, leading out to the 3 finishing slides as the canyon opens up." }
+  ]
+}
