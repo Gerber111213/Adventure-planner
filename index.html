@@ -190,13 +190,13 @@
 
  async function loadDatabases() {
      try {
-         const sportRes = await fetch('sports.json');
+         const sportRes = await fetch('https://raw.githubusercontent.com/Gerber111213/Adventure-planner/main/sports.json');
          if (sportRes.ok) {
              SPORT_GEAR_TEMPLATES = await sportRes.json();
              renderSportButtons();
          }
      } catch (e) {
-         console.warn("sports.json not detected or failed to load.");
+         console.warn("sports.json failed to load:", e);
      }
  }
 
@@ -216,7 +216,7 @@
 
  function selectSport(sportKey) {
      currentSport = sportKey;
-     let routeFileName = `${sportKey}-routes.json`;
+     let routeFileName = `https://raw.githubusercontent.com/Gerber111213/Adventure-planner/main/${sportKey}-routes.json`;
      loadSportRoutes(routeFileName);
      goToScreen('screen-planner');
  }
