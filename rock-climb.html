@@ -16,7 +16,7 @@
         .form-group {margin-bottom: 16px; position: relative; }
         label {display: block; font-weight: 600; margin-bottom: 6px; color: var(--text-bright); }
         select, input[type="text"], input[type="number"], input[type="date"], textarea {width: 100%; padding: 10px; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; color: var(--text-bright); box-sizing: border-box; font-size: 15px; }
-        .cascade-row {display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 12px; }
+        .cascade-row {display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
         .row-inputs {display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         button.primary-btn {background: var(--accent); color: var(--text-bright); border: none; padding: 12px 20px; border-radius: 6px; font-weight: bold; font-size: 16px; width: 100%; cursor: pointer; transition: background 0.2s ease; margin-top: 8px; }
         button.primary-btn:hover {background: var(--accent-hover); }
@@ -45,33 +45,24 @@
         
         <div class="hero-banner">
             <h1>🧗‍♂️ Rock Climbing Safety & Route Planner</h1>
-            <p>Tailored protocols, multi-pitch beta, and equipment manifests for rock objectives.</p>
+            <p>Tailored protocols, multi-pitch beta, and intelligent equipment manifests for rock objectives.</p>
         </div>
 
         <div class="card">
             <h2>Objective Setup</h2>
 
-            <!-- PROVINCE & HIERARCHY SELECTOR -->
+            <!-- NESTED REGION -> CRAG -> ROUTE SELECTOR -->
             <div id="regional-cascade-group" class="form-group">
-                <label>📍 Select Province & Region</label>
+                <label>📍 Detailed Regional & Crag Hierarchy</label>
                 <div class="cascade-row">
-                    <select id="cascade-province" onchange="onProvinceChange()">
-                        <option value="">Select Province</option>
-                        <option value="Alberta">Alberta</option>
-                        <option value="British Columbia">British Columbia</option>
+                    <select id="cascade-region" onchange="onRegionChange()">
+                        <option value="">Select Region</option>
                     </select>
-                </div>
-                <div class="cascade-row" style="margin-top: 8px;">
-                    <select id="cascade-region" onchange="onRegionChange()" disabled>
-                        <option value="">Select Region / Area</option>
-                    </select>
-                </div>
-                <div class="cascade-row" style="margin-top: 8px;">
                     <select id="cascade-crag" onchange="onCragChange()" disabled>
-                        <option value="">Select Crag</option>
+                        <option value="">Select Crag / Area</option>
                     </select>
                 </div>
-                <select id="cascade-route" onchange="onRouteSelect()" disabled style="margin-top: 8px; max-height: 200px; overflow-y: auto;">
+                <select id="cascade-route" onchange="onRouteSelect()" disabled style="margin-top: 6px; max-height: 200px; overflow-y: auto;">
                     <option value="">Select Specific Route / Objective</option>
                 </select>
             </div>
@@ -178,6 +169,7 @@
     <script>
         let MASTER_DATABASE = [];
         let SPORT_GEAR_TEMPLATES = {};
+        let selectedRouteData = null;
         const sportKey = 'rock-climb';
 
         async function loadRockClimbingData() {
@@ -193,6 +185,7 @@
                 const routeRes = await fetch('https://raw.githubusercontent.com/Gerber111213/Adventure-planner/main/climbing-routes.json');
                 if (routeRes.ok) {
                     MASTER_DATABASE = await routeRes.json();
+                    setupRockClimbingUI();
                 } else {
                     console.warn("Could not load climbing-routes.json");
                 }
@@ -201,41 +194,23 @@
             }
         }
 
-        function onProvinceChange() {
-            const provinceVal = document.getElementById('cascade-province').value;
+        function setupRockClimbingUI() {
             const regSelect = document.getElementById('cascade-region');
-            const cragSelect = document.getElementById('cascade-crag');
-            const routeSelect = document.getElementById('cascade-route');
+            regSelect.innerHTML = '<option value="">Select Region</option>';
 
-            regSelect.innerHTML = '<option value="">Select Region / Area</option>';
-            cragSelect.innerHTML = '<option value="">Select Crag</option>';
-            routeSelect.innerHTML = '<option value="">Select Specific Route / Objective</option>';
-            
-            cragSelect.disabled = true;
-            routeSelect.disabled = true;
-
-            if (!provinceVal) {
-                regSelect.disabled = true;
-                return;
-            }
-
-            regSelect.disabled = false;
-            // Filter regions matching the selected province property in climbing-routes.json
-            const filteredRegions = MASTER_DATABASE.filter(r => r.province === provinceVal);
-            filteredRegions.forEach(reg => {
+            MASTER_DATABASE.forEach(reg => {
                 const regName = reg.regionName || reg.region;
                 regSelect.innerHTML += `<option value="${regName}">${regName}</option>`;
             });
         }
 
         function onRegionChange() {
-            const provinceVal = document.getElementById('cascade-province').value;
             const regVal = document.getElementById('cascade-region').value;
             const cragSelect = document.getElementById('cascade-crag');
             const routeSelect = document.getElementById('cascade-route');
 
-            cragSelect.innerHTML = '<option value="">Select Crag</option>';
-            routeSelect.innerHTML = '<option value="">Select Specific Route / Objective</option>';
+            cragSelect.innerHTML = '<option value="">Select Crag / Area</option>';
+            routeSelect.innerHTML = '<option value="">Select Specific Route</option>';
             routeSelect.disabled = true;
 
             if (!regVal) {
@@ -244,7 +219,7 @@
             }
 
             cragSelect.disabled = false;
-            const regionObj = MASTER_DATABASE.find(r => r.province === provinceVal && (r.regionName || r.region) === regVal);
+            const regionObj = MASTER_DATABASE.find(r => (r.regionName || r.region) === regVal);
             if (regionObj && regionObj.crags) {
                 regionObj.crags.forEach(crag => {
                     const cragName = crag.cragName || crag.crag;
@@ -254,16 +229,15 @@
         }
 
         function onCragChange() {
-            const provinceVal = document.getElementById('cascade-province').value;
             const regVal = document.getElementById('cascade-region').value;
             const cragVal = document.getElementById('cascade-crag').value;
             const routeSelect = document.getElementById('cascade-route');
 
-            routeSelect.innerHTML = '<option value="">Select Specific Route / Objective</option>';
+            routeSelect.innerHTML = '<option value="">Select Specific Route</option>';
 
             if (regVal && cragVal) {
                 routeSelect.disabled = false;
-                const regionObj = MASTER_DATABASE.find(r => r.province === provinceVal && (r.regionName || r.region) === regVal);
+                const regionObj = MASTER_DATABASE.find(r => (r.regionName || r.region) === regVal);
                 if (regionObj && regionObj.crags) {
                     const cragObj = regionObj.crags.find(c => (c.cragName || c.crag) === cragVal);
                     if (cragObj && cragObj.routes) {
@@ -281,16 +255,16 @@
             const routeName = document.getElementById('cascade-route').value;
             if (!routeName) return;
 
-            const provinceVal = document.getElementById('cascade-province').value;
             const regVal = document.getElementById('cascade-region').value;
             const cragVal = document.getElementById('cascade-crag').value;
-            const regionObj = MASTER_DATABASE.find(r => r.province === provinceVal && (r.regionName || r.region) === regVal);
+            const regionObj = MASTER_DATABASE.find(r => (r.regionName || r.region) === regVal);
             
             if (regionObj && regionObj.crags) {
                 const cragObj = regionObj.crags.find(c => (c.cragName || c.crag) === cragVal);
                 if (cragObj && cragObj.routes) {
                     const matched = cragObj.routes.find(rt => rt.name === routeName);
                     if (matched) {
+                        selectedRouteData = matched;
                         document.getElementById('route-search').value = matched.name;
                         applyRouteData(matched);
                     }
@@ -342,19 +316,64 @@
             document.getElementById('duration-nights').value = days > 1 ? days - 1 : 0;
         }
 
+        // INTELLIGENT HARDWARE & GEAR GENERATOR
         function generateManifest() {
-            const defaultTemplate = {
-                safety: ["Garmin inReach / Satellite Communicator", "First Aid Kit", "Headlamp"],
-                hardware: ["Climbing Harness", "Helmet", "Locking Carabiners", "Belay Device", "Rope"],
-                clothing: ["Base Layer", "Shell Jacket"],
-                fuel: ["Water Storage", "Nutrition"]
+            const defaultSafety = ["Garmin inReach / Satellite Communicator", "First Aid Kit", "Headlamp with extra batteries"];
+            const defaultClothing = ["Base Layer", "Insulating Mid-layer", "Wind/Shell Jacket", "Climbing Helmet"];
+            const defaultFuel = ["Water Storage (2L minimum)", "High-Energy Nutrition / Snacks"];
+
+            let hardwareList = ["Climbing Harness", "Locking Carabiners (x3-4)", "Belay/Rappel Device", "Personal Anchor System (PAS)"];
+
+            // Determine Quickdraw Count intelligently from route data
+            let boltCount = 0;
+            if (selectedRouteData) {
+                const textToCheck = (selectedRouteData.notes || '') + ' ' + (selectedRouteData.approach || '');
+                if (selectedRouteData.pitchesBreakdown && Array.isArray(selectedRouteData.pitchesBreakdown)) {
+                    selectedRouteData.pitchesBreakdown.forEach(p => {
+                        const match = (p.description || '').match(/(\d+)\s*bolts?/i);
+                        if (match) boltCount += parseInt(match[1]);
+                    });
+                }
+                const generalMatch = textToCheck.match(/(\d+)\s*bolts?/i);
+                if (boltCount === 0 && generalMatch) {
+                    boltCount = parseInt(generalMatch[1]);
+                }
+            }
+
+            if (boltCount > 0) {
+                const totalDraws = boltCount + 2;
+                hardwareList.unshift(`Quickdraws: ${totalDraws} total (${boltCount} for bolts + 2 extra for anchor/extensions)`);
+            } else {
+                hardwareList.unshift("Quickdraws: 12 total (10 standard + 2 extra for anchor/extensions)");
+            }
+
+            // Determine Rope Length logically
+            let ropeRecommendation = "Single Rope: 70m dynamic climbing rope (Standard)";
+            if (selectedRouteData) {
+                const lengthStr = (selectedRouteData.length || '').toLowerCase();
+                const notesStr = (selectedRouteData.notes || '').toLowerCase();
+                const totalPitches = selectedRouteData.pitches || 1;
+
+                if (totalPitches > 1 || lengthStr.includes('multi') || lengthStr.includes('alpine') || notesStr.includes('alpine')) {
+                    ropeRecommendation = "Ropes: Dual 60m half/twin ropes (Recommended for multi-pitch rappels and rope drag reduction)";
+                } else if (lengthStr.includes('80m') || lengthStr.includes('long pitch') || lengthStr.includes('40m')) {
+                    ropeRecommendation = "Single Rope: 80m dynamic climbing rope (Required for long pitch length)";
+                } else if (lengthStr.includes('60m') || lengthStr.includes('short')) {
+                    ropeRecommendation = "Single Rope: 60m dynamic climbing rope";
+                }
+            }
+            hardwareList.push(ropeRecommendation);
+
+            const template = SPORT_GEAR_TEMPLATES.safety ? SPORT_GEAR_TEMPLATES : {
+                safety: defaultSafety,
+                clothing: defaultClothing,
+                fuel: defaultFuel
             };
-            const template = Object.keys(SPORT_GEAR_TEMPLATES).length > 0 ? SPORT_GEAR_TEMPLATES : defaultTemplate;
-            
-            renderManifestCategory('list-safety', template.safety || [], 'safety');
-            renderManifestCategory('list-hardware', template.hardware || [], 'hardware');
-            renderManifestCategory('list-clothing', template.clothing || [], 'clothing');
-            renderManifestCategory('list-fuel', template.fuel || [], 'fuel');
+
+            renderManifestCategory('list-safety', template.safety || defaultSafety, 'safety');
+            renderManifestCategory('list-hardware', hardwareList, 'hardware');
+            renderManifestCategory('list-clothing', template.clothing || defaultClothing, 'clothing');
+            renderManifestCategory('list-fuel', template.fuel || defaultFuel, 'fuel');
             
             document.getElementById('manifest-card').style.display = 'block';
             document.getElementById('manifest-card').scrollIntoView({ behavior: 'smooth' });
