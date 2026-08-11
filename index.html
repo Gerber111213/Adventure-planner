@@ -22,7 +22,7 @@
  .form-group {margin-bottom: 16px; position: relative; }
  label {display: block; font-weight: 600; margin-bottom: 6px; color: var(--text-bright); }
  select, input[type="text"], input[type="number"], input[type="date"], textarea {width: 100%; padding: 10px; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; color: var(--text-bright); box-sizing: border-box; font-size: 15px; }
- .cascade-row {display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 12px; }
+ .cascade-row {display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
  .autocomplete-items {position: absolute; border: 1px solid var(--border); border-bottom: none; border-top: none; z-index: 99; top: 100%; left: 0; right: 0; background-color: var(--card-bg); border-radius: 0 0 6px 6px; max-height: 200px; overflow-y: auto; }
  .autocomplete-items div {padding: 10px; cursor: pointer; border-bottom: 1px solid var(--border); color: var(--text); font-size: 14px; }
  .autocomplete-items div:hover {background-color: #30363d; color: var(--text-bright); }
@@ -68,16 +68,19 @@
  <div class="card">
  <h2 id="sport-title" style="margin-bottom: 16px;">Objective Setup</h2>
 
- <!-- DYNAMIC REGION & OBJECTIVE SELECTOR -->
+ <!-- DYNAMIC HIERARCHY SELECTOR (Adapts completely per sport schema) -->
  <div id="regional-cascade-group" class="form-group">
- <label>📍 Select Region & Objective</label>
- <div class="cascade-row">
+ <label id="cascade-label-main">📍 Hierarchy Selection</label>
+ <div class="cascade-row" id="cascade-row-container">
  <select id="cascade-region" onchange="onRegionChange()">
- <option value="">Select Region / Area</option>
+ <option value="">Select Region</option>
+ </select>
+ <select id="cascade-crag" onchange="onCragChange()" disabled>
+ <option value="">Select Crag / Area</option>
  </select>
  </div>
  <select id="cascade-route" onchange="onRouteSelect()" disabled style="margin-top: 6px; max-height: 200px; overflow-y: auto;">
- <option value="">Select Specific Objective / Canyon</option>
+ <option value="">Select Specific Objective</option>
  </select>
  </div>
 
@@ -226,57 +229,138 @@
          const response = await fetch(fileName);
          if (response.ok) {
              MASTER_DATABASE = await response.json();
-             populateRegions();
+             setupSportUI();
          } else {
              console.warn(`Could not load ${fileName}, starting with empty database.`);
              MASTER_DATABASE = [];
-             populateRegions();
+             setupSportUI();
          }
      } catch (e) {
          console.warn("Error fetching route database:", e);
          MASTER_DATABASE = [];
-         populateRegions();
+         setupSportUI();
      }
  }
 
- function populateRegions() {
-     const regSelect = document.getElementById('cascade-region');
-     const routeSelect = document.getElementById('cascade-route');
+ // Intelligently configures the planner UI based on whether the active sport is flat (canyoning) or nested (rock climbing)
+ function isFlatSchema() {
+     return Array.isArray(MASTER_DATABASE) && MASTER_DATABASE.length > 0 && MASTER_DATABASE[0].name && !MASTER_DATABASE[0].crags;
+ }
 
-     regSelect.innerHTML = '<option value="">Select Region / Area</option>';
-     routeSelect.innerHTML = '<option value="">Select Specific Objective / Canyon</option>';
+ function setupSportUI() {
+     const regSelect = document.getElementById('cascade-region');
+     const cragSelect = document.getElementById('cascade-crag');
+     const routeSelect = document.getElementById('cascade-route');
+     const cascadeLabel = document.getElementById('cascade-label-main');
+     const cascadeRow = document.getElementById('cascade-row-container');
+
+     // Reset fields
+     regSelect.innerHTML = '<option value="">Select Region</option>';
+     cragSelect.innerHTML = '<option value="">Select Crag / Area</option>';
+     routeSelect.innerHTML = '<option value="">Select Specific Objective</option>';
      routeSelect.disabled = true;
 
-     const regions = [...new Set(MASTER_DATABASE.map(item => item.region))].filter(Boolean);
-     regions.forEach(reg => {
-         regSelect.innerHTML += `<option value="${reg}">${reg}</option>`;
-     });
+     if (isFlatSchema()) {
+         // Flat Schema (e.g., Canyoning: Region -> Scrollable Canyon Dropdown)
+         cascadeLabel.textContent = "📍 Select Region & Canyon";
+         cragSelect.style.display = 'none';
+         cascadeRow.style.gridTemplateColumns = '1fr';
+
+         const regions = [...new Set(MASTER_DATABASE.map(item => item.region))].filter(Boolean);
+         regions.forEach(reg => {
+             regSelect.innerHTML += `<option value="${reg}">${reg}</option>`;
+         });
+     } else {
+         // Nested Schema (e.g., Rock Climbing: Region -> Crag -> Route)
+         cascadeLabel.textContent = "📍 Detailed Regional & Crag Hierarchy";
+         cragSelect.style.display = 'block';
+         cascadeRow.style.gridTemplateColumns = '1fr 1fr';
+
+         const regions = MASTER_DATABASE.map(item => item.regionName || item.region).filter(Boolean);
+         regions.forEach(reg => {
+             regSelect.innerHTML += `<option value="${reg}">${reg}</option>`;
+         });
+     }
  }
 
  function onRegionChange() {
-     const reg = document.getElementById('cascade-region').value;
+     const regVal = document.getElementById('cascade-region').value;
+     const cragSelect = document.getElementById('cascade-crag');
      const routeSelect = document.getElementById('cascade-route');
 
-     routeSelect.innerHTML = '<option value="">Select Specific Objective / Canyon</option>';
+     cragSelect.innerHTML = '<option value="">Select Crag / Area</option>';
+     routeSelect.innerHTML = '<option value="">Select Specific Objective</option>';
+     routeSelect.disabled = true;
 
-     if (reg) {
+     if (!regVal) {
+         cragSelect.disabled = true;
+         return;
+     }
+
+     if (isFlatSchema()) {
+         // Flat schema populates canyons directly in the scrollable route select dropdown
          routeSelect.disabled = false;
-         const filteredRoutes = MASTER_DATABASE.filter(r => r.region === reg);
-         filteredRoutes.forEach(r => {
-             routeSelect.innerHTML += `<option value="${r.name}">${r.name} (${r.grade || ''})</option>`;
+         const filteredCanyons = MASTER_DATABASE.filter(r => r.region === regVal);
+         filteredCanyons.forEach(canyon => {
+             routeSelect.innerHTML += `<option value="${canyon.name}">${canyon.name} (${canyon.grade || ''})</option>`;
          });
+     } else {
+         // Nested schema populates the crag dropdown
+         cragSelect.disabled = false;
+         const regionObj = MASTER_DATABASE.find(r => (r.regionName || r.region) === regVal);
+         if (regionObj && regionObj.crags) {
+             regionObj.crags.forEach(crag => {
+                 const cragName = crag.cragName || crag.crag;
+                 cragSelect.innerHTML += `<option value="${cragName}">${cragName}</option>`;
+             });
+         }
+     }
+ }
+
+ function onCragChange() {
+     if (isFlatSchema()) return;
+
+     const regVal = document.getElementById('cascade-region').value;
+     const cragVal = document.getElementById('cascade-crag').value;
+     const routeSelect = document.getElementById('cascade-route');
+
+     routeSelect.innerHTML = '<option value="">Select Specific Route / Objective</option>';
+
+     if (regVal && cragVal) {
+         routeSelect.disabled = false;
+         const regionObj = MASTER_DATABASE.find(r => (r.regionName || r.region) === regVal);
+         if (regionObj && regionObj.crags) {
+             const cragObj = regionObj.crags.find(c => (c.cragName || c.crag) === cragVal);
+             if (cragObj && cragObj.routes) {
+                 cragObj.routes.forEach(route => {
+                     routeSelect.innerHTML += `<option value="${route.name}">${route.name} (${route.grade})</option>`;
+                 });
+             }
+         }
      } else {
          routeSelect.disabled = true;
      }
  }
 
- // Unused wrapper functions to maintain compatibility with legacy handlers
- function onCragChange() {}
-
  function onRouteSelect() {
      const routeName = document.getElementById('cascade-route').value;
      if (!routeName) return;
-     const matched = MASTER_DATABASE.find(r => r.name === routeName);
+
+     let matched = null;
+     if (isFlatSchema()) {
+         matched = MASTER_DATABASE.find(r => r.name === routeName);
+     } else {
+         const regVal = document.getElementById('cascade-region').value;
+         const cragVal = document.getElementById('cascade-crag').value;
+         const regionObj = MASTER_DATABASE.find(r => (r.regionName || r.region) === regVal);
+         if (regionObj && regionObj.crags) {
+             const cragObj = regionObj.crags.find(c => (c.cragName || c.crag) === cragVal);
+             if (cragObj && cragObj.routes) {
+                 matched = cragObj.routes.find(rt => rt.name === routeName);
+             }
+         }
+     }
+
      if (matched) {
          document.getElementById('route-search').value = matched.name;
          applyRouteData(matched);
@@ -288,16 +372,16 @@
      let betaText = item.notes || 'No specific technical beta recorded.';
      
      if (item.pitchesBreakdown && Array.isArray(item.pitchesBreakdown)) {
-         betaText += '<br><br><strong>🧗‍♂️ Pitch-by-Pitch Breakdown:</strong><ul style="margin: 4px 0 0 20px; padding: 0;">';
+         betaText += '<br><br><strong>🧗‍♂️ Breakdown:</strong><ul style="margin: 4px 0 0 20px; padding: 0;">';
          item.pitchesBreakdown.forEach(p => {
-             betaText += `<li><strong>Pitch ${p.pitch} (${p.grade}):</strong> ${p.description}</li>`;
+             betaText += `<li><strong>${p.pitch ? 'Pitch ' + p.pitch : 'Section'} (${p.grade || ''}):</strong> ${p.description}</li>`;
          });
          betaText += '</ul>';
      }
 
      document.getElementById('route-notes').value = item.notes || '';
      document.getElementById('stat-grade').textContent = item.grade || 'Standard';
-     document.getElementById('stat-pitches').textContent = item.length ? `${item.length} (${item.pitches} Pitches)` : `${item.pitches || 1} Pitches`;
+     document.getElementById('stat-pitches').textContent = item.length ? `${item.length}` : `${item.pitches || 1} Pitches`;
      document.getElementById('stat-approach').textContent = item.approach || 'No specific approach notes recorded.';
      document.getElementById('stat-beta').innerHTML = betaText;
      document.getElementById('route-beta-display').style.display = 'block';
