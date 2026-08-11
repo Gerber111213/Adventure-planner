@@ -76,7 +76,7 @@
 
     .activity-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
       gap: 12px;
       margin-top: 16px;
     }
@@ -85,7 +85,7 @@
       background: #21262d;
       border: 1px solid var(--border);
       color: var(--text-bright);
-      padding: 14px;
+      padding: 14px 10px;
       border-radius: 8px;
       cursor: pointer;
       display: flex;
@@ -105,8 +105,8 @@
     }
 
     .activity-btn svg {
-      width: 28px;
-      height: 28px;
+      width: 26px;
+      height: 26px;
       fill: var(--link-blue);
     }
 
@@ -423,7 +423,7 @@
   <div id="screen-welcome" class="screen active">
     <div class="hero-banner">
       <h1>"Out of the office, into the wild."</h1>
-      <p>Select your specific sport discipline for tailored life-safety protocols, route beta, and Garmin Explore integration.</p>
+      <p>Select your sport discipline for tailored life-safety protocols, route beta, and Garmin Explore integration.</p>
     </div>
 
     <div class="card">
@@ -437,23 +437,45 @@
           <svg viewBox="0 0 24 24"><path d="M14 2h-4l-6 18h3l1.5-4h7l1.5 4h3L14 2zm-2.3 9L13 6.8 14.3 11h-2.6z"/></svg>
           Alpine Climbing
         </button>
-       <button class="activity-btn" onclick="selectSport('ice-climb')">
-          <svg viewBox="0 0 24 24">
-            <path d="M14.5 2c-.3 0-.5.1-.7.3l-9 9c-.4.4-.4 1 0 1.4l3.3 3.3-4.3 4.3c-.4.4-.4 1 0 1.4s1 .4 1.4 0l4.3-4.3 3.3 3.3c.2.2.5.3.7.3s.5-.1.7-.3l9-9c.4-.4.4-1 0-1.4l-7-7c-.2-.2-.5-.3-.7-.3zm1.1 3.5l3.4 3.4-1.9 1.9-3.4-3.4 1.9-1.9zm-3.8 3.8l3.4 3.4-7.1 7.1-3.4-3.4 7.1-7.1z"/>
-          </svg>
+        <button class="activity-btn" onclick="selectSport('ice-climb')">
+          <svg viewBox="0 0 24 24"><path d="M15 2l-3 3 2 2-3 3-5-5-2 2 7 7 4-4 2 2 3-3-4-4z"/></svg>
           Ice & Mixed
         </button>
         <button class="activity-btn" onclick="selectSport('hike')">
           <svg viewBox="0 0 24 24"><path d="M13.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 2zM9.8 8.9L7 23h2.1l1.8-8 2.1 2v6h2v-7.5l-2.1-2 .6-3C14.8 12 16.8 13 19 13v-2c-2.1 0-3.9-1.1-4.8-2.8l-1-1.7c-.4-.6-1-1-1.7-1-.3 0-.5.1-.8.2L6 8.5V13h2V9.6l1.8-.7z"/></svg>
           Hiking & Trekking
         </button>
+        <button class="activity-btn" onclick="selectSport('backpacking')">
+          <svg viewBox="0 0 24 24"><path d="M18 6h-2V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v2H6C4.9 6 4 6.9 4 8v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm-6-2h4v2h-4V4zm6 16H6V8h2v3h2V8h4v3h2V8h2v12z"/></svg>
+          Backpacking
+        </button>
+        <button class="activity-btn" onclick="selectSport('car-camping')">
+          <svg viewBox="0 0 24 24"><path d="M18.92 6.01C18.72 5.42 18.16 5 17.5 5h-11c-.66 0-1.22.42-1.42 1.01L3 12v8c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-1h12v1c0 .55.45 1 1 1h1c.55 0 1-.45 1-1v-8l-2.08-5.99zM6.85 7h10.29l1.04 3H5.81l1.04-3zM19 17H5v-4.66l.12-.34h13.76l.12.34V17z"/></svg>
+          Car Camping
+        </button>
         <button class="activity-btn" onclick="selectSport('bikepacking')">
           <svg viewBox="0 0 24 24"><path d="M15.5 5.5c1.1 0 2-.9 2-2s-.9-2-2-2-2 .9-2 2 .9 2 2 zM5 12c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5zm0 8c-1.7 0-3-1.3-3-3s1.3-3 3-3 3 1.3 3 3-1.3 3-3 3zm14-8c-2.8 0-5 2.2-5 5s2.2 5 5 5 5-2.2 5-5-2.2-5-5-5zm0 8c-1.7 0-3-1.3-3-3s1.3-3 3-3 3 1.3 3 3-1.3 3-3 3zm-7.2-7.5l-2.4-4.8C9 4.2 8.5 4 8 4H4v2h3.2l1.8 3.6-1.5.8L6.2 8H4v2h1.8l1.4.7 1.6-3.2 2 4h3.2V8h-2.2l-.8-1.5z"/></svg>
           Bikepacking
         </button>
+        <button class="activity-btn" onclick="selectSport('gravel-biking')">
+          <svg viewBox="0 0 24 24"><path d="M18.5 14h-3.3l-2.7-4H10v2h2.2l2.3 3.5-1.5 2.3c-.6-.5-1.4-.8-2.3-.8-2 0-3.5 1.5-3.5 3.5s1.5 3.5 3.5 3.5 3.5-1.5 3.5-3.5c0-.6-.2-1.2-.5-1.7l1.7-2.6h2.1V14z"/></svg>
+          Gravel Biking
+        </button>
+        <button class="activity-btn" onclick="selectSport('packrafting')">
+          <svg viewBox="0 0 24 24"><path d="M20 15c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-16 2c0 1.1.9 2 2 2s2-.9 2-2-.9-2-2-2-2 .9-2 2zm15.8-9h-1.6l-2.4-4.8c-.3-.6-.9-1-1.6-1h-6.8c-.7 0-1.3.4-1.6 1L4.2 8H2.6C1.7 8 1 8.7 1 9.6v1.8c0 .9.7 1.6 1.6 1.6h.4c0 2.2 1.8 4 4 4s4-1.8 4-4h4c0 2.2 1.8 4 4 4s4-1.8 4-4h.4c.9 0 1.6-.7 1.6-1.6V9.6c0-.9-.7-1.6-1.6-1.6z"/></svg>
+          Packrafting
+        </button>
+        <button class="activity-btn" onclick="selectSport('canyoning')">
+          <svg viewBox="0 0 24 24"><path d="M12 2L2 22h20L12 2zm0 4.5l6.5 13H5.5L12 6.5z"/></svg>
+          Canyoning
+        </button>
         <button class="activity-btn" onclick="selectSport('ski-mountaineering')">
           <svg viewBox="0 0 24 24"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-2 10h-4v4h-2v-4H7v-2h4V7h2v4h4v2z"/></svg>
           Ski Touring / Skimo
+        </button>
+        <button class="activity-btn" onclick="selectSport('multi-sport')">
+          <svg viewBox="0 0 24 24"><path d="M12 2L1 21h22L12 2zm0 3.8l7.5 13.2H4.5L12 5.8z"/></svg>
+          Complex / Multi-Sport
         </button>
       </div>
     </div>
@@ -642,7 +664,7 @@
   let selectedRouteData = null;
   let searchDebounceTimer = null;
 
-  // COMPREHENSIVE SPORT GEAR TEMPLATES
+  // COMPREHENSIVE SPORT GEAR TEMPLATES (PERMANENTLY LOCKED IN)
   const SPORT_GEAR_TEMPLATES = {
     'rock-climb': {
       safety: ["Garmin inReach / Satellite Communicator", "ACMG First Aid Kit + Trauma Compress", "Headlamp + Extra Batteries"],
@@ -668,17 +690,53 @@
       clothing: ["Moisture-Wicking Base Layer", "Fleece Mid-layer", "Waterproof Rain Shell", "Extra Wool Socks"],
       fuel: ["3L Water Capacity / Filtration System (Sawyer / Katadyn)", "Trail Snacks & Meals", "Emergency Ration Bar"]
     },
+    'backpacking': {
+      safety: ["Garmin inReach Satellite Communicator", "Backcountry Wilderness First Aid Kit", "Headlamp + Extra Batteries", "Emergency Bivy / Shelter"],
+      hardware: ["Ultralight Backpacking Tent / Tarp", "Down Sleeping Bag (Rated to expected temp)", "Inflatable Sleeping Pad", "Trekking Poles", "Water Filter / Purifier System"],
+      clothing: ["Merino Wool Base Layers", "Fleece Mid-layer", "Waterproof Rain Jacket & Pants", "Camp Socks & Extra Underlayers"],
+      fuel: ["Backpacking Stove + Fuel Canister", "Lightweight Cookset & Utensils", "Dehydrated Trail Meals & High-Calorie Snacks", "Water Storage Bladders (4L total capacity)"]
+    },
+    'car-camping': {
+      safety: ["Compact First Aid Kit", "Headlamps & Lanterns", "Bear Spray / Wildlife Deterrent"],
+      hardware: ["Large Family Tent / Rooftop Tent", "Comfortable Air Mattress / Cot", "Camp Chairs & Folding Table", "Heavy-Duty Cooler with Ice", "Camp Hatchet & Firewood"],
+      clothing: ["Comfortable Leisure Layers", "Insulated Evening Jacket", "Sturdy Camp Footwear / Slippers", "Rain Jacket"],
+      fuel: ["Multi-burner Camp Stove + Propane", "Complete Camp Kitchen Set & Cookware", "Drinking Water Jugs", "Camp Meals & Fresh Food Storage"]
+    },
     'bikepacking': {
       safety: ["Garmin inReach / Satellite Comms", "Cyclist Trauma First Aid Kit", "Handlebar & Helmet Headlamps (USB Rechargeable)", "Emergency Shelter / Bivy"],
       hardware: ["Bikepacking Bag Set (Frame, Saddle, Handlebar)", "Multi-tool with Chain Breaker", "Tubeless Tire Repair Kit + Tire Plugs", "Mini Frame Pump / CO2 Inflator", "Spare Inner Tubes & Chain Links"],
       clothing: ["Cycling Shorts / Bibs", "Merino Wool Jersey", "Packable Rain Jacket", "Padded Cycling Gloves", "Off-bike Camp Shoes"],
       fuel: ["Frame-mounted Water Bottles + Filtration System", "Compact Backpacking Stove Set", "High-Calorie Trail Nutrition"]
     },
+    'gravel-biking': {
+      safety: ["GPS Cycling Computer / Phone with Offline Maps", "Roadside First Aid Kit", "Compact USB Rechargeable Lights"],
+      hardware: ["Gravel Bike with Tubeless Setup", "Multi-tool & Tire Levers", "CO2 Inflator & Tubeless Plugs", "Frame Pack / Top Tube Bag", "Rear Saddle Bag"],
+      clothing: ["Moisture-Wicking Gravel Jersey", "Padded Bib Shorts", "Windproof Vest", "Full-finger Cycling Gloves"],
+      fuel: ["2x Large Water Bottles + Electrolyte Mix", "Energy Gels / Chews / Bars", "Emergency Bonk Bar"]
+    },
+    'packrafting': {
+      safety: ["Garmin inReach Satellite Communicator", "White-water PFD (Type V Rescue)", "Whitewater Helmet", "Throw Bag (50ft floating line)", "River Knife"],
+      hardware: ["Packraft + Inflation Bag", "Breakdown Whitewater Paddle", "Dry Bags (Heavy duty internal cargo)", "Repair Kit & Patch Material", "Wading Boots / Neoprene Booties"],
+      clothing: ["Dry Suit or Semi-Dry Splash Top", "Neoprene Wetsuit / Booties", "Thermal Baselayer (Polypropylene/Wool)"],
+      fuel: ["Waterproof River Storage Containers", "High-Energy Expedition Food", "Water Filtration / Purification"]
+    },
+    'canyoning': {
+      safety: ["Garmin inReach Satellite Communicator", "Canyoneering First Aid Kit (Waterproof)", "Emergency Bivy / Group Shelter", "Whistle & Knife"],
+      hardware: ["Canyoneering Harness with Protector", "Canyon Backpack with Drainage", "Static Canyoneering Ropes (2x 60m)", "Rapparel / Descender Device + Locking Carabiners", "Canyoneering Helmet", "Sticky-Rubber Canyon Shoes"],
+      clothing: ["Full 5mm Neoprene Wetsuit", "Neoprene Socks", "Drainage Shorts / Torrent Pants"],
+      fuel: ["Waterproof Dry Barrel", "High-Calorie Snacks & Electrolytes", "Thermos"]
+    },
     'ski-mountaineering': {
       safety: ["Garmin inReach Satellite Communicator", "Avalanche Transceiver, Probe, and Shovel", "Group First Aid & Rescue Bivy", "Headlamp with Extra Batteries"],
       hardware: ["Ski Touring Skis / Splitboard with Skins", "Touring Boots with Walk Mode", "Adjustable Ski Poles", "Lightweight Ski Mountaineering Helmet", "Glacier Harness + Crevasse Rescue Kit", "Ski Crampons (Blades)"],
       clothing: ["Breathable Touring Layers", "Insulated Puffy Jacket", "Gore-Tex Shell", "Lightweight Ascent Gloves & Warm Descent Mitts"],
       fuel: ["Thermos with Warm Hydration", "Insulated Water Bottle", "High-Energy Snacks"]
+    },
+    'multi-sport': {
+      safety: ["Garmin inReach Satellite Communicator", "Comprehensive Multi-Discipline First Aid Kit", "Multi-Mode Headlamps + Spare Batteries", "Emergency Bivy Shelter"],
+      hardware: ["Transition Gear Storage Systems", "Multi-Sport Technical Backpack", "Navigation GPS Unit & Backup Compass", "Multi-tool & Repair Kit"],
+      clothing: ["Layering System for All Climates", "Wind & Waterproof Shells", "Moisture-Wicking Base Layers", "Warm Camp Insulation"],
+      fuel: ["Extended Hydration Bladders & Filtration", "High-Calorie Expedition Nutrition", "Compact Multi-fuel Stove"]
     }
   };
 
@@ -831,7 +889,7 @@
     }
   ];
 
-  // BULLETPROOF MASTER DATABASE MERGE
+  // BULLETPROOF SAFE MERGE: Preserves base database items while appending user additions
   let MASTER_DATABASE = [...BASE_DATABASE];
   const savedDb = localStorage.getItem('adventure_master_db');
   if (savedDb) {
@@ -845,7 +903,7 @@
         });
       }
     } catch(e) {
-      console.error("Error loading saved database, falling back to base", e);
+      console.error("Error merging saved database, falling back to base", e);
     }
   }
 
@@ -969,14 +1027,20 @@
       'alpine-climb': 'Alpine Climbing Objective Setup',
       'ice-climb': 'Ice & Mixed Climbing Objective Setup',
       'hike': 'Hiking & Trekking Objective Setup',
+      'backpacking': 'Backpacking Expedition Setup',
+      'car-camping': 'Car Camping Setup',
       'bikepacking': 'Bikepacking Expedition Setup',
-      'ski-mountaineering': 'Ski Touring / Skimo Objective Setup'
+      'gravel-biking': 'Gravel Biking Setup',
+      'packrafting': 'Packrafting Objective Setup',
+      'canyoning': 'Canyoning Objective Setup',
+      'ski-mountaineering': 'Ski Touring / Skimo Objective Setup',
+      'multi-sport': 'Complex / Multi-Sport Traverse Setup'
     };
 
     document.getElementById('sport-title').textContent = titles[sportKey] || 'Objective Setup';
 
     const cascadeGroup = document.getElementById('regional-cascade-group');
-    if (['rock-climb', 'alpine-climb', 'ice-climb', 'ski-mountaineering'].includes(sportKey)) {
+    if (['rock-climb', 'alpine-climb', 'ice-climb', 'ski-mountaineering', 'multi-sport'].includes(sportKey)) {
       cascadeGroup.style.display = 'block';
     } else {
       cascadeGroup.style.display = 'none';
@@ -1337,7 +1401,7 @@
     const userNotes = document.getElementById('route-notes').value;
 
     document.getElementById('stat-grade').textContent = selectedRouteData?.grade || "Custom Rating";
-    document.getElementById('stat-pitches').textContent = selectedRouteData?.pitches || "Custom Length / Specs";
+    document.getElementById('stat-pitches').textContent = selectedRouteData?.pitches || "Custom Length / Stats";
     document.getElementById('stat-approach').textContent = selectedRouteData?.approach || "No specific approach documentation found. Consult topographic maps and GPS coordinates.";
     document.getElementById('stat-beta').textContent = userNotes || selectedRouteData?.notes || "No additional route beta provided.";
 
