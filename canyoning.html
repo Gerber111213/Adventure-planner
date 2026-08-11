@@ -3,393 +3,165 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Canyoning Adventure Planner</title>
+    <title>Canyoning Adventure & Life-Safety Engine</title>
     <style>
-        :root {
-            --primary-color: #2e3d30;
-            --secondary-color: #4a6b4e;
-            --accent-color: #8fb996;
-            --bg-color: #f7f9f6;
-            --text-color: #2c352d;
-            --card-bg: #ffffff;
-            --border-color: #d0d7d1;
-        }
-
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: var(--bg-color);
-            color: var(--text-color);
-            margin: 0;
-            padding: 0;
-            line-height: 1.6;
-        }
-
-        header {
-            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
-            color: white;
-            padding: 2.5rem 1rem;
-            text-align: center;
-        }
-
-        header h1 {
-            margin: 0;
-            font-size: 2.4rem;
-            font-weight: 700;
-        }
-
-        header p {
-            margin: 0.5rem 0 0;
-            font-size: 1.1rem;
-            opacity: 0.9;
-        }
-
-        .main-container {
-            max-width: 750px;
-            margin: 2.5rem auto;
-            padding: 0 1rem;
-        }
-
-        .planner-card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
-            padding: 2.5rem;
-            border: 1px solid var(--border-color);
-            margin-bottom: 2rem;
-        }
-
-        .form-section {
-            margin-bottom: 1.5rem;
-        }
-
-        .form-section label {
-            display: block;
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-            color: var(--primary-color);
-            font-size: 0.95rem;
-        }
-
-        .form-section select,
-        .form-section input,
-        .form-section textarea {
-            width: 100%;
-            padding: 0.8rem 1rem;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            font-size: 1rem;
-            background-color: #fff;
-            box-sizing: border-box;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-
-        .form-section select:focus,
-        .form-section input:focus,
-        .form-section textarea:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(46, 61, 48, 0.15);
-        }
-
-        .form-row {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 1.2rem;
-        }
-
-        .action-btn {
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            padding: 0.85rem 1.5rem;
-            font-size: 1rem;
-            font-weight: 600;
-            border-radius: 8px;
-            cursor: pointer;
-            width: 100%;
-            transition: background-color 0.2s, transform 0.1s;
-            box-sizing: border-box;
-            margin-top: 0.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            text-decoration: none;
-        }
-
-        .action-btn:hover {
-            background-color: #1f2820;
-        }
-
-        .action-btn:active {
-            transform: scale(0.98);
-        }
-
-        .map-btn {
-            background-color: var(--secondary-color);
-            margin-top: 1rem;
-            margin-bottom: 1.5rem;
-            display: none;
-        }
-
-        .map-btn:hover {
-            background-color: #3b553d;
-        }
-
-        .beta-display {
-            background-color: #f0f4f1;
-            border: 1px solid var(--border-color);
-            border-radius: 8px;
-            padding: 1.5rem;
-            margin-top: 1.5rem;
-            display: none;
-        }
-
-        .beta-display h3 {
-            margin-top: 0;
-            color: var(--primary-color);
-            font-size: 1.2rem;
-        }
-
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
-            gap: 1rem;
-            margin: 1rem 0;
-        }
-
-        .stat-box {
-            background: #fff;
-            padding: 0.75rem;
-            border-radius: 6px;
-            border: 1px solid var(--border-color);
-            text-align: center;
-        }
-
-        .stat-box span {
-            display: block;
-            font-size: 0.8rem;
-            color: #556b57;
-            text-transform: uppercase;
-            font-weight: 600;
-        }
-
-        .stat-box strong {
-            font-size: 1.05rem;
-            color: var(--primary-color);
-        }
-
-        .manifest-container {
-            margin-top: 2rem;
-            border-top: 2px solid #e2e8df;
-            padding-top: 1.5rem;
-            display: none;
-        }
-
-        .manifest-container h3 {
-            color: var(--primary-color);
-            margin-top: 0;
-            font-size: 1.3rem;
-            margin-bottom: 1rem;
-        }
-
-        .manifest-category {
-            margin-bottom: 1.2rem;
-        }
-
-        .manifest-category h4 {
-            margin: 0 0 0.5rem 0;
-            font-size: 1rem;
-            color: var(--secondary-color);
-        }
-
-        .manifest-category ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-
-        .manifest-category li {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-            background: #f0f4f1;
-            padding: 0.5rem 0.8rem;
-            border-radius: 6px;
-            border: 1px solid #dcdeda;
-        }
-
-        .gear-item-left {
-            display: flex;
-            align-items: center;
-        }
-
-        .gear-item-left input[type="checkbox"] {
-            width: 18px;
-            height: 18px;
-            accent-color: var(--primary-color);
-            margin-right: 0.8rem;
-            cursor: pointer;
-        }
-
-        .delete-gear-btn {
-            background: none;
-            border: none;
-            color: #b94a48;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 1rem;
-            padding: 0 4px;
-        }
-
-        .delete-gear-btn:hover {
-            color: #953b39;
-        }
-
-        @media (max-width: 600px) {
-            .form-row {
-                grid-template-columns: 1fr;
-            }
-            .planner-card {
-                padding: 1.5rem;
-            }
-        }
+        :root {--bg: #0d1117; --card-bg: #161b22; --border: #30363d; --accent: #238636; --accent-hover: #2ea043; --warning: #d29922; --text: #c9d1d9; --text-bright: #ffffff; --link-blue: #58a6ff; --garmin-blue: #007cc3; }
+        body {font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg); color: var(--text); margin: 0; padding: 16px; line-height: 1.5; }
+        .container {max-width: 800px; margin: 0 auto; }
+        h1, h2, h3 {color: var(--text-bright); margin-top: 0; }
+        .card {background: var(--card-bg); border: 1px solid var(--border); border-radius: 8px; padding: 24px; margin-bottom: 20px; }
+        .hero-banner {text-align: center; padding: 35px 20px; background: linear-gradient(135deg, #1f242d 0%, #161b22 100%); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 24px; }
+        .hero-banner h1 {font-size: 26px; margin-bottom: 8px; color: var(--text-bright); }
+        .hero-banner p {color: #8b949e; font-size: 15px; margin: 0; }
+        .form-group {margin-bottom: 16px; position: relative; }
+        label {display: block; font-weight: 600; margin-bottom: 6px; color: var(--text-bright); }
+        select, input[type="text"], input[type="number"], input[type="date"], textarea {width: 100%; padding: 10px; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; color: var(--text-bright); box-sizing: border-box; font-size: 15px; }
+        .cascade-row {display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+        .row-inputs {display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        button.primary-btn {background: var(--accent); color: var(--text-bright); border: none; padding: 12px 20px; border-radius: 6px; font-weight: bold; font-size: 16px; width: 100%; cursor: pointer; transition: background 0.2s ease; margin-top: 8px; }
+        button.primary-btn:hover {background: var(--accent-hover); }
+        button.secondary-btn {background: #21262d; color: var(--link-blue); border: 1px solid var(--link-blue); padding: 12px 16px; border-radius: 6px; font-weight: bold; font-size: 14px; width: 100%; cursor: pointer; transition: all 0.2s ease; margin-top: 10px; display: flex; align-items: center; justify-content: center; gap: 8px; text-decoration: none; }
+        button.secondary-btn:hover {background: rgba(88, 166, 255, 0.1); }
+        .back-link {background: none; border: none; color: var(--link-blue); cursor: pointer; padding: 0; font-size: 14px; margin-bottom: 16px; display: inline-flex; align-items: center; gap: 4px; text-decoration: none; }
+        .back-link:hover {text-decoration: underline; }
+        .badge {display: inline-block; padding: 2px 8px; border-radius: 12px; font-size: 12px; font-weight: bold; margin-left: 6px; }
+        .badge-protocol { background: rgba(56, 139, 253, 0.2); color: #58a6ff; border: 1px solid #58a6ff; }
+        ul.gear-manifest {list-style-type: none; padding-left: 0; margin: 0; }
+        ul.gear-manifest li {padding: 10px 0; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; justify-content: space-between; gap: 10px; }
+        ul.gear-manifest li:last-child {border-bottom: none; }
+        .gear-item-left {display: flex; align-items: flex-start; gap: 10px; }
+        ul.gear-manifest input[type="checkbox"] {margin-top: 4px; width: 18px; height: 18px; cursor: pointer; }
+        .delete-gear-btn {background: none; border: none; color: #f85149; cursor: pointer; font-size: 14px; padding: 0 4px; }
+        .section-header {font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #8b949e; margin-top: 16px; margin-bottom: 8px; border-bottom: 1px solid var(--border); padding-bottom: 4px; }
+        .route-beta-card {background: rgba(35, 134, 54, 0.08); border: 1px solid var(--accent); border-radius: 6px; padding: 14px; margin-bottom: 16px; }
+        .route-beta-card h4 {margin-top: 0; margin-bottom: 8px; color: var(--text-bright); display: flex; align-items: center; gap: 6px; }
+        .route-beta-grid {display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 8px; font-size: 14px; }
+        .action-button-row {display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
     </style>
 </head>
 <body>
+    <div class="container">
+        <a href="index.html" class="back-link">← Back to Sports Landing Page</a>
+        
+        <div class="hero-banner">
+            <h1>🌊 Canyoning Safety & Route Planner</h1>
+            <p>Tailored water-flow protocols, rappel beta, and intelligent equipment manifests for canyon descents.</p>
+        </div>
 
-    <header>
-        <h1>Canyoning Adventure Planner</h1>
-        <p>Coordinate your technical descents, map slot canyons, and gear up precisely</p>
-    </header>
+        <div class="card">
+            <h2>Objective Setup</h2>
 
-    <div class="main-container">
-        <div class="planner-card">
-            <form id="canyoning-planner-form">
-                
-                <!-- Region Dropdown Cascade -->
-                <div class="form-section">
-                    <label for="cascade-region">Region</label>
+            <!-- NESTED REGION -> CANYON SYSTEM -> ROUTE SELECTOR -->
+            <div id="regional-cascade-group" class="form-group">
+                <label>📍 Detailed Regional & Canyon System Hierarchy</label>
+                <div class="cascade-row">
                     <select id="cascade-region" onchange="onRegionChange()">
                         <option value="">Select Region</option>
                     </select>
-                </div>
-
-                <!-- Canyon/Area Dropdown Cascade -->
-                <div class="form-section">
-                    <label for="cascade-crag">Canyon Area / System</label>
                     <select id="cascade-crag" onchange="onCragChange()" disabled>
-                        <option value="">Select Region First</option>
+                        <option value="">Select Canyon System / Area</option>
                     </select>
                 </div>
-
-                <!-- Specific Route/Descent Dropdown Cascade -->
-                <div class="form-section">
-                    <label for="cascade-route">Specific Canyon Route</label>
-                    <select id="cascade-route" onchange="onRouteSelect()" disabled>
-                        <option value="">Select Canyon Area First</option>
-                    </select>
-                </div>
-
-                <!-- Hidden search input for compatibility matching -->
-                <input type="hidden" id="route-search">
-
-                <!-- Date and Duration Row -->
-                <div class="form-row">
-                    <div class="form-section">
-                        <label for="start-date">Start Date</label>
-                        <input type="date" id="start-date" onchange="calculateDuration()" required>
-                    </div>
-                    <div class="form-section">
-                        <label for="end-date">End Date</label>
-                        <input type="date" id="end-date" onchange="calculateDuration()" required>
-                    </div>
-                </div>
-
-                <div class="form-row">
-                    <div class="form-section">
-                        <label for="duration-days">Number of Days</label>
-                        <input type="number" id="duration-days" min="1" value="1" oninput="updateNights()">
-                    </div>
-                    <div class="form-section">
-                        <label for="duration-nights">Number of Nights</label>
-                        <input type="number" id="duration-nights" min="0" value="0">
-                    </div>
-                </div>
-
-                <!-- Dynamic Route Beta Display Section -->
-                <div id="route-beta-display" class="beta-display">
-                    <h3>Descent Beta & Details</h3>
-                    <div class="stats-grid">
-                        <div class="stat-box">
-                            <span>Technical Rating</span>
-                            <strong id="stat-grade">--</strong>
-                        </div>
-                        <div class="stat-box">
-                            <span>Max Rappel</span>
-                            <strong id="stat-pitches">--</strong>
-                        </div>
-                    </div>
-                    <div style="margin-top: 1rem;">
-                        <strong>Approach / Exit Notes:</strong>
-                        <p id="stat-approach" style="margin: 0.3rem 0 0 0; font-size: 0.95rem; color: #3b4d3d;">No approach notes recorded.</p>
-                    </div>
-                    <div style="margin-top: 1rem;">
-                        <strong>Technical Beta / Obstacles:</strong>
-                        <p id="stat-beta" style="margin: 0.3rem 0 0 0; font-size: 0.95rem; color: #3b4d3d;">No beta recorded.</p>
-                    </div>
-                </div>
-
-                <!-- Google Maps GPS Integration Button -->
-                <a id="maps-link-btn" href="#" target="_blank" class="action-btn map-btn">
-                    🗺️ View GPS Route via Google Maps
-                </a>
-
-                <!-- GPX Import / Export Options -->
-                <div class="form-row" style="margin-top: 1rem;">
-                    <div class="form-section" style="margin-bottom: 0;">
-                        <label for="gpx-file-input" style="font-size: 0.85rem; cursor: pointer;">📁 Import GPX Track</label>
-                        <input type="file" id="gpx-file-input" accept=".gpx" onchange="importGpxFile(event)" style="padding: 0.4rem; font-size: 0.9rem;">
-                    </div>
-                    <div class="form-section" style="margin-bottom: 0; display: flex; align-items: flex-end;">
-                        <button type="button" class="action-btn" onclick="exportGpxFile()" style="margin-top: 0; background-color: var(--secondary-color);">📤 Export GPX</button>
-                    </div>
-                </div>
-
-                <!-- Custom Notes / Comments -->
-                <div class="form-section" style="margin-top: 1.5rem;">
-                    <label for="route-notes">Trip Notes & Flow Conditions</label>
-                    <textarea id="route-notes" rows="3" placeholder="Add water flow warnings, shuttle details, or wetsuit thickness notes..."></textarea>
-                </div>
-
-                <!-- Generate Manifest Button -->
-                <button type="button" class="action-btn" onclick="generateManifest()">Generate Suggested Packing List</button>
-            </form>
-
-            <!-- Dynamic Packing List Manifest Display -->
-            <div id="manifest-card" class="manifest-container">
-                <h3>Required Canyoning Gear Checklist</h3>
-                
-                <div class="manifest-category">
-                    <h4>Safety & Emergency</h4>
-                    <ul id="list-safety"></ul>
-                </div>
-                
-                <div class="manifest-category">
-                    <h4>Technical Hardware & Ropes</h4>
-                    <ul id="list-hardware"></ul>
-                </div>
-                
-                <div class="manifest-category">
-                    <h4>Thermal Protection & Wetsuits</h4>
-                    <ul id="list-clothing"></ul>
-                </div>
-                
-                <div class="manifest-category">
-                    <h4>Water & Sustenance</h4>
-                    <ul id="list-fuel"></ul>
-                </div>
+                <select id="cascade-route" onchange="onRouteSelect()" disabled style="margin-top: 6px; max-height: 200px; overflow-y: auto;">
+                    <option value="">Select Specific Canyon Descent / Objective</option>
+                </select>
             </div>
+
+            <!-- GPX FILE IMPORT CONTAINER -->
+            <div class="form-group" style="background: rgba(88, 166, 255, 0.05); padding: 12px; border: 1px dashed var(--link-blue); border-radius: 6px;">
+                <label for="gpx-file-input" style="font-size: 14px; margin-bottom: 4px; cursor: pointer;">📂 Import GPX Track / Waypoint File</label>
+                <input type="file" id="gpx-file-input" accept=".gpx" onchange="importGpxFile(event)" style="font-size: 13px; padding: 6px;">
+            </div>
+
+            <form id="planner-form">
+                <div class="form-group">
+                    <label for="route-search">Search Specific Canyon Name</label>
+                    <input type="text" id="route-search" placeholder="Type exact canyon name...">
+                </div>
+
+                <div class="row-inputs">
+                    <div class="form-group">
+                        <label for="start-date">Start Date</label>
+                        <input type="date" id="start-date" onchange="calculateDuration()">
+                    </div>
+                    <div class="form-group">
+                        <label for="end-date">End Date</label>
+                        <input type="date" id="end-date" onchange="calculateDuration()">
+                    </div>
+                </div>
+
+                <div class="row-inputs">
+                    <div class="form-group">
+                        <label for="duration-days">Duration (Days)</label>
+                        <input type="number" id="duration-days" value="1" min="1" onchange="updateNights()">
+                    </div>
+                    <div class="form-group">
+                        <label for="duration-nights">Nights</label>
+                        <input type="number" id="duration-nights" value="0" min="0">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="accommodation">Sleeping Accommodation</label>
+                    <select id="accommodation">
+                        <option value="none">Day Trip / Unsupported (No Overnight)</option>
+                        <option value="tent">Backcountry Tent / Bivy</option>
+                        <option value="cabin">Mountain Cabin / Hut</option>
+                        <option value="car">Vehicle / Rooftop Tent</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="route-notes">Custom Approach, Shuttle & Flow Notes</label>
+                    <textarea id="route-notes" rows="4" placeholder="Specific shuttle coordinates, water flow warnings, vertical drop specs, wetsuit recommendations..."></textarea>
+                </div>
+
+                <button type="button" class="primary-btn" onclick="generateManifest()">Generate Optimized Life-Safety Manifest</button>
+            </form>
+        </div>
+
+        <!-- MANIFEST DISPLAY -->
+        <div class="card" id="manifest-card" style="display: none;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                <h2 style="margin: 0;">Gear Manifest</h2>
+                <span class="badge badge-protocol">Guide-Vetted Protocol</span>
+            </div>
+
+            <!-- ROUTE STATS & BETA SCREEN -->
+            <div id="route-beta-display" class="route-beta-card">
+                <h4>📊 Comprehensive Canyon & Safety Profile</h4>
+                <div class="route-beta-grid">
+                    <div><strong>Technical Rating:</strong> <span id="stat-grade">-</span></div>
+                    <div><strong>Max Rappel / Stats:</strong> <span id="stat-pitches">-</span></div>
+                </div>
+                <div style="margin-top: 8px;"><strong>Approach & Shuttle Beta:</strong></div>
+                <div id="stat-approach" style="font-size: 14px; color: var(--text-bright); margin-top: 2px; white-space: pre-line;">-</div>
+                <div style="margin-top: 8px;"><strong>Descent & Obstacle Breakdown:</strong></div>
+                <div id="stat-beta" style="font-size: 14px; color: var(--text-bright); margin-top: 2px; white-space: pre-line;">-</div>
+
+                <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid rgba(255,255,255,0.1);">
+                    <strong>🌊 Hydrological & Safety Bulletins:</strong>
+                    <div style="display: flex; gap: 10px; margin-top: 6px; flex-wrap: wrap;">
+                        <a id="weather-forecast-link" href="https://wateroffice.ec.gc.ca/" target="_blank" class="secondary-btn" style="margin:0; font-size: 12px; padding: 6px 10px;">Water Survey Streamflow Data</a>
+                    </div>
+                </div>
+
+                <div class="action-button-row">
+                    <a id="maps-link-btn" href="#" target="_blank" class="secondary-btn" style="display: none;">Open in Google Maps</a>
+                </div>
+                <button type="button" class="secondary-btn" onclick="exportGpxFile()" style="margin-top: 10px; background: rgba(35, 134, 54, 0.2); border-color: var(--accent); color: var(--text-bright);">
+                    📥 Export Route & Waypoints as .GPX File
+                </button>
+            </div>
+
+            <div class="section-header">Core Safety & Navigation</div>
+            <ul class="gear-manifest" id="list-safety"></ul>
+            <div class="section-header">Technical & Canyoning Hardware</div>
+            <ul class="gear-manifest" id="list-hardware"></ul>
+            <div class="section-header">Thermal Protection & Wetsuits</div>
+            <ul class="gear-manifest" id="list-clothing"></ul>
+            <div class="section-header">Hydration, Fuel & Dry Systems</div>
+            <ul class="gear-manifest" id="list-fuel"></ul>
         </div>
     </div>
 
@@ -414,30 +186,11 @@
                     MASTER_DATABASE = await routeRes.json();
                     setupCanyoningUI();
                 } else {
-                    console.warn("Could not load canyoning-routes.json, trying fallback data structure");
-                    loadFallbackData();
+                    console.warn("Could not load canyoning-routes.json");
                 }
             } catch (e) {
-                console.warn("Error loading data from network:", e);
-                loadFallbackData();
+                console.warn("Error loading data:", e);
             }
-        }
-
-        function loadFallbackData() {
-            MASTER_DATABASE = [
-                {
-                    regionName: "Alps (France & Switzerland)",
-                    crags: [
-                        {
-                            cragName: "Canyon du Maglia",
-                            routes: [
-                                { name: "Maglia Full Descent", grade: "v4a4IV", length: "18m max drop", approach: "20 min walk-in", notes: "Features jumps, siphon, and tight narrows.", mapSearchQuery: "Canyon du Maglia France" }
-                            ]
-                        }
-                    ]
-                }
-            ];
-            setupCanyoningUI();
         }
 
         function setupCanyoningUI() {
@@ -456,8 +209,8 @@
             const cragSelect = document.getElementById('cascade-crag');
             const routeSelect = document.getElementById('cascade-route');
 
-            cragSelect.innerHTML = '<option value="">Select Canyon Area / System</option>';
-            routeSelect.innerHTML = '<option value="">Select Specific Canyon Route</option>';
+            cragSelect.innerHTML = '<option value="">Select Canyon System / Area</option>';
+            routeSelect.innerHTML = '<option value="">Select Specific Canyon Descent</option>';
             routeSelect.disabled = true;
 
             if (!regVal) {
@@ -471,10 +224,9 @@
             
             let allCrags = [];
             matchingRegions.forEach(regionObj => {
-                const possibleCrags = regionObj.crags || regionObj.areas || regionObj.subregions || regionObj.locations || [];
-                
-                possibleCrags.forEach(crag => {
-                    const cragName = crag.cragName || crag.crag || crag.name || crag.title;
+                const cragsList = regionObj.crags || regionObj.areas || regionObj.subregions || [];
+                cragsList.forEach(crag => {
+                    const cragName = crag.cragName || crag.crag || crag.name;
                     if (cragName && !allCrags.includes(cragName)) {
                         allCrags.push(cragName);
                     }
@@ -491,7 +243,7 @@
             const cragVal = document.getElementById('cascade-crag').value;
             const routeSelect = document.getElementById('cascade-route');
 
-            routeSelect.innerHTML = '<option value="">Select Specific Canyon Route</option>';
+            routeSelect.innerHTML = '<option value="">Select Specific Canyon Descent</option>';
 
             if (regVal && cragVal) {
                 routeSelect.disabled = false;
@@ -499,17 +251,17 @@
                 
                 let foundCragObj = null;
                 matchingRegions.forEach(regionObj => {
-                    const possibleCrags = regionObj.crags || regionObj.areas || regionObj.subregions || regionObj.locations || [];
-                    const match = possibleCrags.find(c => (c.cragName || c.crag || c.name || c.title) === cragVal);
+                    const cragsList = regionObj.crags || regionObj.areas || regionObj.subregions || [];
+                    const match = cragsList.find(c => (c.cragName || c.crag || c.name) === cragVal);
                     if (match) foundCragObj = match;
                 });
 
-                const routesList = foundCragObj ? (foundCragObj.routes || foundCragObj.climbs || foundCragObj.objectives || []) : [];
-                routesList.forEach(route => {
-                    const routeName = route.name || route.routeName || route.title;
-                    const routeGrade = route.grade || route.rating || '';
-                    routeSelect.innerHTML += `<option value="${routeName}">${routeName} (${routeGrade})</option>`;
-                });
+                if (foundCragObj && foundCragObj.routes) {
+                    foundCragObj.routes.forEach(route => {
+                        const routeName = route.name || route.routeName || route.title;
+                        routeSelect.innerHTML += `<option value="${routeName}">${routeName} (${route.grade || route.rating || ''})</option>`;
+                    });
+                }
             } else {
                 routeSelect.disabled = true;
             }
@@ -525,11 +277,10 @@
             
             let matchedRoute = null;
             matchingRegions.forEach(regionObj => {
-                const possibleCrags = regionObj.crags || regionObj.areas || regionObj.subregions || regionObj.locations || [];
-                const cragObj = possibleCrags.find(c => (c.cragName || c.crag || c.name || c.title) === cragVal);
-                if (cragObj) {
-                    const routesList = cragObj.routes || cragObj.climbs || cragObj.objectives || [];
-                    const route = routesList.find(rt => (rt.name || rt.routeName || rt.title) === routeName);
+                const cragsList = regionObj.crags || regionObj.areas || regionObj.subregions || [];
+                const cragObj = cragsList.find(c => (c.cragName || c.crag || c.name) === cragVal);
+                if (cragObj && cragObj.routes) {
+                    const route = cragObj.routes.find(rt => (rt.name || rt.routeName || rt.title) === routeName);
                     if (route) matchedRoute = route;
                 }
             });
@@ -553,8 +304,8 @@
             }
 
             document.getElementById('route-notes').value = item.notes || item.description || '';
-            document.getElementById('stat-grade').textContent = item.grade || item.rating || 'v3a3II';
-            document.getElementById('stat-pitches').textContent = item.length || item.maxRappel || 'Standard Drop';
+            document.getElementById('stat-grade').textContent = item.grade || item.rating || 'Standard';
+            document.getElementById('stat-pitches').textContent = item.length ? `${item.length} (Max Drop)` : (item.maxRappel || 'Standard Drop');
             document.getElementById('stat-approach').textContent = item.approach || 'No specific approach notes recorded.';
             document.getElementById('stat-beta').innerHTML = betaText;
             document.getElementById('route-beta-display').style.display = 'block';
@@ -585,19 +336,49 @@
             document.getElementById('duration-nights').value = days > 1 ? days - 1 : 0;
         }
 
+        // INTELLIGENT HARDWARE & GEAR GENERATOR FOR CANYONING
         function generateManifest() {
-            const defaultSafety = ["Waterproof First Aid Kit", "Emergency Pealess Whistle", "Thermal Emergency Blanket", "Knife / Line Cutter"];
-            const defaultClothing = ["5mm Neoprene Wetsuit (Jacket & Long Johns)", "Canyoning Boots with High-Friction Rubber", "Neoprene Thermal Socks", "CE Certified Canyoning Helmet"];
-            const defaultFuel = ["Water Storage (2L minimum in dry bag)", "High-Energy Snacks & Gels"];
+            const defaultSafety = ["Garmin inReach / Satellite Communicator", "Waterproof First Aid Kit", "Knife / Line Cutter", "Pealess Whistle"];
+            const defaultClothing = ["Canyoning Wetsuit (5mm Neoprene Jacket & Long Johns)", "Canyoning Boots with High-Friction Rubber Soles", "Neoprene Thermal Socks", "CE Certified Canyoning Helmet"];
+            const defaultFuel = ["Water Storage (2L minimum in dry bag)", "High-Energy Nutrition / Gels"];
 
             let hardwareList = [
                 "Canyoning Harness with Protective Seat Rump",
                 "Canyoning Descender (e.g., Pirana or modified Figure 8)",
                 "Dual Cowstails / Lanyards with Locking Carabiners",
-                "Waterproof Dry Bag / Barrel Container",
-                "Dynamic Canyoning Main Rope (water-resistant)",
-                "Backup Pull Cord / Retrieval Line"
+                "Waterproof Dry Bag / Barrel Container"
             ];
+
+            let maxDropMeters = 0;
+            if (selectedRouteData) {
+                const textToCheck = (selectedRouteData.notes || '') + ' ' + (selectedRouteData.approach || '') + ' ' + (selectedRouteData.length || '') + ' ' + (selectedRouteData.maxRappel || '');
+                if (selectedRouteData.rappelBreakdown && Array.isArray(selectedRouteData.rappelBreakdown)) {
+                    selectedRouteData.rappelBreakdown.forEach(p => {
+                        const match = (p.height || p.description || '').match(/(\d+)\s*m/i);
+                        if (match) {
+                            const val = parseInt(match[1]);
+                            if (val > maxDropMeters) maxDropMeters = val;
+                        }
+                    });
+                }
+                const generalMatch = textToCheck.match(/(\d+)\s*m/i);
+                if (maxDropMeters === 0 && generalMatch) {
+                    maxDropMeters = parseInt(generalMatch[1]);
+                }
+            }
+
+            let ropeRecommendation = "Dynamic Canyoning Rope: 60m water-resistant canyon rope (Standard)";
+            if (maxDropMeters > 30) {
+                const requiredLength = (maxDropMeters * 2) + 10;
+                ropeRecommendation = `Dynamic Canyoning Ropes: Dual ropes or ${requiredLength}m main line (Required for ${maxDropMeters}m max rappel drop)`;
+            } else if (selectedRouteData) {
+                const lengthStr = (selectedRouteData.length || '').toLowerCase();
+                const notesStr = (selectedRouteData.notes || '').toLowerCase();
+                if (lengthStr.includes('long') || notesStr.includes('long rappel')) {
+                    ropeRecommendation = "Dynamic Canyoning Ropes: Dual 60m canyon ropes (Recommended for extended rappels)";
+                }
+            }
+            hardwareList.push(ropeRecommendation);
 
             const template = SPORT_GEAR_TEMPLATES.safety ? SPORT_GEAR_TEMPLATES : {
                 safety: defaultSafety,
@@ -650,7 +431,7 @@
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = 'canyoning-descent-export.gpx';
+            a.download = 'canyoning-export.gpx';
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
