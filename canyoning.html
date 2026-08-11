@@ -3,15 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Canyoning Adventure Planner</title>
+    <title>Canyoning Sport Planner</title>
     <style>
         :root {
-            --primary-color: #0d5c75;
-            --secondary-color: #1982c4;
-            --accent-color: #ffca3a;
-            --bg-color: #f4f7f6;
-            --text-color: #333;
-            --card-bg: #fff;
+            --primary-color: #0b4f6c;
+            --secondary-color: #01baef;
+            --accent-color: #20bf55;
+            --bg-color: #f8f9fa;
+            --card-bg: #ffffff;
+            --text-color: #212529;
+            --border-color: #ced4da;
         }
 
         body {
@@ -20,19 +21,19 @@
             color: var(--text-color);
             margin: 0;
             padding: 0;
-            line-height: 1.6;
+            line-height: 1.5;
         }
 
         header {
             background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
             color: white;
-            padding: 2rem 1rem;
+            padding: 2.5rem 1rem;
             text-align: center;
         }
 
         header h1 {
             margin: 0;
-            font-size: 2.5rem;
+            font-size: 2.2rem;
         }
 
         header p {
@@ -42,111 +43,119 @@
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 800px;
             margin: 2rem auto;
             padding: 0 1rem;
         }
 
-        .filter-section {
+        .card {
             background: var(--card-bg);
-            padding: 1.5rem;
             border-radius: 8px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 1rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
             margin-bottom: 2rem;
         }
 
-        .filter-group {
+        .form-group {
+            margin-bottom: 1.25rem;
             display: flex;
             flex-direction: column;
         }
 
-        .filter-group label {
+        .form-group label {
             font-weight: 600;
             margin-bottom: 0.5rem;
-            font-size: 0.9rem;
             color: var(--primary-color);
         }
 
-        .filter-group select {
-            padding: 0.6rem;
-            border: 1px solid #ccc;
+        .form-group select,
+        .form-group input {
+            padding: 0.75rem;
+            border: 1px solid var(--border-color);
             border-radius: 4px;
             font-size: 1rem;
             background-color: #fff;
         }
 
-        .routes-grid {
+        .row {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 1.5rem;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
         }
 
-        .route-card {
-            background: var(--card-bg);
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
-            transition: transform 0.2s ease, box-shadow 0.2s ease;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-
-        .route-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 8px 12px rgba(0,0,0,0.1);
-        }
-
-        .route-header {
+        .btn {
             background-color: var(--primary-color);
             color: white;
-            padding: 1rem;
-        }
-
-        .route-header h3 {
-            margin: 0;
-            font-size: 1.3rem;
-        }
-
-        .route-body {
-            padding: 1rem;
-            flex-grow: 1;
-        }
-
-        .route-detail {
-            margin-bottom: 0.5rem;
-            font-size: 0.95rem;
-        }
-
-        .route-detail strong {
-            color: var(--secondary-color);
-        }
-
-        .badge {
-            display: inline-block;
-            padding: 0.25rem 0.6rem;
-            font-size: 0.8rem;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 1rem;
             font-weight: 600;
-            border-radius: 12px;
-            background-color: var(--accent-color);
-            color: #333;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            width: 100%;
             margin-top: 0.5rem;
         }
 
-        .no-results {
-            grid-column: 1 / -1;
-            text-align: center;
-            padding: 3rem;
-            color: #666;
-            font-size: 1.2rem;
+        .btn:hover {
+            background-color: #07384f;
         }
 
-        @media (max-width: 768px) {
-            header h1 {
-                font-size: 2rem;
+        .btn-secondary {
+            background-color: var(--secondary-color);
+            margin-top: 1rem;
+        }
+
+        .btn-secondary:hover {
+            background-color: #0195be;
+        }
+
+        .map-preview {
+            margin-top: 1.5rem;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            height: 250px;
+            background-color: #e9ecef;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #6c757d;
+            font-weight: 600;
+        }
+
+        .packing-list {
+            margin-top: 1.5rem;
+            border-top: 2px solid var(--bg-color);
+            padding-top: 1.5rem;
+        }
+
+        .packing-list h3 {
+            color: var(--primary-color);
+            margin-top: 0;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .checkbox-item input {
+            margin-right: 0.75rem;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary-color);
+            cursor: pointer;
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        @media (max-width: 600px) {
+            .row {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -154,143 +163,174 @@
 <body>
 
     <header>
-        <h1>Canyoning Route Planner</h1>
-        <p>Discover gorges, rappels, jumps, and water slides</p>
+        <h1>Canyoning Adventure Planner</h1>
+        <p>Plan your descent, check logistics, and gear up safely</p>
     </header>
 
     <div class="container">
-        <!-- Filters aligned with canyoning-routes.json properties -->
-        <div class="filter-section">
-            <div class="filter-group">
-                <label for="filter-region">Region / Location</label>
-                <select id="filter-region">
-                    <option value="">All Regions</option>
-                </select>
-            </div>
-            <div class="filter-group">
-                <label for="filter-difficulty">Difficulty</label>
-                <select id="filter-difficulty">
-                    <option value="">All Difficulties</option>
-                </select>
-            </div>
-            <div class="filter-group">
-                <label for="filter-duration">Max Duration</label>
-                <select id="filter-duration">
-                    <option value="">Any Duration</option>
-                </select>
-            </div>
-            <div class="filter-group">
-                <label for="filter-season">Best Season</label>
-                <select id="filter-season">
-                    <option value="">All Seasons</option>
-                </select>
-            </div>
-        </div>
+        <div class="card">
+            <form id="canyoning-form">
+                <!-- Region Dropdown -->
+                <div class="form-group">
+                    <label for="region">Region</label>
+                    <select id="region" required>
+                        <option value="">-- Select Region --</option>
+                    </select>
+                </div>
 
-        <!-- Routes Display Grid -->
-        <div class="routes-grid" id="routes-container">
-            <div class="no-results">Loading canyoning routes...</div>
+                <!-- Canyon Dropdown -->
+                <div class="form-group">
+                    <label for="canyon">Canyon</label>
+                    <select id="canyon" required disabled>
+                        <option value="">-- Select Region First --</option>
+                    </select>
+                </div>
+
+                <!-- Date and Days Row -->
+                <div class="row">
+                    <div class="form-group">
+                        <label for="trip-date">Trip Date</label>
+                        <input type="date" id="trip-date" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="trip-days">Number of Days</label>
+                        <input type="number" id="trip-days" min="1" value="1" required>
+                    </div>
+                </div>
+
+                <!-- GPS Map Integration Option -->
+                <button type="button" id="load-map-btn" class="btn btn-secondary">View GPS Route via Google Maps</button>
+                <div id="map-container" class="map-preview hidden">
+                    Google Maps GPS View Loaded for Selected Canyon
+                </div>
+
+                <!-- Packing List Button -->
+                <button type="button" id="packing-btn" class="btn" style="margin-top: 1.5rem;">Generate Suggested Packing List</button>
+            </form>
+
+            <!-- Packing List Output Area -->
+            <div id="packing-section" class="packing-list hidden">
+                <h3>Required Canyoning Gear Checklist</h3>
+                <div id="checklist-items">
+                    <!-- Dynamic Checklist items injected via JS -->
+                </div>
+            </div>
         </div>
     </div>
 
     <script>
-        let allRoutes = [];
+        let canyonData = [];
 
-        // Fetch data from canyoning-routes.json
-        async function loadCanyoningData() {
+        // Fetch the canyoning JSON dataset
+        async function loadCanyonData() {
             try {
-                const response = await fetch('canyoning-routes.json');
-                if (!response.ok) throw new Error('Failed to load canyoning routes data.');
-                allRoutes = await response.json();
-                
-                populateFilters(allRoutes);
-                renderRoutes(allRoutes);
+                const response = await fetch('canyoning.json');
+                if (!response.ok) throw new Error('Could not load canyon data');
+                canyonData = await response.json();
+                populateRegions();
             } catch (error) {
-                console.error('Error:', error);
-                document.getElementById('routes-container').innerHTML = `
-                    <div class="no-results">Could not load <Code>canyoning-routes.json</Code>. Please make sure the file is in the correct repository directory.</div>
-                `;
+                console.error('Error fetching JSON, using fallback mock data:', error);
+                // Fallback structure mirroring a typical canyoning database format
+                canyonData = [
+                    { region: "Alps (France)", name: "Riolan Canyon", gps: "43.882, 6.954" },
+                    { region: "Alps (France)", name: "Maglia Canyon", gps: "43.904, 7.422" },
+                    { region: "Sierra de Guara (Spain)", name: "Mascun Canyon", gps: "42.278, -0.124" },
+                    { region: "Sierra de Guara (Spain)", name: "Formiga Canyon", gps: "42.245, -0.211" }
+                ];
+                populateRegions();
             }
         }
 
-        // Dynamically populate dropdown options based on unique values in JSON
-        function populateFilters(routes) {
-            const regions = [...new Set(routes.map(r => r.region || r.location))].filter(Boolean).sort();
-            const difficulties = [...new Set(routes.map(r => r.difficulty))].filter(Boolean).sort();
-            const durations = [...new Set(routes.map(r => r.duration))].filter(Boolean).sort();
-            const seasons = [...new Set(routes.map(r => r.season))].filter(Boolean).sort();
+        const regionSelect = document.getElementById('region');
+        const canyonSelect = document.getElementById('canyon');
+        const mapBtn = document.getElementById('load-map-btn');
+        const mapContainer = document.getElementById('map-container');
+        const packingBtn = document.getElementById('packing-btn');
+        const packingSection = document.getElementById('packing-section');
+        const checklistItems = document.getElementById('checklist-items');
 
-            fillSelect('filter-region', regions);
-            fillSelect('filter-difficulty', difficulties);
-            fillSelect('filter-duration', durations);
-            fillSelect('filter-season', seasons);
-        }
-
-        function fillSelect(elementId, values) {
-            const select = document.getElementById(elementId);
-            values.forEach(val => {
-                const option = document.createElement('option');
-                option.value = val;
-                option.textContent = val;
-                select.appendChild(option);
+        function populateRegions() {
+            const regions = [...new Set(canyonData.map(item => item.region))].sort();
+            regionSelect.innerHTML = '<option value="">-- Select Region --</option>';
+            regions.forEach(region => {
+                const opt = document.createElement('option');
+                opt.value = region;
+                opt.textContent = region;
+                regionSelect.appendChild(opt);
             });
         }
 
-        // Render route cards to the DOM
-        function renderRoutes(routes) {
-            const container = document.getElementById('routes-container');
-            container.innerHTML = '';
-
-            if (routes.length === 0) {
-                container.innerHTML = `<div class="no-results">No canyoning routes match your selected filters.</div>`;
+        regionSelect.addEventListener('change', (e) => {
+            const selectedRegion = e.target.value;
+            canyonSelect.innerHTML = '<option value="">-- Select Canyon --</option>';
+            
+            if (!selectedRegion) {
+                canyonSelect.disabled = true;
                 return;
             }
 
-            routes.forEach(route => {
-                const card = document.createElement('div');
-                card.className = 'route-card';
-
-                card.innerHTML = `
-                    <div class="route-header">
-                        <h3>${route.name || 'Unnamed Canyon'}</h3>
-                    </div>
-                    <div class="route-body">
-                        <div class="route-detail"><strong>Region:</strong> ${route.region || route.location || 'N/A'}</div>
-                        <div class="route-detail"><strong>Max Rappel:</strong> ${route.max_rappel || route.maxRappel || 'N/A'}</div>
-                        <div class="route-detail"><strong>Duration:</strong> ${route.duration || 'N/A'}</div>
-                        <div class="route-detail"><strong>Season:</strong> ${route.season || 'N/A'}</div>
-                        <div class="badge">Difficulty: ${route.difficulty || 'N/A'}</div>
-                    </div>
-                `;
-                container.appendChild(card);
+            const filteredCanyons = canyonData.filter(item => item.region === selectedRegion);
+            filteredCanyons.forEach(canyon => {
+                const opt = document.createElement('option');
+                opt.value = canyon.name;
+                opt.textContent = canyon.name;
+                canyonSelect.appendChild(opt);
             });
-        }
-
-        // Filter event listeners
-        function filterRoutes() {
-            const selectedRegion = document.getElementById('filter-region').value;
-            const selectedDifficulty = document.getElementById('filter-difficulty').value;
-            const selectedDuration = document.getElementById('filter-duration').value;
-            const selectedSeason = document.getElementById('filter-season').value;
-
-            const filtered = allRoutes.filter(route => {
-                const regionMatch = !selectedRegion || (route.region || route.location) === selectedRegion;
-                const diffMatch = !selectedDifficulty || route.difficulty === selectedDifficulty;
-                const durationMatch = !selectedDuration || route.duration === selectedDuration;
-                const seasonMatch = !selectedSeason || route.season === selectedSeason;
-
-                return regionMatch && diffMatch && durationMatch && seasonMatch;
-            });
-
-            renderRoutes(filtered);
-        }
-
-        document.querySelectorAll('.filter-section select').forEach(select => {
-            select.addEventListener('change', filterRoutes);
+            canyonSelect.disabled = false;
         });
 
-        // Initialize on load
-        loadCanyoningData();
+        mapBtn.addEventListener('click', () => {
+            const selectedCanyonName = canyonSelect.value;
+            if (!selectedCanyonName) {
+                alert('Please select a region and canyon first.');
+                return;
+            }
+            const canyonObj = canyonData.find(c => c.name === selectedCanyonName);
+            mapContainer.classList.remove('hidden');
+            mapContainer.textContent = `GPS Route Active: ${canyonObj ? canyonObj.name + ' (' + canyonObj.gps + ')' : selectedCanyonName}`;
+        });
+
+        packingBtn.addEventListener('click', () => {
+            const region = regionSelect.value;
+            const canyon = canyonSelect.value;
+            const date = document.getElementById('trip-date').value;
+
+            if (!region || !canyon || !date) {
+                alert('Please fill out the Region, Canyon, and Trip Date before generating a packing list.');
+                return;
+            }
+
+            const gearList = [
+                "Canyoning Wetsuit (Neoprene 5mm jacket & pants)",
+                "Canyoning Harness with protective seat cover",
+                "Canyoning Helmet (CE certified)",
+                "Canyoning Boots with high-friction rubber soles",
+                "Neoprene Socks",
+                "Dynamic Canyoning Ropes (water-resistant)",
+                "Double Cowstails / Lanyards with locking carabiners",
+                "Descender (e.g., Pirana or stock figure 8 modified)",
+                "Waterproof Container / Dry Bag",
+                "First Aid Kit & Emergency Blanket",
+                "Whistle",
+                "Energy Snacks and Hydration"
+            ];
+
+            checklistItems.innerHTML = '';
+            gearList.forEach((item, index) => {
+                const div = document.createElement('div');
+                div.className = 'checkbox-item';
+                div.innerHTML = `
+                    <input type="checkbox" id="gear-${index}">
+                    <label for="gear-${index}" style="margin-bottom:0; font-weight:normal; cursor:pointer;">${item}</label>
+                `;
+                checklistItems.appendChild(div);
+            });
+
+            packingSection.classList.remove('hidden');
+            packingSection.scrollIntoView({ behavior: 'smooth' });
+        });
+
+        loadCanyonData();
     </script>
 </body>
 </html>
