@@ -400,7 +400,7 @@
         </div>
       </div>
 
-      <!-- HIERARCHICAL REGIONAL SELECTOR (Province -> Region -> Crag/Area -> Route) -->
+      <!-- HIERARCHICAL REGIONAL SELECTOR (Province -> Region -> Crag -> Route) -->
       <div class="form-group">
         <label id="cascade-label">📍 Regional Route Cascade (Browse by Location)</label>
         <div class="cascade-row">
@@ -414,7 +414,7 @@
             <option value="">Select Region</option>
           </select>
           <select id="cascade-crag" onchange="onCragChange()" disabled>
-            <option value="">Select Area / Crag</option>
+            <option value="">Select Crag / Area</option>
           </select>
         </div>
         <select id="cascade-route" onchange="onRouteSelect()" disabled style="margin-top: 6px;">
@@ -591,9 +591,9 @@
     }
   };
 
-  // SPORT-ISOLATED SCRUBBED DATABASE (Including all requested David Thompson Climbing Association routes)
+  // FULL COMPREHENSIVE DATABASE SCRUBBED FROM SHARED DAVID THOMPSON LINKS & HIKES
   const SCRUBBED_DATABASE = [
-    // Rock Climbing - David Thompson & Nordegg (Scrubbed from provided association beta)
+    // --- DAVID THOMPSON CLIMBING ASSOCIATION ROUTES ---
     {
       name: "Starstruck (Mt. Ernest Ross, Nordegg)",
       category: "rock-climb",
@@ -610,9 +610,261 @@
       jurisdiction: "Alberta Crown Land",
       permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
       permitName: "Alberta Public Lands Camping Pass",
-      notes: "Multi-pitch limestone trad and alpine ridge climbing in David Thompson Country. Loose scree approach.",
+      notes: "Sport & gear routes from 5.6 to 5.10d on dolomite rock. 30-45 min approach from Hwy 11.",
       gearAdditions: ["1x Set of Cams (#0.3 to #3)", "1x Set of Nuts", "Helmet (Mandatory for loose rock)"],
       gearSubstitutions: { "10x Standard Quickdraws": "6x Alpine Long Draws + 4x Quickdraws" }
+    },
+    {
+      name: "Getaway Crag - General Overview Route",
+      category: "rock-climb",
+      jurisdiction: "Alberta Crown Land",
+      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
+      permitName: "Alberta Public Lands Camping Pass",
+      notes: "New limestone crag with huge potential in the David Thompson corridor.",
+      gearAdditions: ["Standard Sport Rack", "Helmet"]
+    },
+    {
+      name: "Helmet Heart (Freyja)",
+      category: "rock-climb",
+      jurisdiction: "Alberta Crown Land",
+      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
+      permitName: "Alberta Public Lands Camping Pass",
+      notes: "5.10a / 5.14a 135m, Sport climbing at Freyja.",
+      gearAdditions: ["12-14 Quickdraws", "60m Rope"]
+    },
+    {
+      name: "Ultimate Nordegg Thing (Abraham Slabs)",
+      category: "rock-climb",
+      jurisdiction: "Alberta Crown Land",
+      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
+      permitName: "Alberta Public Lands Camping Pass",
+      notes: "5.9, 60m rope, gear to 4 inches.",
+      gearAdditions: ["60m Rope", "10 Alpine Draws", "Cams to 4 inches"]
+    },
+    {
+      name: "Know When to Fold 'Em (Mt. Elliot)",
+      category: "rock-climb",
+      jurisdiction: "Alberta Crown Land",
+      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
+      permitName: "Alberta Public Lands Camping Pass",
+      notes: "5.8, 60m rope, 12 alpine draws, and gear to 4 inches.",
+      gearAdditions: ["60m Rope", "12 Alpine Draws", "Gear to 4 inches"]
+    },
+    {
+      name: "Rammed If I Do (Lookout Slabs / Pollution Slab)",
+      category: "rock-climb",
+      jurisdiction: "Alberta Crown Land",
+      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
+      permitName: "Alberta Public Lands Camping Pass",
+      notes: "5.6, 70m rope and 12 quickdraws.",
+      gearAdditions: ["70m Rope", "12 Quickdraws"]
+    },
+    {
+      name: "Kili (Billy Goat Slab / Lookout Slabs)",
+      category: "rock-climb",
+      jurisdiction: "Alberta Crown Land",
+      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
+      permitName: "Alberta Public Lands Camping Pass",
+      notes: "90m, 5.6; 70m rope and 12 quickdraws.",
+      gearAdditions: ["70m Rope", "12 Quickdraws"]
+    },
+    {
+      name: "Silly Billy (Billy Goat Slab / Lookout Slabs)",
+      category: "rock-climb",
+      jurisdiction: "Alberta Crown Land",
+      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
+      permitName: "Alberta Public Lands Camping Pass",
+      notes: "90m, 5.6; 70m rope and 12 quickdraws.",
+      gearAdditions: ["70m Rope", "12 Quickdraws"]
+    },
+    {
+      name: "Fili (Billy Goat Slab / Lookout Slabs)",
+      category: "rock-climb",
+      jurisdiction: "Alberta Crown Land",
+      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
+      permitName: "Alberta Public Lands Camping Pass",
+      notes: "90m, 5.6; 70m rope and 12 quickdraws.",
+      gearAdditions: ["70m Rope", "12 Quickdraws"]
+    },
+    {
+      name: "Magic Carpet Ride (Lookout Slabs / Movie Night Slab)",
+      category: "rock-climb",
+      jurisdiction: "Alberta Crown Land",
+      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
+      permitName: "Alberta Public Lands Camping Pass",
+      notes: "5.8, 11-16 draws, 70m rope.",
+      gearAdditions: ["70m Rope", "14 Quickdraws"]
+    },
+    {
+      name: "Always on Belay Andrew (Little Russia)",
+      category: "rock-climb",
+      jurisdiction: "Alberta Crown Land",
+      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
+      permitName: "Alberta Public Lands Camping Pass",
+      notes: "5.12a 28m, Sport/Gear. 11-16 draws, 60m rope.",
+      gearAdditions: ["60m Rope", "14 Quickdraws"]
+    },
+    {
+      name: "Better Together (Freyja)",
+      category: "rock-climb",
+      jurisdiction: "Alberta Crown Land",
+      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
+      permitName: "Alberta Public Lands Camping Pass",
+      notes: "5.11b 300m, Sport multi-pitch.",
+      gearAdditions: ["70m Dry Rope", "16 Quickdraws"]
+    },
+    {
+      name: "Always on Belay Nate (Little Russia)",
+      category: "rock-climb",
+      jurisdiction: "Alberta Crown Land",
+      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
+      permitName: "Alberta Public Lands Camping Pass",
+      notes: "5.11b 28m, Sport/Gear. 11-16 draws, 60m rope.",
+      gearAdditions: ["60m Rope", "14 Quickdraws"]
+    },
+    {
+      name: "Kuzco's Poison (Abraham Slabs / Groove Sector)",
+      category: "rock-climb",
+      jurisdiction: "Alberta Crown Land",
+      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
+      permitName: "Alberta Public Lands Camping Pass",
+      notes: "5.10c, 122m, 70m rope, 12 quickdraws.",
+      gearAdditions: ["70m Rope", "12 Quickdraws"]
+    },
+    {
+      name: "The Emperor's New Groove (Abraham Slabs / Groove Sector)",
+      category: "rock-climb",
+      jurisdiction: "Alberta Crown Land",
+      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
+      permitName: "Alberta Public Lands Camping Pass",
+      notes: "5.10b, 122m, 70m rope, 12 quickdraws.",
+      gearAdditions: ["70m Rope", "12 Quickdraws"]
+    },
+    {
+      name: "Susan's Pollution Solution (Lookout Slabs / Pollution Slab)",
+      category: "rock-climb",
+      jurisdiction: "Alberta Crown Land",
+      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
+      permitName: "Alberta Public Lands Camping Pass",
+      notes: "60m rope and quickdraws.",
+      gearAdditions: ["60m Rope", "12 Quickdraws"]
+    },
+    {
+      name: "Wet Like Willy (Lookout Slabs / Pollution Slab)",
+      category: "rock-climb",
+      jurisdiction: "Alberta Crown Land",
+      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
+      permitName: "Alberta Public Lands Camping Pass",
+      notes: "5.7, 60m rope and 12 quickdraws.",
+      gearAdditions: ["60m Rope", "12 Quickdraws"]
+    },
+    {
+      name: "Dumbo (Lookout Slabs / Movie Night Slab)",
+      category: "rock-climb",
+      jurisdiction: "Alberta Crown Land",
+      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
+      permitName: "Alberta Public Lands Camping Pass",
+      notes: "5.7, 60m rope, 12 quickdraws.",
+      gearAdditions: ["60m Rope", "12 Quickdraws"]
+    },
+    {
+      name: "Mythos Mixed Crag",
+      category: "rock-climb",
+      jurisdiction: "Alberta Crown Land",
+      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
+      permitName: "Alberta Public Lands Camping Pass",
+      notes: "6 Mixed & Ice routes.",
+      gearAdditions: ["Mixed Climbing Rack", "Ice Screws"]
+    },
+    {
+      name: "Zardoz (David Thompson)",
+      category: "rock-climb",
+      jurisdiction: "Alberta Crown Land",
+      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
+      permitName: "Alberta Public Lands Camping Pass",
+      notes: "David Thompson development route.",
+      gearAdditions: ["Standard Sport Setup"]
+    },
+    {
+      name: "Energizer Bunny (David Thompson)",
+      category: "rock-climb",
+      jurisdiction: "Alberta Crown Land",
+      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
+      permitName: "Alberta Public Lands Camping Pass",
+      notes: "David Thompson sport route.",
+      gearAdditions: ["Quickdraws"]
+    },
+    {
+      name: "Batteries Not Included (David Thompson)",
+      category: "rock-climb",
+      jurisdiction: "Alberta Crown Land",
+      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
+      permitName: "Alberta Public Lands Camping Pass",
+      notes: "David Thompson sport route.",
+      gearAdditions: ["Quickdraws", "Headlamp"]
+    },
+    {
+      name: "AA (David Thompson)",
+      category: "rock-climb",
+      jurisdiction: "Alberta Crown Land",
+      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
+      permitName: "Alberta Public Lands Camping Pass",
+      notes: "David Thompson development line.",
+      gearAdditions: ["Quickdraws"]
+    },
+    {
+      name: "Voltzwagen (David Thompson)",
+      category: "rock-climb",
+      jurisdiction: "Alberta Crown Land",
+      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
+      permitName: "Alberta Public Lands Camping Pass",
+      notes: "David Thompson sport climb.",
+      gearAdditions: ["Quickdraws"]
+    },
+    {
+      name: "Liquid Corner (David Thompson)",
+      category: "rock-climb",
+      jurisdiction: "Alberta Crown Land",
+      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
+      permitName: "Alberta Public Lands Camping Pass",
+      notes: "David Thompson corner trad/sport route.",
+      gearAdditions: ["Trad Rack", "Cams"]
+    },
+    {
+      name: "Filthy With Minerals (Tan'si Tower)",
+      category: "rock-climb",
+      jurisdiction: "Alberta Crown Land",
+      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
+      permitName: "Alberta Public Lands Camping Pass",
+      notes: "5.8, Mixed, 140m.",
+      gearAdditions: ["Mixed Rack", "Alpine Draws"]
+    },
+    {
+      name: "Rockies Ringlock (Tan'si Tower)",
+      category: "rock-climb",
+      jurisdiction: "Alberta Crown Land",
+      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
+      permitName: "Alberta Public Lands Camping Pass",
+      notes: "5.9, Mixed, 125m.",
+      gearAdditions: ["Finger Tape", "Small Cams and Nuts"]
+    },
+    {
+      name: "No Lights On Fridays (Tan'si Tower)",
+      category: "rock-climb",
+      jurisdiction: "Alberta Crown Land",
+      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
+      permitName: "Alberta Public Lands Camping Pass",
+      notes: "5.10a A0 (5.10c), Mixed, 340m.",
+      gearAdditions: ["Multi-pitch Rack", "Headlamp"]
+    },
+    {
+      name: "Unfinished Business (Freyja)",
+      category: "rock-climb",
+      jurisdiction: "Alberta Crown Land",
+      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
+      permitName: "Alberta Public Lands Camping Pass",
+      notes: "5.12b/c 314m, Mixed.",
+      gearAdditions: ["Double Ropes", "Full Mixed & Sport Rack"]
     },
     {
       name: "Yamnuska - Directissima",
@@ -624,251 +876,8 @@
       gearAdditions: ["Full Trad Rack (Cams to #3)", "Extra Locking Biners"],
       gearSubstitutions: { "10x Standard Quickdraws": "8x Alpine Draws" }
     },
-    {
-      name: "Helmet Heart",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      notes: "David Thompson sport/trad route development. Technical limestone climbing.",
-      gearAdditions: ["Helmet with Visor", "Extended Quickdraws"]
-    },
-    {
-      name: "Ultimate Nordegg Thing",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      notes: "David Thompson multi-pitch objective. Steep wall climbing.",
-      gearAdditions: ["Double Ropes for Rappel", "Extra Slings"]
-    },
-    {
-      name: "Know When to Fold 'Em",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      notes: "David Thompson limestone route.",
-      gearAdditions: ["Standard Sport Rack", "Anchor Building Materials"]
-    },
-    {
-      name: "Rammed If I Do",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      notes: "David Thompson climbing area route.",
-      gearAdditions: ["Trad Rack to #3", "Alpine Draws"]
-    },
-    {
-      name: "Kili",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      notes: "David Thompson route development.",
-      gearAdditions: ["Quickdraws", "Personal Anchor System"]
-    },
-    {
-      name: "Silly Billy",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      notes: "David Thompson limestone line.",
-      gearAdditions: ["Quickdraws", "Helmet"]
-    },
-    {
-      name: "Fili",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      notes: "David Thompson crag route.",
-      gearAdditions: ["Quickdraws", "Belay Glasses"]
-    },
-    {
-      name: "Magic Carpet Ride",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      notes: "David Thompson climbing development.",
-      gearAdditions: ["Alpine Draws", "Trad Gear"]
-    },
-    {
-      name: "Always on Belay Andrew",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      notes: "David Thompson crag route.",
-      gearAdditions: ["Quickdraws", "Static Line for Fixed Ropes"]
-    },
-    {
-      name: "Better Together",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      notes: "David Thompson rock route.",
-      gearAdditions: ["Standard Sport Rack", "Helmet"]
-    },
-    {
-      name: "Always on Belay Nate",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      notes: "David Thompson crag route.",
-      gearAdditions: ["Quickdraws", "Anchor Slings"]
-    },
-    {
-      name: "Kuzco's Poison",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      notes: "David Thompson climbing line.",
-      gearAdditions: ["Quickdraws", "Helmet"]
-    },
-    {
-      name: "The Emperor's New Groove",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      notes: "David Thompson rock route.",
-      gearAdditions: ["Quickdraws", "Chalk"]
-    },
-    {
-      name: "Susan's Pollution Solution",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      notes: "David Thompson development route.",
-      gearAdditions: ["Quickdraws", "Trad Protection"]
-    },
-    {
-      name: "Wet Like Willy",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      notes: "David Thompson limestone route near waterfall/drainage.",
-      gearAdditions: ["Waterproof Shell", "Quickdraws"]
-    },
-    {
-      name: "Dumbo",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      notes: "David Thompson climbing area route.",
-      gearAdditions: ["Quickdraws", "Helmet"]
-    },
-    {
-      name: "Mythos",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      notes: "David Thompson classic line.",
-      gearAdditions: ["Trad Rack", "Long Draws"]
-    },
-    {
-      name: "Zardoz",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      notes: "David Thompson climbing route.",
-      gearAdditions: ["Quickdraws", "Helmet"]
-    },
-    {
-      name: "Energizer Bunny",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      notes: "David Thompson limestone route.",
-      gearAdditions: ["Quickdraws", "Endurance Fuel"]
-    },
-    {
-      name: "Batteries Not Included",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      notes: "David Thompson route development.",
-      gearAdditions: ["Quickdraws", "Headlamp"]
-    },
-    {
-      name: "AA",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      notes: "David Thompson climbing line.",
-      gearAdditions: ["Quickdraws", "Helmet"]
-    },
-    {
-      name: "Voltzwagen",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      notes: "David Thompson route.",
-      gearAdditions: ["Quickdraws", "Alpine Draws"]
-    },
-    {
-      name: "Liquid Corner",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      notes: "David Thompson corner climb.",
-      gearAdditions: ["Trad Gear", "Cams"]
-    },
-    {
-      name: "Filthy With Minerals",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      notes: "David Thompson limestone wall route.",
-      gearAdditions: ["Quickdraws", "Helmet"]
-    },
-    {
-      name: "Rockies Ringlock",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      notes: "David Thompson crack climbing route.",
-      gearAdditions: ["Small Cams & Micro-nuts", "Finger Tape"]
-    },
-    {
-      name: "No Lights On Fridays",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      notes: "David Thompson route development.",
-      gearAdditions: ["Quickdraws", "Helmet"]
-    },
-    {
-      name: "Unfinished Business",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      notes: "David Thompson climbing project line.",
-      gearAdditions: ["Quickdraws", "Project Gear"]
-    },
 
-    // Hiking & Backpacking (Properly isolated to hiking category)
+    // --- HIKING ROUTES ---
     {
       name: "Berg Lake Trail (Mount Robson)",
       category: "hike",
@@ -887,26 +896,8 @@
       notes: "44 km point-to-point high alpine ridge hike. Extreme exposure to wind and weather.",
       gearAdditions: ["Windproof Hard Shell", "Emergency Bivy"]
     },
-    {
-      name: "Plain of Six Glaciers (Banff National Park)",
-      category: "hike",
-      jurisdiction: "Banff National Park",
-      permitUrl: "https://reservation.pc.gc.ca/",
-      permitName: "Parks Canada Reservation Portal",
-      notes: "14.6 km return, 465m gain. Iconic mountain hike past Lake Louise to historic teahouse.",
-      gearAdditions: ["Trekking Poles", "Layers for changing alpine wind"]
-    },
-    {
-      name: "Plain of Six Glaciers & Larch Valley Combo",
-      category: "hike",
-      jurisdiction: "Banff National Park",
-      permitUrl: "https://reservation.pc.gc.ca/",
-      permitName: "Parks Canada Reservation Portal",
-      notes: "Extended alpine day hike from Moraine Lake to Lake Louise areas.",
-      gearAdditions: ["Bear Spray", "Sturdy Hiking Boots"]
-    },
 
-    // Ultramarathons
+    // --- ULTRAMARATHONS ---
     {
       name: "Leadville Trail 100 Run",
       category: "ultra",
@@ -927,41 +918,52 @@
     }
   ];
 
-  // HIERARCHICAL CASCADING DATA (Province -> Region -> Crag/Area -> Route)
+  // HIERARCHICAL CASCADING DATA ORGANIZED BY SHARED CRAGS & AREAS
   const HIERARCHY_DATA = {
     "AB": {
       "David Thompson": {
         "Whirlpool Ridge": [
           { name: "Whirlpool Ridge Classic Route (David Thompson)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Whirlpool Ridge")) }
         ],
-        "Getaway Crag & General Area": [
-          { name: "Helmet Heart", routeObj: SCRUBBED_DATABASE.find(r => r.name === "Helmet Heart") },
-          { name: "Ultimate Nordegg Thing", routeObj: SCRUBBED_DATABASE.find(r => r.name === "Ultimate Nordegg Thing") },
-          { name: "Know When to Fold 'Em", routeObj: SCRUBBED_DATABASE.find(r => r.name === "Know When to Fold 'Em") },
-          { name: "Rammed If I Do", routeObj: SCRUBBED_DATABASE.find(r => r.name === "Rammed If I Do") },
-          { name: "Kili", routeObj: SCRUBBED_DATABASE.find(r => r.name === "Kili") },
-          { name: "Silly Billy", routeObj: SCRUBBED_DATABASE.find(r => r.name === "Silly Billy") },
-          { name: "Fili", routeObj: SCRUBBED_DATABASE.find(r => r.name === "Fili") },
-          { name: "Magic Carpet Ride", routeObj: SCRUBBED_DATABASE.find(r => r.name === "Magic Carpet Ride") },
-          { name: "Always on Belay Andrew", routeObj: SCRUBBED_DATABASE.find(r => r.name === "Always on Belay Andrew") },
-          { name: "Better Together", routeObj: SCRUBBED_DATABASE.find(r => r.name === "Better Together") },
-          { name: "Always on Belay Nate", routeObj: SCRUBBED_DATABASE.find(r => r.name === "Always on Belay Nate") },
-          { name: "Kuzco's Poison", routeObj: SCRUBBED_DATABASE.find(r => r.name === "Kuzco's Poison") },
-          { name: "The Emperor's New Groove", routeObj: SCRUBBED_DATABASE.find(r => r.name === "The Emperor's New Groove") },
-          { name: "Susan's Pollution Solution", routeObj: SCRUBBED_DATABASE.find(r => r.name === "Susan's Pollution Solution") },
-          { name: "Wet Like Willy", routeObj: SCRUBBED_DATABASE.find(r => r.name === "Wet Like Willy") },
-          { name: "Dumbo", routeObj: SCRUBBED_DATABASE.find(r => r.name === "Dumbo") },
-          { name: "Mythos", routeObj: SCRUBBED_DATABASE.find(r => r.name === "Mythos") },
-          { name: "Zardoz", routeObj: SCRUBBED_DATABASE.find(r => r.name === "Zardoz") },
-          { name: "Energizer Bunny", routeObj: SCRUBBED_DATABASE.find(r => r.name === "Energizer Bunny") },
-          { name: "Batteries Not Included", routeObj: SCRUBBED_DATABASE.find(r => r.name === "Batteries Not Included") },
-          { name: "AA", routeObj: SCRUBBED_DATABASE.find(r => r.name === "AA") },
-          { name: "Voltzwagen", routeObj: SCRUBBED_DATABASE.find(r => r.name === "Voltzwagen") },
-          { name: "Liquid Corner", routeObj: SCRUBBED_DATABASE.find(r => r.name === "Liquid Corner") },
-          { name: "Filthy With Minerals", routeObj: SCRUBBED_DATABASE.find(r => r.name === "Filthy With Minerals") },
-          { name: "Rockies Ringlock", routeObj: SCRUBBED_DATABASE.find(r => r.name === "Rockies Ringlock") },
-          { name: "No Lights On Fridays", routeObj: SCRUBBED_DATABASE.find(r => r.name === "No Lights On Fridays") },
-          { name: "Unfinished Business", routeObj: SCRUBBED_DATABASE.find(r => r.name === "Unfinished Business") }
+        "Getaway Crag": [
+          { name: "Getaway Crag - General Overview Route", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Getaway Crag")) }
+        ],
+        "Freyja": [
+          { name: "Helmet Heart (Freyja)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Helmet Heart")) },
+          { name: "Better Together (Freyja)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Better Together")) },
+          { name: "Unfinished Business (Freyja)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Unfinished Business")) }
+        ],
+        "Abraham Slabs": [
+          { name: "Ultimate Nordegg Thing (Abraham Slabs)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Ultimate Nordegg Thing")) },
+          { name: "Kuzco's Poison (Abraham Slabs / Groove Sector)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Kuzco's Poison")) },
+          { name: "The Emperor's New Groove (Abraham Slabs / Groove Sector)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("The Emperor's New Groove")) }
+        ],
+        "Tan'si Tower": [
+          { name: "Filthy With Minerals (Tan'si Tower)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Filthy With Minerals")) },
+          { name: "Rockies Ringlock (Tan'si Tower)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Rockies Ringlock")) },
+          { name: "No Lights On Fridays (Tan'si Tower)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("No Lights On Fridays")) }
+        ],
+        "Lookout Slabs & Pollution Slab": [
+          { name: "Rammed If I Do (Lookout Slabs / Pollution Slab)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Rammed If I Do")) },
+          { name: "Susan's Pollution Solution (Lookout Slabs / Pollution Slab)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Susan's Pollution Solution")) },
+          { name: "Wet Like Willy (Lookout Slabs / Pollution Slab)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Wet Like Willy")) }
+        ],
+        "Billy Goat Slab": [
+          { name: "Kili (Billy Goat Slab / Lookout Slabs)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Kili")) },
+          { name: "Silly Billy (Billy Goat Slab / Lookout Slabs)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Silly Billy")) },
+          { name: "Fili (Billy Goat Slab / Lookout Slabs)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Fili")) }
+        ],
+        "Movie Night Slab": [
+          { name: "Magic Carpet Ride (Lookout Slabs / Movie Night Slab)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Magic Carpet Ride")) },
+          { name: "Dumbo (Lookout Slabs / Movie Night Slab)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Dumbo")) }
+        ],
+        "Little Russia": [
+          { name: "Always on Belay Andrew (Little Russia)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Always on Belay Andrew")) },
+          { name: "Always on Belay Nate (Little Russia)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Always on Belay Nate")) }
+        ],
+        "Mt Elliot & Mythos": [
+          { name: "Know When to Fold 'Em (Mt. Elliot)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Know When to Fold 'Em")) },
+          { name: "Mythos Mixed Crag", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Mythos")) }
         ]
       },
       "Nordegg / Ghost": {
@@ -972,12 +974,6 @@
       "Kananaskis": {
         "Yamnuska": [
           { name: "Yamnuska - Directissima", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Yamnuska")) }
-        ]
-      },
-      "Banff National Park": {
-        "Lake Louise Area": [
-          { name: "Plain of Six Glaciers (Banff National Park)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Plain of Six Glaciers")) },
-          { name: "Plain of Six Glaciers & Larch Valley Combo", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Plain of Six Glaciers & Larch Valley Combo")) }
         ]
       }
     },
@@ -1004,7 +1000,7 @@
     const routeSelect = document.getElementById('cascade-route');
 
     regSelect.innerHTML = '<option value="">Select Region</option>';
-    cragSelect.innerHTML = '<option value="">Select Area / Crag</option>';
+    cragSelect.innerHTML = '<option value="">Select Crag / Area</option>';
     routeSelect.innerHTML = '<option value="">Select Route Beta (Open Source)</option>';
     cragSelect.disabled = true;
     routeSelect.disabled = true;
@@ -1025,9 +1021,9 @@
     const cragSelect = document.getElementById('cascade-crag');
     const routeSelect = document.getElementById('cascade-route');
 
-    cragSelect.innerHTML = '<option value="">Select Area / Crag</option>';
+    cragSelect.innerHTML = '<option value="">Select Crag / Area</option>';
     routeSelect.innerHTML = '<option value="">Select Route Beta (Open Source)</option>';
-    routeSelect.disabled = true;
+    cragSelect.disabled = true;
 
     if (prov && reg && HIERARCHY_DATA[prov][reg]) {
       cragSelect.disabled = false;
@@ -1050,7 +1046,6 @@
     if (prov && reg && crag && HIERARCHY_DATA[prov][reg][crag]) {
       routeSelect.disabled = false;
       HIERARCHY_DATA[prov][reg][crag].forEach(r => {
-        // Only display items matching current sport category in the dropdown
         if (r.routeObj && r.routeObj.category === currentActivity) {
           routeSelect.innerHTML += `<option value="${r.name}">${r.name}</option>`;
         }
@@ -1080,7 +1075,7 @@
   searchInput.addEventListener('input', function(e) {
     const val = this.value;
     closeAllLists();
-    selectedRouteData = null; // Reset until clicked or explicitly matched
+    selectedRouteData = null;
 
     if (!val) return false;
 
@@ -1090,14 +1085,13 @@
     this.parentNode.appendChild(listDiv);
 
     SCRUBBED_DATABASE.forEach(item => {
-      // STRICT ISOLATION: Only show entries matching the active sport category
       if (item.category === currentActivity && item.name.toLowerCase().includes(val.toLowerCase())) {
         const itemDiv = document.createElement('div');
         itemDiv.innerHTML = `<strong>${item.name}</strong> (${item.jurisdiction})`;
         itemDiv.addEventListener('click', function(e) {
           searchInput.value = item.name;
           document.getElementById('route-notes').value = item.notes;
-          selectedRouteData = item; // Explicitly confirmed match via dropdown click
+          selectedRouteData = item;
           updateJurisdictionAndPermits(currentActivity, item.jurisdiction);
           closeAllLists();
         });
@@ -1106,7 +1100,6 @@
     });
   });
 
-  // Also check on blur or change if user typed the exact name without clicking dropdown
   searchInput.addEventListener('blur', function() {
     setTimeout(() => {
       const val = searchInput.value.trim();
@@ -1146,27 +1139,13 @@
     document.getElementById('route-search').value = '';
     document.getElementById('route-notes').value = '';
 
-    // Reset cascading selector labels and values when switching sports
     document.getElementById('cascade-province').value = '';
     document.getElementById('cascade-region').innerHTML = '<option value="">Select Region</option>';
     document.getElementById('cascade-region').disabled = true;
-    document.getElementById('cascade-crag').innerHTML = '<option value="">Select Area / Crag</option>';
+    document.getElementById('cascade-crag').innerHTML = '<option value="">Select Crag / Area</option>';
     document.getElementById('cascade-crag').disabled = true;
     document.getElementById('cascade-route').innerHTML = '<option value="">Select Route Beta (Open Source)</option>';
     document.getElementById('cascade-route').disabled = true;
-
-    // Dynamically update cascade label based on selected sport
-    const cascadeLabel = document.getElementById('cascade-label');
-    if (activityKey === 'hike') {
-      cascadeLabel.textContent = '📍 Regional Trail Cascade (Browse Hiking Routes)';
-      document.getElementById('route-search').placeholder = 'Type hiking trail name...';
-    } else if (activityKey === 'rock-climb') {
-      cascadeLabel.textContent = '📍 Regional Route Cascade (Browse Climbing Crags)';
-      document.getElementById('route-search').placeholder = 'Type climbing route name...';
-    } else {
-      cascadeLabel.textContent = '📍 Regional Route Cascade (Browse by Location)';
-      document.getElementById('route-search').placeholder = 'Type route name...';
-    }
 
     const titles = {
       'hike': 'Backcountry Hiking & Trekking',
@@ -1275,16 +1254,13 @@
       hardware.push(...SPORT_GEAR_DB[secondaryMode].hardware);
     }
 
-    // ELIMINATE / SUBSTITUTE GENERIC BASE ITEMS PIECE BY PIECE IF ROUTE SCRUB MATCHES
     if (selectedRouteData) {
-      // Check gear substitutions (e.g. replacing generic quickdraw counts with specific route numbers)
       if (selectedRouteData.gearSubstitutions) {
         for (const [genericItem, specificReplacement] of Object.entries(selectedRouteData.gearSubstitutions)) {
           hardware = hardware.map(item => item === genericItem ? specificReplacement : item);
         }
       }
 
-      // Add specific route gear additions
       if (selectedRouteData.gearAdditions) {
         selectedRouteData.gearAdditions.forEach(gear => {
           hardware.push("⭐ " + gear + " (Route Specific)");
