@@ -317,10 +317,36 @@
      await loadDatabases();
  });
 
- function selectSport(sportKey) {
-     currentSport = sportKey;
-     goToScreen('screen-planner');
- }
+function selectSport(sportKey) {
+    currentSport = sportKey;
+    
+    // Automatically maps the button ID to its matching JSON file name in your repo (e.g., 'canyoning' -> 'canyoning-routes.json')
+    let routeFileName = `${sportKey}-routes.json`;
+
+    loadSportRoutes(routeFileName);
+    goToScreen('screen-planner');
+}
+    loadSportRoutes(routeFileName);
+    goToScreen('screen-planner');
+}
+
+async function loadSportRoutes(fileName) {
+    try {
+        const response = await fetch(fileName);
+        if (response.ok) {
+            MASTER_DATABASE = await response.json();
+            populateRegions();
+        } else {
+            console.warn(`Could not load ${fileName}, starting with empty database.`);
+            MASTER_DATABASE = [];
+            populateRegions();
+        }
+    } catch (e) {
+        console.warn("Error fetching route database:", e);
+        MASTER_DATABASE = [];
+        populateRegions();
+    }
+}
 
  function goToScreen(screenId) {
      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
