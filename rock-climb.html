@@ -16,7 +16,7 @@
         .form-group {margin-bottom: 16px; position: relative; }
         label {display: block; font-weight: 600; margin-bottom: 6px; color: var(--text-bright); }
         select, input[type="text"], input[type="number"], input[type="date"], textarea {width: 100%; padding: 10px; background: var(--bg); border: 1px solid var(--border); border-radius: 6px; color: var(--text-bright); box-sizing: border-box; font-size: 15px; }
-        .cascade-row {display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px; }
+        .cascade-row {display: grid; grid-template-columns: 1fr; gap: 8px; margin-bottom: 12px; }
         .row-inputs {display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         button.primary-btn {background: var(--accent); color: var(--text-bright); border: none; padding: 12px 20px; border-radius: 6px; font-weight: bold; font-size: 16px; width: 100%; cursor: pointer; transition: background 0.2s ease; margin-top: 8px; }
         button.primary-btn:hover {background: var(--accent-hover); }
@@ -51,18 +51,27 @@
         <div class="card">
             <h2>Objective Setup</h2>
 
-            <!-- NESTED REGION -> CRAG -> ROUTE SELECTOR -->
+            <!-- PROVINCE & HIERARCHY SELECTOR -->
             <div id="regional-cascade-group" class="form-group">
-                <label>📍 Detailed Regional & Crag Hierarchy</label>
+                <label>📍 Select Province & Region</label>
                 <div class="cascade-row">
-                    <select id="cascade-region" onchange="onRegionChange()">
-                        <option value="">Select Region</option>
-                    </select>
-                    <select id="cascade-crag" onchange="onCragChange()" disabled>
-                        <option value="">Select Crag / Area</option>
+                    <select id="cascade-province" onchange="onProvinceChange()">
+                        <option value="">Select Province</option>
+                        <option value="Alberta">Alberta</option>
+                        <option value="British Columbia">British Columbia</option>
                     </select>
                 </div>
-                <select id="cascade-route" onchange="onRouteSelect()" disabled style="margin-top: 6px; max-height: 200px; overflow-y: auto;">
+                <div class="cascade-row" style="margin-top: 8px;">
+                    <select id="cascade-region" onchange="onRegionChange()" disabled>
+                        <option value="">Select Region / Area</option>
+                    </select>
+                </div>
+                <div class="cascade-row" style="margin-top: 8px;">
+                    <select id="cascade-crag" onchange="onCragChange()" disabled>
+                        <option value="">Select Crag</option>
+                    </select>
+                </div>
+                <select id="cascade-route" onchange="onRouteSelect()" disabled style="margin-top: 8px; max-height: 200px; overflow-y: auto;">
                     <option value="">Select Specific Route / Objective</option>
                 </select>
             </div>
@@ -173,7 +182,6 @@
 
         async function loadRockClimbingData() {
             try {
-                // Fetch sport gear templates
                 const sportRes = await fetch('https://raw.githubusercontent.com/Gerber111213/Adventure-planner/main/sports.json');
                 if (sportRes.ok) {
                     const templates = await sportRes.json();
@@ -182,11 +190,9 @@
                     }
                 }
 
-                // Fetch rock-climbing routes
-                const routeRes = await fetch(`https://raw.githubusercontent.com/Gerber111213/Adventure-planner/main/${sportKey}-routes.json`);
+                const routeRes = await fetch('https://raw.githubusercontent.com/Gerber111213/Adventure-planner/main/climbing-routes.json');
                 if (routeRes.ok) {
                     MASTER_DATABASE = await routeRes.json();
-                    setupRockClimbingUI();
                 } else {
                     console.warn("Could not load climbing-routes.json");
                 }
@@ -195,23 +201,41 @@
             }
         }
 
-        function setupRockClimbingUI() {
+        function onProvinceChange() {
+            const provinceVal = document.getElementById('cascade-province').value;
             const regSelect = document.getElementById('cascade-region');
-            regSelect.innerHTML = '<option value="">Select Region</option>';
+            const cragSelect = document.getElementById('cascade-crag');
+            const routeSelect = document.getElementById('cascade-route');
 
-            MASTER_DATABASE.forEach(reg => {
+            regSelect.innerHTML = '<option value="">Select Region / Area</option>';
+            cragSelect.innerHTML = '<option value="">Select Crag</option>';
+            routeSelect.innerHTML = '<option value="">Select Specific Route / Objective</option>';
+            
+            cragSelect.disabled = true;
+            routeSelect.disabled = true;
+
+            if (!provinceVal) {
+                regSelect.disabled = true;
+                return;
+            }
+
+            regSelect.disabled = false;
+            // Filter regions matching the selected province property in climbing-routes.json
+            const filteredRegions = MASTER_DATABASE.filter(r => r.province === provinceVal);
+            filteredRegions.forEach(reg => {
                 const regName = reg.regionName || reg.region;
                 regSelect.innerHTML += `<option value="${regName}">${regName}</option>`;
             });
         }
 
         function onRegionChange() {
+            const provinceVal = document.getElementById('cascade-province').value;
             const regVal = document.getElementById('cascade-region').value;
             const cragSelect = document.getElementById('cascade-crag');
             const routeSelect = document.getElementById('cascade-route');
 
-            cragSelect.innerHTML = '<option value="">Select Crag / Area</option>';
-            routeSelect.innerHTML = '<option value="">Select Specific Route</option>';
+            cragSelect.innerHTML = '<option value="">Select Crag</option>';
+            routeSelect.innerHTML = '<option value="">Select Specific Route / Objective</option>';
             routeSelect.disabled = true;
 
             if (!regVal) {
@@ -220,7 +244,7 @@
             }
 
             cragSelect.disabled = false;
-            const regionObj = MASTER_DATABASE.find(r => (r.regionName || r.region) === regVal);
+            const regionObj = MASTER_DATABASE.find(r => r.province === provinceVal && (r.regionName || r.region) === regVal);
             if (regionObj && regionObj.crags) {
                 regionObj.crags.forEach(crag => {
                     const cragName = crag.cragName || crag.crag;
@@ -230,15 +254,16 @@
         }
 
         function onCragChange() {
+            const provinceVal = document.getElementById('cascade-province').value;
             const regVal = document.getElementById('cascade-region').value;
             const cragVal = document.getElementById('cascade-crag').value;
             const routeSelect = document.getElementById('cascade-route');
 
-            routeSelect.innerHTML = '<option value="">Select Specific Route</option>';
+            routeSelect.innerHTML = '<option value="">Select Specific Route / Objective</option>';
 
             if (regVal && cragVal) {
                 routeSelect.disabled = false;
-                const regionObj = MASTER_DATABASE.find(r => (r.regionName || r.region) === regVal);
+                const regionObj = MASTER_DATABASE.find(r => r.province === provinceVal && (r.regionName || r.region) === regVal);
                 if (regionObj && regionObj.crags) {
                     const cragObj = regionObj.crags.find(c => (c.cragName || c.crag) === cragVal);
                     if (cragObj && cragObj.routes) {
@@ -256,9 +281,10 @@
             const routeName = document.getElementById('cascade-route').value;
             if (!routeName) return;
 
+            const provinceVal = document.getElementById('cascade-province').value;
             const regVal = document.getElementById('cascade-region').value;
             const cragVal = document.getElementById('cascade-crag').value;
-            const regionObj = MASTER_DATABASE.find(r => (r.regionName || r.region) === regVal);
+            const regionObj = MASTER_DATABASE.find(r => r.province === provinceVal && (r.regionName || r.region) === regVal);
             
             if (regionObj && regionObj.crags) {
                 const cragObj = regionObj.crags.find(c => (c.cragName || c.crag) === cragVal);
