@@ -198,8 +198,10 @@
             const regSelect = document.getElementById('cascade-region');
             regSelect.innerHTML = '<option value="">Select Region</option>';
 
-            MASTER_DATABASE.forEach(reg => {
-                const regName = reg.regionName || reg.region;
+            // Deduplicate region names using a Set so regions only appear once
+            const uniqueRegions = [...new Set(MASTER_DATABASE.map(reg => reg.regionName || reg.region))].filter(Boolean);
+
+            uniqueRegions.forEach(regName => {
                 regSelect.innerHTML += `<option value="${regName}">${regName}</option>`;
             });
         }
@@ -219,13 +221,25 @@
             }
 
             cragSelect.disabled = false;
-            const regionObj = MASTER_DATABASE.find(r => (r.regionName || r.region) === regVal);
-            if (regionObj && regionObj.crags) {
-                regionObj.crags.forEach(crag => {
-                    const cragName = crag.cragName || crag.crag;
-                    cragSelect.innerHTML += `<option value="${cragName}">${cragName}</option>`;
-                });
-            }
+            
+            // Find all matching entries for this region name and aggregate their crags properly
+            const matchingRegions = MASTER_DATABASE.filter(r => (r.regionName || r.region) === regVal);
+            
+            let allCrags = [];
+            matchingRegions.forEach(regionObj => {
+                if (regionObj.crags && Array.isArray(regionObj.crags)) {
+                    regionObj.crags.forEach(crag => {
+                        const cragName = crag.cragName || crag.crag;
+                        if (cragName && !allCrags.some(c => c.name === cragName)) {
+                            allCrags.push({ name: cragName, obj: crag });
+                        }
+                    });
+                }
+            });
+
+            allCrags.forEach(item => {
+                cragSelect.innerHTML += `<option value="${item.name}">${item.name}</option>`;
+            });
         }
 
         function onCragChange() {
@@ -237,14 +251,20 @@
 
             if (regVal && cragVal) {
                 routeSelect.disabled = false;
-                const regionObj = MASTER_DATABASE.find(r => (r.regionName || r.region) === regVal);
-                if (regionObj && regionObj.crags) {
-                    const cragObj = regionObj.crags.find(c => (c.cragName || c.crag) === cragVal);
-                    if (cragObj && cragObj.routes) {
-                        cragObj.routes.forEach(route => {
-                            routeSelect.innerHTML += `<option value="${route.name}">${route.name} (${route.grade})</option>`;
-                        });
+                const matchingRegions = MASTER_DATABASE.filter(r => (r.regionName || r.region) === regVal);
+                
+                let foundCragObj = null;
+                matchingRegions.forEach(regionObj => {
+                    if (regionObj.crags) {
+                        const match = regionObj.crags.find(c => (c.cragName || c.crag) === cragVal);
+                        if (match) foundCragObj = match;
                     }
+                });
+
+                if (foundCragObj && foundCragObj.routes) {
+                    foundCragObj.routes.forEach(route => {
+                        routeSelect.innerHTML += `<option value="${route.name}">${route.name} (${route.grade})</option>`;
+                    });
                 }
             } else {
                 routeSelect.disabled = true;
@@ -257,18 +277,23 @@
 
             const regVal = document.getElementById('cascade-region').value;
             const cragVal = document.getElementById('cascade-crag').value;
-            const regionObj = MASTER_DATABASE.find(r => (r.regionName || r.region) === regVal);
+            const matchingRegions = MASTER_DATABASE.filter(r => (r.regionName || r.region) === regVal);
             
-            if (regionObj && regionObj.crags) {
-                const cragObj = regionObj.crags.find(c => (c.cragName || c.crag) === cragVal);
-                if (cragObj && cragObj.routes) {
-                    const matched = cragObj.routes.find(rt => rt.name === routeName);
-                    if (matched) {
-                        selectedRouteData = matched;
-                        document.getElementById('route-search').value = matched.name;
-                        applyRouteData(matched);
+            let matchedRoute = null;
+            matchingRegions.forEach(regionObj => {
+                if (regionObj.crags) {
+                    const cragObj = regionObj.crags.find(c => (c.cragName || c.crag) === cragVal);
+                    if (cragObj && cragObj.routes) {
+                        const route = cragObj.routes.find(rt => rt.name === routeName);
+                        if (route) matchedRoute = route;
                     }
                 }
+            });
+
+            if (matchedRoute) {
+                selectedRouteData = matchedRoute;
+                document.getElementById('route-search').value = matchedRoute.name;
+                applyRouteData(matchedRoute);
             }
         }
 
