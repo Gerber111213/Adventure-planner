@@ -1,0 +1,24 @@
+[
+  {
+    "name": "Spring Break (Getaway Crag, David Thompson)",
+    "category": "rock-climb",
+    "jurisdiction": "Alberta Crown Land",
+    "grade": "5.10a",
+    "pitches": "Single Pitch (25m)",
+    "approach": "Park at the David Thompson Highway pullout. Follow well-marked cairned trail heading uphill through open timber for ~30-40 minutes directly below the limestone band.",
+    "notes": "Well-bolted warm-up line on solid grey limestone. Fast lowering anchors. Watch for loose rock on the upper ledge.",
+    "gpsCoords": "52.1485,-116.3210",
+    "mapSearchQuery": "Getaway+Crag+David+Thompson+Alberta"
+  },
+  {
+    "name": "Cascade Mountain Normal Route (Banff)",
+    "category": "alpine-climb",
+    "jurisdiction": "Banff National Park (Parks Canada)",
+    "grade": "PD / 5.4",
+    "pitches": "Scramble & Low 5th (1,400m gain)",
+    "approach": "Start from Cascade Ponds parking lot. Follow well-traveled trail up through lower forest and scree bowls to the amphitheatre ridge.",
+    "notes": "Helmet mandatory due to rockfall risk from climbers above. Carry glacier glasses and wind gear for the summit plateau.",
+    "gpsCoords": "51.2050,-115.5450",
+    "mapSearchQuery": "Cascade+Mountain+Trailhead+Banff"
+  }
+]
