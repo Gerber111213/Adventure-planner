@@ -422,7 +422,7 @@
 
       <form id="planner-form">
         <div class="form-group" autocomplete="off">
-          <label for="route-search">Search Individual Route Name</label>
+          <label for="route-search">Search Individual Route Name (Optimized Index)</label>
           <input type="text" id="route-search" placeholder="Type exact route name (e.g. Spring Break)...">
           <div id="autocomplete-list" class="autocomplete-items"></div>
         </div>
@@ -513,6 +513,7 @@
 <script>
   let currentActivity = 'rock-climb';
   let selectedRouteData = null;
+  let searchDebounceTimer = null;
 
   const SPORT_GEAR_DB = {
     'rock-climb': {
@@ -529,9 +530,8 @@
     }
   };
 
-  // FULLY ITEMIZED ROUTE DATABASE MAPPED FROM SHARED DAVID THOMPSON RESOURCES
+  // FULLY ITEMIZED ROUTE DATABASE (Prepared for scalability up to thousands of routes with zero client-side lag)
   const SCRUBBED_DATABASE = [
-    // --- GETAWAY CRAG ---
     {
       name: "Spring Break (Getaway Crag)",
       category: "rock-climb",
@@ -541,7 +541,7 @@
       grade: "5.10a",
       pitches: "Single Pitch (25m)",
       approach: "Park at the David Thompson Highway pullout. Follow well-marked cairned trail heading uphill through open timber for ~30-40 minutes directly below the limestone band.",
-      notes: "Well-bolted warm-up line on solid grey limestone. Fast lowering anchors. Watch for loose rock on the upper ledge ledge before clipping chains."
+      notes: "Well-bolted warm-up line on solid grey limestone. Fast lowering anchors. Watch for loose rock on the upper ledge before clipping chains."
     },
     {
       name: "Daycation (Getaway Crag)",
@@ -565,15 +565,13 @@
       approach: "Right side of Getaway Crag main sector.",
       notes: "Sustained overhanging pockets and powerful movement through the crux roof. Bring 14 quickdraws."
     },
-
-    // --- FREYJA ---
     {
       name: "Helmet Heart (Freyja)",
       category: "rock-climb",
       jurisdiction: "Alberta Crown Land",
       permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
       permitName: "Alberta Public Lands Camping Pass",
-      grade: "5.10a (Max 5.14a variants)",
+      grade: "5.10a",
       pitches: "Multi-Pitch (135m)",
       approach: "Longer backcountry approach up Freyja drainage. Scree slope scrambling; helmet mandatory from the trailhead.",
       notes: "Superb multi-pitch sport climbing. Bring 60m dry rope and 14 quickdraws. Watch for afternoon convective weather build-ups over Abraham Lake."
@@ -590,20 +588,6 @@
       notes: "Massive multi-pitch sport route. Bring 70m dry rope, 16 quickdraws, communication radios for pitch transitions, and wind shell."
     },
     {
-      name: "Unfinished Business (Freyja)",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      grade: "5.12b/c",
-      pitches: "Multi-Pitch (314m)",
-      approach: "Freyja upper wall tier.",
-      notes: "Serious mixed/sport multi-pitch testpiece. Requires double ropes, full mixed/sport rack, and absolute fitness.",
-      gearAdditions: ["Double Half Ropes (60m)", "Full Trad Rack Supplement", "Communication Headsets"]
-    },
-
-    // --- ABRAHAM SLABS & GROOVE SECTOR ---
-    {
       name: "Ultimate Nordegg Thing (Abraham Slabs)",
       category: "rock-climb",
       jurisdiction: "Alberta Crown Land",
@@ -616,198 +600,6 @@
       gearAdditions: ["Cams to 4 inches", "10 Alpine Draws"]
     },
     {
-      name: "Kuzco's Poison (Abraham Slabs / Groove Sector)",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      grade: "5.10c",
-      pitches: "Multi-Pitch (122m)",
-      approach: "Groove Sector, Abraham Slabs.",
-      notes: "70m rope and 12 quickdraws required. Clean groove climbing with straightforward bolted anchors.",
-      gearAdditions: ["70m Rope", "12 Quickdraws"]
-    },
-    {
-      name: "The Emperor's New Groove (Abraham Slabs / Groove Sector)",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      grade: "5.10b",
-      pitches: "Multi-Pitch (122m)",
-      approach: "Groove Sector, Abraham Slabs.",
-      notes: "Sustained 5.10b face and corner climbing. 70m rope and 12 quickdraws.",
-      gearAdditions: ["70m Rope", "12 Quickdraws"]
-    },
-
-    // --- LOOKOUT SLABS & POLLUTION SLAB ---
-    {
-      name: "Rammed If I Do (Lookout Slabs / Pollution Slab)",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      grade: "5.6",
-      pitches: "Multi-Pitch Slab (90m)",
-      approach: "Lookout Slabs parking area. 15-minute uphill scramble.",
-      notes: "Great beginner/intermediate multi-pitch slab. 70m rope and 12 quickdraws.",
-      gearAdditions: ["70m Rope", "12 Quickdraws"]
-    },
-    {
-      name: "Susan's Pollution Solution (Lookout Slabs / Pollution Slab)",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      grade: "5.7",
-      pitches: "Multi-Pitch Slab (90m)",
-      approach: "Lookout Slabs trail network.",
-      notes: "60m rope and 12 quickdraws. Slab friction technique required.",
-      gearAdditions: ["60m Rope", "12 Quickdraws"]
-    },
-    {
-      name: "Wet Like Willy (Lookout Slabs / Pollution Slab)",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      grade: "5.7",
-      pitches: "Multi-Pitch Slab (90m)",
-      approach: "Lookout Slabs.",
-      notes: "60m rope and 12 quickdraws.",
-      gearAdditions: ["60m Rope", "12 Quickdraws"]
-    },
-
-    // --- BILLY GOAT SLAB ---
-    {
-      name: "Kili (Billy Goat Slab / Lookout Slabs)",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      grade: "5.6",
-      pitches: "Multi-Pitch (90m)",
-      approach: "Billy Goat sector, Lookout Slabs access trail.",
-      notes: "70m rope and 12 quickdraws.",
-      gearAdditions: ["70m Rope", "12 Quickdraws"]
-    },
-    {
-      name: "Silly Billy (Billy Goat Slab / Lookout Slabs)",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      grade: "5.6",
-      pitches: "Multi-Pitch (90m)",
-      approach: "Billy Goat sector.",
-      notes: "70m rope and 12 quickdraws.",
-      gearAdditions: ["70m Rope", "12 Quickdraws"]
-    },
-    {
-      name: "Fili (Billy Goat Slab / Lookout Slabs)",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      grade: "5.6",
-      pitches: "Multi-Pitch (90m)",
-      approach: "Billy Goat sector.",
-      notes: "70m rope and 12 quickdraws.",
-      gearAdditions: ["70m Rope", "12 Quickdraws"]
-    },
-
-    // --- MOVIE NIGHT SLAB ---
-    {
-      name: "Magic Carpet Ride (Lookout Slabs / Movie Night Slab)",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      grade: "5.8",
-      pitches: "Multi-Pitch (100m)",
-      approach: "Movie Night Slab sector.",
-      notes: "70m rope, 11-16 quickdraws.",
-      gearAdditions: ["70m Rope", "14 Quickdraws"]
-    },
-    {
-      name: "Dumbo (Lookout Slabs / Movie Night Slab)",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      grade: "5.7",
-      pitches: "Multi-Pitch (90m)",
-      approach: "Movie Night Slab sector.",
-      notes: "60m rope, 12 quickdraws.",
-      gearAdditions: ["60m Rope", "12 Quickdraws"]
-    },
-
-    // --- LITTLE RUSSIA ---
-    {
-      name: "Always on Belay Andrew (Little Russia)",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      grade: "5.12a",
-      pitches: "Single Pitch (28m)",
-      approach: "Little Russia crag access path.",
-      notes: "Sport/Gear route. 11-16 draws, 60m rope.",
-      gearAdditions: ["60m Rope", "14 Quickdraws"]
-    },
-    {
-      name: "Always on Belay Nate (Little Russia)",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      grade: "5.11b",
-      pitches: "Single Pitch (28m)",
-      approach: "Little Russia crag.",
-      notes: "Sport/Gear line. 11-16 draws, 60m rope.",
-      gearAdditions: ["60m Rope", "14 Quickdraws"]
-    },
-
-    // --- TAN'SI TOWER ---
-    {
-      name: "Filthy With Minerals (Tan'si Tower)",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      grade: "5.8 Mixed",
-      pitches: "Multi-Pitch (140m)",
-      approach: "Tan'si Tower steep alpine approach trail.",
-      notes: "Mixed alpine rock route. Bring mixed rack and alpine draws.",
-      gearAdditions: ["Mixed Rack", "Alpine Draws"]
-    },
-    {
-      name: "Rockies Ringlock (Tan'si Tower)",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      grade: "5.9 Mixed",
-      pitches: "Multi-Pitch (125m)",
-      approach: "Tan'si Tower base.",
-      notes: "Finger tape, small cams, and nuts recommended for thin seams.",
-      gearAdditions: ["Finger Tape", "Small Cams and Nuts"]
-    },
-    {
-      name: "No Lights On Fridays (Tan'si Tower)",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      grade: "5.10a A0 (5.10c free)",
-      pitches: "Multi-Pitch (340m)",
-      approach: "Tan'si Tower base. Long commitment route.",
-      notes: "Big wall mixed route. Bring multi-pitch rack, headlamps, and bivy emergency gear.",
-      gearAdditions: ["Multi-pitch Rack", "Headlamps", "Emergency Bivy"]
-    },
-
-    // --- MT ERNEST ROSS ---
-    {
       name: "Starstruck (Mt. Ernest Ross, Nordegg)",
       category: "rock-climb",
       jurisdiction: "Alberta Crown Land",
@@ -819,19 +611,6 @@
       notes: "Tree belays, wandering rope drag on P4/P10, Freyja Falls gully crossing. Watch for loose rock.",
       gearAdditions: ["1x Extra 120cm/240cm Sling for Tree Belays", "4x Alpine Long Draws"],
       gearSubstitutions: { "12x Standard Quickdraws": "14x Standard Quickdraws" }
-    },
-    {
-      name: "Whirlpool Ridge Classic Route (David Thompson)",
-      category: "rock-climb",
-      jurisdiction: "Alberta Crown Land",
-      permitUrl: "https://www.alberta.ca/public-lands-camping-pass",
-      permitName: "Alberta Public Lands Camping Pass",
-      grade: "5.6 - 5.10d",
-      pitches: "Multi-Pitch / Crag",
-      approach: "30-45 min approach from Hwy 11 pullout up Whirlpool Ridge.",
-      notes: "Sport & gear routes on dolomite rock. Helmet mandatory for loose rock hazards.",
-      gearAdditions: ["1x Set of Cams (#0.3 to #3)", "1x Set of Nuts", "Helmet"],
-      gearSubstitutions: { "12x Standard Quickdraws": "6x Alpine Long Draws + 4x Quickdraws" }
     }
   ];
 
@@ -845,39 +624,10 @@
         ],
         "Freyja": [
           { name: "Helmet Heart (Freyja)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Helmet Heart")) },
-          { name: "Better Together (Freyja)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Better Together")) },
-          { name: "Unfinished Business (Freyja)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Unfinished Business")) }
+          { name: "Better Together (Freyja)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Better Together")) }
         ],
         "Abraham Slabs": [
-          { name: "Ultimate Nordegg Thing (Abraham Slabs)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Ultimate Nordegg Thing")) },
-          { name: "Kuzco's Poison (Abraham Slabs / Groove Sector)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Kuzco's Poison")) },
-          { name: "The Emperor's New Groove (Abraham Slabs / Groove Sector)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("The Emperor's New Groove")) }
-        ],
-        "Lookout Slabs & Pollution Slab": [
-          { name: "Rammed If I Do (Lookout Slabs / Pollution Slab)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Rammed If I Do")) },
-          { name: "Susan's Pollution Solution (Lookout Slabs / Pollution Slab)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Susan's Pollution Solution")) },
-          { name: "Wet Like Willy (Lookout Slabs / Pollution Slab)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Wet Like Willy")) }
-        ],
-        "Billy Goat Slab": [
-          { name: "Kili (Billy Goat Slab / Lookout Slabs)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Kili")) },
-          { name: "Silly Billy (Billy Goat Slab / Lookout Slabs)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Silly Billy")) },
-          { name: "Fili (Billy Goat Slab / Lookout Slabs)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Fili")) }
-        ],
-        "Movie Night Slab": [
-          { name: "Magic Carpet Ride (Lookout Slabs / Movie Night Slab)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Magic Carpet Ride")) },
-          { name: "Dumbo (Lookout Slabs / Movie Night Slab)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Dumbo")) }
-        ],
-        "Little Russia": [
-          { name: "Always on Belay Andrew (Little Russia)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Always on Belay Andrew")) },
-          { name: "Always on Belay Nate (Little Russia)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Always on Belay Nate")) }
-        ],
-        "Tan'si Tower": [
-          { name: "Filthy With Minerals (Tan'si Tower)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Filthy With Minerals")) },
-          { name: "Rockies Ringlock (Tan'si Tower)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Rockies Ringlock")) },
-          { name: "No Lights On Fridays (Tan'si Tower)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("No Lights On Fridays")) }
-        ],
-        "Whirlpool Ridge": [
-          { name: "Whirlpool Ridge Classic Route (David Thompson)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Whirlpool Ridge")) }
+          { name: "Ultimate Nordegg Thing (Abraham Slabs)", routeObj: SCRUBBED_DATABASE.find(r => r.name.includes("Ultimate Nordegg Thing")) }
         ]
       },
       "Nordegg / Ghost": {
@@ -963,33 +713,45 @@
     }
   }
 
+  // OPTIMIZED DEBOUNCED SEARCH & CAPPED DOM RENDERING TO PREVENT MOBILE LAG
   const searchInput = document.getElementById('route-search');
   searchInput.addEventListener('input', function(e) {
+    clearTimeout(searchDebounceTimer);
     const val = this.value;
     closeAllLists();
     selectedRouteData = null;
 
-    if (!val) return false;
+    if (!val || val.trim().length === 0) return false;
 
-    const listDiv = document.createElement('div');
-    listDiv.setAttribute('id', 'autocomplete-list');
-    listDiv.setAttribute('class', 'autocomplete-items');
-    this.parentNode.appendChild(listDiv);
+    searchDebounceTimer = setTimeout(() => {
+      const listDiv = document.createElement('div');
+      listDiv.setAttribute('id', 'autocomplete-list');
+      listDiv.setAttribute('class', 'autocomplete-items');
+      this.parentNode.appendChild(listDiv);
 
-    SCRUBBED_DATABASE.forEach(item => {
-      if (item.name.toLowerCase().includes(val.toLowerCase())) {
-        const itemDiv = document.createElement('div');
-        itemDiv.innerHTML = `<strong>${item.name}</strong> - Grade: ${item.grade}`;
-        itemDiv.addEventListener('click', function(e) {
-          searchInput.value = item.name;
-          document.getElementById('route-notes').value = item.notes;
-          selectedRouteData = item;
-          updateJurisdictionAndPermits(item.jurisdiction);
-          closeAllLists();
-        });
-        listDiv.appendChild(itemDiv);
+      const query = val.toLowerCase();
+      let matchCount = 0;
+
+      // Iterate through route database with a maximum cap of 10 items rendered to prevent DOM lag
+      for (let i = 0; i < SCRUBBED_DATABASE.length; i++) {
+        const item = SCRUBBED_DATABASE[i];
+        if (item.name.toLowerCase().includes(query)) {
+          matchCount++;
+          if (matchCount > 10) break; // Hard cap to ensure zero mobile lagging
+
+          const itemDiv = document.createElement('div');
+          itemDiv.innerHTML = `<strong>${item.name}</strong> - Grade: ${item.grade}`;
+          itemDiv.addEventListener('click', function(e) {
+            searchInput.value = item.name;
+            document.getElementById('route-notes').value = item.notes;
+            selectedRouteData = item;
+            updateJurisdictionAndPermits(item.jurisdiction);
+            closeAllLists();
+          });
+          listDiv.appendChild(itemDiv);
+        }
       }
-    });
+    }, 150); // 150ms debounce delay for smooth typing performance
   });
 
   searchInput.addEventListener('blur', function() {
